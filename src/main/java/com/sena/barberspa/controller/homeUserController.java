@@ -24,6 +24,14 @@ import com.sena.barberspa.service.*;
 
 import jakarta.servlet.http.HttpSession;
 
+import com.paypal.api.payments.Links;
+import com.paypal.api.payments.Payment;
+import com.paypal.base.rest.PayPalRESTException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import java.util.Map;
+import java.util.HashMap;
+
 @Controller
 @RequestMapping("/")
 public class homeUserController {
@@ -46,6 +54,8 @@ public class homeUserController {
 	private IDetalleOrdenService detalleOrdenService;
 	@Autowired
 	private IAgendamientosService agendamientosService;
+	@Autowired
+	private PayPalService paypalService;
 
 	// Variables temporales para el carrito
 	private List<DetalleOrden> detalles = new ArrayList<>();
@@ -205,6 +215,9 @@ public class homeUserController {
 
 		Orden ordenGuardada = ordenService.save(orden);
 
+		// Guardar el ID de la orden en la sesión para usarlo con pagos
+		session.setAttribute("ordenId", ordenGuardada.getId());
+
 		detalles.forEach(dt -> {
 			dt.setOrden(ordenGuardada);
 			detalleOrdenService.save(dt);
@@ -214,7 +227,8 @@ public class homeUserController {
 		orden = new Orden();
 		detalles.clear();
 
-		return "redirect:/usuario/compras/" + ordenGuardada.getId();
+		// Redireccionar a la página de MercadoPago
+		return "redirect:/pagar/" + ordenGuardada.getId();
 	}
 
 	@PostMapping("/searchU")
@@ -285,4 +299,209 @@ public class homeUserController {
 
 		return "pagos/pago_pendiente";
 	}
+	@PostMapping("/paypal/create")
+	public String createPaypalPayment(HttpSession session, RedirectAttributes redirectAttributes) {
+		if (session.getAttribute("idUsuario") == null) {
+			return "redirect:/usuario/login";
+		}
+
+		try {
+			Integer ordenId = (Integer) session.getAttribute("ordenId");
+			if (ordenId == null) {
+				redirectAttributes.addFlashAttribute("error", "Orden no encontrada");
+				return "redirect:/usuario/compras";
+			}
+
+			Orden orden = ordenService.findById(ordenId)
+					.orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+
+			Payment payment = paypalService.createPayment(
+					orden,
+					"http://localhost:63106/paypal/cancel",
+					"http://localhost:63106/paypal/success"
+			);
+
+			for(Links link : payment.getLinks()) {
+				if(link.getRel().equals("approval_url")) {
+					return "redirect:" + link.getHref();
+				}
+			}
+
+		} catch (PayPalRESTException e) {
+			LOGGER.error("Error al crear pago con PayPal: {}", e.getMessage());
+			redirectAttributes.addFlashAttribute("error", "Error al procesar el pago: " + e.getMessage());
+		}
+
+		redirectAttributes.addFlashAttribute("error", "No se pudo procesar el pago");
+		return "redirect:/usuario/compras";
+	}
+
+	@GetMapping("/paypal/success")
+	public String paypalSuccessPayment(@RequestParam("paymentId") String paymentId,
+									   @RequestParam("PayerID") String payerId,
+									   HttpSession session, Model model) {
+
+		try {
+			Payment payment = paypalService.executePayment(paymentId, payerId);
+
+			if(payment.getState().equals("approved")) {
+				Integer idOrden = (Integer) session.getAttribute("ordenId");
+				if (idOrden != null) {
+					ordenService.findById(idOrden).ifPresent(orden -> {
+						orden.setEstado("PAGADO");
+						ordenService.update(orden);
+						model.addAttribute("orden", orden);
+					});
+				}
+
+				return "pagos/pago_exitoso";
+			}
+		} catch (PayPalRESTException e) {
+			LOGGER.error("Error al ejecutar pago con PayPal: {}", e.getMessage());
+		}
+
+		return "redirect:/paypal/cancel";
+	}
+
+	@GetMapping("/paypal/cancel")
+	public String paypalCancelPayment(HttpSession session, Model model) {
+		Integer idOrden = (Integer) session.getAttribute("ordenId");
+		if (idOrden != null) {
+			ordenService.findById(idOrden).ifPresent(orden -> {
+				orden.setEstado("RECHAZADO");
+				ordenService.update(orden);
+				model.addAttribute("orden", orden);
+			});
+		}
+
+		return "pagos/pago_fallido";
+	}
+	@PostMapping("/paypalOrder")
+	public String processPaypalOrder(HttpSession session, RedirectAttributes redirectAttributes) {
+		if (session.getAttribute("idUsuario") == null) {
+			return "redirect:/usuario/login";
+		}
+
+		try {
+			LOGGER.info("Iniciando proceso de pago con PayPal");
+
+			// Obtener usuario
+			Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+			Usuario usuario = usuarioService.findById(idUsuario)
+					.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+			LOGGER.info("Usuario identificado: ID={}, Nombre={}", idUsuario, usuario.getNombre());
+
+			// Validar carrito
+			if (detalles.isEmpty()) {
+				LOGGER.error("Carrito vacío al intentar procesar un pago");
+				redirectAttributes.addFlashAttribute("error", "El carrito está vacío");
+				return "redirect:/getCart";
+			}
+
+			// Crear nueva orden
+			orden.setFechacreacion(new Date());
+			orden.setNumero(ordenService.generarNumeroOrden());
+			orden.setUsuario(usuario);
+			orden.setEstado("PENDIENTE");
+			LOGGER.info("Orden creada: Número={}, Total={}", orden.getNumero(), orden.getTotal());
+
+			// Guardar orden
+			Orden ordenGuardada = ordenService.save(orden);
+			LOGGER.info("Orden guardada en DB con ID: {}", ordenGuardada.getId());
+
+			// Guardar ID de orden en sesión
+			session.setAttribute("ordenId", ordenGuardada.getId());
+
+			// Guardar detalles
+			for (DetalleOrden detalle : detalles) {
+				detalle.setOrden(ordenGuardada);
+				detalleOrdenService.save(detalle);
+				LOGGER.info("Detalle guardado: Producto={}, Cantidad={}, Total={}",
+						detalle.getNombre(), detalle.getCantidad(), detalle.getTotal());
+			}
+
+			// Limpiar el carrito
+			List<DetalleOrden> tempDetalles = new ArrayList<>(detalles);
+			orden = new Orden();
+			detalles.clear();
+			LOGGER.info("Carrito limpiado");
+
+			// Crear pago en PayPal
+			LOGGER.info("Generando pago en PayPal para orden ID: {}", ordenGuardada.getId());
+			Payment payment = paypalService.createPayment(
+					ordenGuardada,
+					"http://localhost:63106/paypal/cancel",
+					"http://localhost:63106/paypal/success"
+			);
+			LOGGER.info("Pago de PayPal creado con ID: {}", payment.getId());
+
+			// Buscar el enlace de aprobación
+			String approvalUrl = null;
+			for (Links link : payment.getLinks()) {
+				if (link.getRel().equals("approval_url")) {
+					approvalUrl = link.getHref();
+					LOGGER.info("URL de aprobación de PayPal: {}", approvalUrl);
+					break;
+				}
+			}
+
+			if (approvalUrl != null) {
+				return "redirect:" + approvalUrl;
+			} else {
+				LOGGER.error("No se encontró URL de aprobación en la respuesta de PayPal");
+				redirectAttributes.addFlashAttribute("error", "Error al procesar el pago con PayPal");
+				return "redirect:/user/cart";
+			}
+
+		} catch (Exception e) {
+			LOGGER.error("Error al procesar el pago con PayPal: {}", e.getMessage(), e);
+			redirectAttributes.addFlashAttribute("error", "Error al procesar el pago: " + e.getMessage());
+			return "redirect:/getCart";
+		}
+	}
+
+	@GetMapping("/prepareOrder")
+	@ResponseBody
+	public ResponseEntity<?> prepareOrder(HttpSession session) {
+		if (session.getAttribute("idUsuario") == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autenticado");
+		}
+
+		try {
+			Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idUsuario").toString()))
+					.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+			orden.setFechacreacion(new Date());
+			orden.setNumero(ordenService.generarNumeroOrden());
+			orden.setUsuario(usuario);
+			orden.setEstado("PENDIENTE");
+
+			Orden ordenGuardada = ordenService.save(orden);
+
+			// Guardar el ID de la orden en la sesión para usarlo con PayPal
+			session.setAttribute("ordenId", ordenGuardada.getId());
+
+			for (DetalleOrden detalle : detalles) {
+				detalle.setOrden(ordenGuardada);
+				detalleOrdenService.save(detalle);
+			}
+
+			// Limpiar carrito
+			List<DetalleOrden> detallesGuardados = new ArrayList<>(detalles);
+			orden = new Orden();
+			detalles.clear();
+
+			Map<String, Object> response = new HashMap<>();
+			response.put("success", true);
+			response.put("ordenId", ordenGuardada.getId());
+			response.put("total", ordenGuardada.getTotal());
+			response.put("detalles", detallesGuardados);
+
+			return ResponseEntity.ok(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error al preparar la orden: " + e.getMessage());
+		}
+	}
+
 }
