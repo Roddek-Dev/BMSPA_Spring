@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html :: head}">
+	<title>Órdenes | BarberMusic Admin</title>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Sidebar -->
+		<div th:replace="~{administrador/template_admins.html :: aside}"></div>
+
+		<!-- Main Content -->
+		<main class="dashboard-main">
+			<!-- Encabezado -->
+			<div class="page-header">
+				<h1>
+					<span class="material-icons-sharp">receipt_long</span>
+					Órdenes
+				</h1>
+				<nav class="breadcrumbs">
+					<a th:href="@{/administrador}">Inicio</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<span>Lista de Órdenes</span>
+				</nav>
+			</div>
+
+			<!-- Contenido Principal -->
+			<section class="tabla-section">
+				<div class="card">
+					<div class="card-header">
+						<h2>Historial de Órdenes</h2>
+					</div>
+
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="agendamientos-table">
+								<thead>
+									<tr>
+										<th>No. Orden</th>
+										<th>Fecha Creación</th>
+										<th>Total</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="orden : ${ordenes}">
+										<td th:text="${orden.numero}"></td>
+										<td th:text="${#dates.format(orden.fechacreacion, 'dd/MM/yyyy HH:mm')}"></td>
+										<td th:text="${'$' + #numbers.formatDecimal(orden.total, 1, 2, 'COMMA')}"></td>
+										<td class="actions">
+											<a class="btn-action btn-view"
+												th:href="@{/administrador/detalle/{id}(id=${orden.id})}"
+												title="Ver detalle">
+												<span class="material-icons-sharp">visibility</span>
+											</a>
+										</td>
+									</tr>
+									<tr th:if="${ordenes.empty}">
+										<td colspan="4" class="text-center text-muted py-3">
+											No hay órdenes registradas
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Right Section -->
+		<div th:replace="~{administrador/template_admins.html :: right_section}"></div>
+	</div>
+
+	<div th:replace="~{administrador/template_admins.html :: jsFiles}"></div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			setActiveLink("ordenes-link");
+		});
+	</script>
+</body>
+
+</html>

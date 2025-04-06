@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html::head}">
+	<title>Agendamientos | BarberMusic Admin</title>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Sidebar -->
+		<div th:replace="~{administrador/template_admins.html::aside}"></div>
+
+		<!-- Main Content -->
+		<main class="agendamientos-main">
+			<!-- Encabezado -->
+			<div class="page-header">
+				<h1>
+					<span class="material-icons-sharp">calendar_today</span>
+					Agendamientos
+				</h1>
+				<nav class="breadcrumbs">
+					<a th:href="@{/administrador}">Inicio</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<span>Agendamientos</span>
+				</nav>
+			</div>
+
+			<!-- Contenido Principal -->
+			<section class="tabla-section">
+				<div class="card">
+					<div class="card-header">
+						<h2>Lista de Agendamientos</h2>
+
+					</div>
+
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="agendamientos-table">
+								<thead>
+									<tr>
+										<th>Fecha y Hora</th>
+										<th>Estado</th>
+										<th>Cliente</th>
+										<th>Servicio</th>
+										<th>Sucursal</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="agendamiento : ${agendamientos}">
+										<td th:text="${#temporals.format(agendamiento.fechaHora, 'dd/MM/yyyy HH:mm')}">
+										</td>
+										<td>
+											<span class="status-badge"
+												th:classappend="${agendamiento.estado.toLowerCase()}">
+												<span th:text="${agendamiento.estado}"></span>
+											</span>
+										</td>
+										<td th:text="${agendamiento.usuario.nombre}"></td>
+										<td th:text="${agendamiento.servicio.nombre}"></td>
+										<td th:text="${agendamiento.sucursal.nombre}"></td>
+										<td class="actions">
+											<a class="btn-action btn-edit"
+												th:href="@{/agendamientos/edit/{id}(id=${agendamiento.id})}"
+												title="Editar">
+												<span class="material-icons-sharp">edit</span>
+											</a>
+											<a class="btn-action btn-delete"
+												th:href="@{/agendamientos/delete/{id}(id=${agendamiento.id})}"
+												title="Eliminar"
+												onclick="return confirm('¿Estás seguro de eliminar este agendamiento?');">
+												<span class="material-icons-sharp">delete</span>
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Right Section -->
+		<div th:replace="~{administrador/template_admins.html::right_section}"></div>
+	</div>
+
+	<div th:replace="~{administrador/template_admins.html::jsFiles}"></div>
+	<script>
+		setActiveLink("agendamientos-link");
+		// Opcional: Inicializar plugins de tabla si es necesario
+	</script>
+</body>
+
+</html>

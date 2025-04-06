@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{usuario/template_user.html::head}"> </head>
+  <style>
+    #main {
+      height: 80vh; /* Ajusta la altura del contenido principal */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .maintenance-icon {
+      font-size: 6rem;
+      color: #ffc107; /* Color amarillo para destacar el ícono */
+      margin-bottom: 1rem;
+    }
+
+    .btn-home {
+      margin-top: 1.5rem;
+    }
+  </style>
+
+
+<body class="index-page">
+
+  <!-- Header -->
+  <div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
+  <div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
+
+  <!-- Main Content -->
+  <main id="main">
+    <div class="container">
+      <div class="maintenance-icon">⚙️</div>
+      <h1 class="display-4 fw-bold">¡Estamos en mantenimiento!</h1>
+      <p class="lead mt-3">
+        Actualmente estamos realizando mejoras para ofrecerte una mejor experiencia. Por favor, vuelve más tarde.
+      </p>
+      <a th:href="@{/}" class="btn btn-dark btn-lg btn-home">Volver a Inicio</a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div th:insert="~{usuario/template_user.html::footer}"></div>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- JavaScript Files -->
+  <div th:insert="~{usuario/template_user.html::jsFiles}"></div>
+
+</body>
+
+</html>

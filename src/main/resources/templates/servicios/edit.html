@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html :: head}">
+	<title>Editar Servicio | BarberMusic Admin</title>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Sidebar -->
+		<div th:replace="~{administrador/template_admins.html :: aside}"></div>
+
+		<!-- Main Content -->
+		<main class="edit-agendamiento-main">
+			<!-- Encabezado -->
+			<div class="page-header">
+				<h1>
+					<span class="material-icons-sharp">miscellaneous_services</span>
+					Editar Servicio
+				</h1>
+				<nav class="breadcrumbs">
+					<a th:href="@{/administrador}">Inicio</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<a th:href="@{/servicios}">Servicios</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<span th:text="${servicio.nombre} ?: 'Edición'"></span>
+				</nav>
+			</div>
+
+			<!-- Formulario de Edición -->
+			<section class="edit-agendamiento-section">
+				<div class="card">
+					<div class="card-header">
+						<h2 th:text="${servicio.nombre}"></h2>
+					</div>
+
+					<div class="card-body">
+						<form th:action="@{/servicios/update}" method="post" enctype="multipart/form-data"
+							class="agendamiento-form">
+							<input type="hidden" name="id" th:value="${servicio.id}">
+
+							<div class="form-grid">
+								<!-- Columna Izquierda -->
+								<div class="form-column">
+									<div class="form-group">
+										<label for="nombre">Nombre</label>
+										<input type="text" id="nombre" name="nombre" class="form-control"
+											placeholder="Nombre del servicio" required th:value="${servicio.nombre}">
+									</div>
+
+									<div class="form-group">
+										<label for="descripcion">Descripción</label>
+										<textarea id="descripcion" name="descripcion" class="form-control"
+											placeholder="Descripción detallada del servicio" required
+											th:text="${servicio.descripcion}"></textarea>
+									</div>
+								</div>
+
+								<!-- Columna Derecha -->
+								<div class="form-column">
+									<div class="form-group">
+										<label for="duracion">Duración (minutos)</label>
+										<input type="number" id="duracion" name="duracion" class="form-control"
+											placeholder="Ej: 30, 45, 60" min="15" max="180" required
+											th:value="${servicio.duracion}">
+									</div>
+
+									<div class="form-group">
+										<label for="precio">Precio</label>
+										<div class="input-group">
+											<span class="input-group-text">$</span>
+											<input type="number" id="precio" name="precio" class="form-control"
+												placeholder="Precio del servicio" min="0" step="0.01" required
+												th:value="${servicio.precio}">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="img">Imagen</label>
+										<input type="file" id="img" name="img" class="form-control"
+											accept="image/jpeg, image/png">
+										<small class="text-muted">Dejar en blanco para mantener la imagen actual</small>
+										<div th:if="${servicio.imagen != null and !servicio.imagen.isEmpty()}"
+											class="current-image mt-2">
+											<img th:src="@{'/uploads/' + ${servicio.imagen}}" alt="Imagen actual"
+												class="img-thumbnail" style="max-width: 150px;">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-actions">
+								<button type="submit" class="btn btn-primary">
+									<span class="material-icons-sharp">save</span>
+									Guardar Cambios
+								</button>
+								<a th:href="@{/servicios}" class="btn btn-secondary">
+									<span class="material-icons-sharp">cancel</span>
+									Cancelar
+								</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Right Section -->
+		<div th:replace="~{administrador/template_admins.html :: right_section}"></div>
+	</div>
+
+	<div th:replace="~{administrador/template_admins.html :: jsFiles}"></div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			setActiveLink("servicios-link");
+
+			// Validación de imagen
+			const imgInput = document.getElementById('img');
+			if (imgInput) {
+				imgInput.addEventListener('change', function (e) {
+					const file = e.target.files[0];
+					if (file) {
+						// Validar tipo de archivo
+						const validTypes = ['image/jpeg', 'image/png'];
+						if (!validTypes.includes(file.type)) {
+							alert('Por favor sube una imagen JPG o PNG');
+							imgInput.value = '';
+							return;
+						}
+
+						// Opcional: Validar dimensiones
+						const img = new Image();
+						img.onload = function () {
+							if (this.width !== 500 || this.height !== 500) {
+								alert('La imagen debe tener dimensiones de 500x500 píxeles');
+								imgInput.value = '';
+							}
+						};
+						img.src = URL.createObjectURL(file);
+					}
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html::head}">
+	<title>Editar Sucursal | BarberMusic Admin</title>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Sidebar -->
+		<div th:replace="~{administrador/template_admins.html::aside}"></div>
+
+		<!-- Main Content -->
+		<main class="edit-agendamiento-main">
+			<!-- Encabezado -->
+			<div class="page-header">
+				<h1>
+					<span class="material-icons-sharp">store</span>
+					Editar Sucursal
+				</h1>
+				<nav class="breadcrumbs">
+					<a th:href="@{/administrador}">Inicio</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<a th:href="@{/sucursales}">Sucursales</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<span th:text="${sucursal.nombre} ?: 'Edición'"></span>
+				</nav>
+			</div>
+
+			<!-- Formulario de Edición -->
+			<section class="edit-agendamiento-section">
+				<div class="card">
+					<div class="card-header">
+						<h2>
+							<span th:text="${sucursal.nombre}"></span>
+						</h2>
+					</div>
+
+					<div class="card-body">
+						<form th:action="@{/sucursales/update}" method="post" enctype="multipart/form-data"
+							class="agendamiento-form">
+							<input type="hidden" name="id" th:value="${sucursal.id}">
+
+							<div class="form-grid">
+								<!-- Columna Izquierda -->
+								<div class="form-column">
+									<div class="form-group">
+										<label for="nombre">Nombre</label>
+										<input type="text" id="nombre" name="nombre" th:value="${sucursal.nombre}"
+											class="form-control" placeholder="Nombre de la sucursal" required>
+									</div>
+
+									<div class="form-group">
+										<label for="direccion">Dirección</label>
+										<input type="text" id="direccion" name="direccion"
+											th:value="${sucursal.direccion}" class="form-control"
+											placeholder="Dirección completa" required>
+									</div>
+
+									<div class="form-group">
+										<label for="ciudad">Ciudad</label>
+										<input type="text" id="ciudad" name="ciudad" th:value="${sucursal.ciudad}"
+											class="form-control" placeholder="Ciudad" required>
+									</div>
+								</div>
+
+								<!-- Columna Derecha -->
+								<div class="form-column">
+									<div class="form-group">
+										<label for="link_maps">Enlace Google Maps</label>
+										<input type="url" id="link_maps" name="link_maps"
+											th:value="${sucursal.link_maps}" class="form-control"
+											placeholder="https://maps.google.com/..." required>
+									</div>
+
+									<div class="form-group">
+										<label for="horarios">Horarios</label>
+										<input type="text" id="horarios" name="horarios" th:value="${sucursal.horarios}"
+											class="form-control" placeholder="Ej: Lunes a Viernes 9:00-18:00" required>
+									</div>
+								</div>
+
+								<!-- Campo de imagen (ocupa ambas columnas) -->
+								<div class="form-group form-full-width">
+									<label for="img">Imagen (500x500 px, JPG/PNG)</label>
+									<input type="file" id="img" name="img" class="form-control"
+										accept="image/jpeg, image/png">
+									<small class="text-muted">Dejar en blanco para mantener la imagen actual</small>
+									<div th:if="${sucursal.imagen != null and !sucursal.imagen.isEmpty()}"
+										class="current-image mt-2">
+										<img th:src="@{'/uploads/' + ${sucursal.imagen}}" alt="Imagen actual"
+											class="img-thumbnail" style="max-width: 150px;">
+									</div>
+								</div>
+							</div>
+
+							<div class="form-actions">
+								<button type="submit" class="btn btn-primary">
+									<span class="material-icons-sharp">save</span>
+									Guardar Cambios
+								</button>
+								<a th:href="@{/sucursales}" class="btn btn-secondary">
+									<span class="material-icons-sharp">cancel</span>
+									Cancelar
+								</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Right Section -->
+		<div th:replace="~{administrador/template_admins.html::right_section}"></div>
+	</div>
+
+	<div th:replace="~{administrador/template_admins.html::jsFiles}"></div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			setActiveLink("sucursales-link");
+
+			// Validación de imagen
+			const imgInput = document.getElementById('img');
+			if (imgInput) {
+				imgInput.addEventListener('change', function (e) {
+					const file = e.target.files[0];
+					if (file) {
+						// Validar tipo de archivo
+						const validTypes = ['image/jpeg', 'image/png'];
+						if (!validTypes.includes(file.type)) {
+							alert('Por favor sube una imagen JPG o PNG');
+							imgInput.value = '';
+							return;
+						}
+
+						// Validar dimensiones (opcional, requiere más código)
+						// Podrías usar FileReader para cargar y verificar dimensiones
+					}
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

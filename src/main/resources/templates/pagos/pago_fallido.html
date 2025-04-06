@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{usuario/template_user.html::head}"></head>
+
+<title>Pago Fallido | BarberMusicSpa</title>
+<style>
+	.error-section {
+		padding: 100px 0;
+		text-align: center;
+		background-color: #fff8f8;
+	}
+
+	.error-icon {
+		font-size: 5rem;
+		color: #dc3545;
+		margin-bottom: 2rem;
+		animation: shake 0.5s;
+	}
+
+	.error-card {
+		max-width: 600px;
+		margin: 0 auto;
+		padding: 3rem;
+		border-radius: 15px;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+		background: white;
+		border-top: 5px solid #dc3545;
+	}
+
+	.error-message {
+		font-size: 1.1rem;
+		color: #6c757d;
+		margin: 1.5rem 0;
+		line-height: 1.6;
+	}
+
+	.btn-retry {
+		padding: 0.75rem 2.5rem;
+		font-weight: 500;
+		border-radius: 50px;
+		margin: 1rem 0.5rem;
+		transition: all 0.3s;
+		background-color: var(--accent-color);
+		color: white;
+	}
+
+	.btn-secondary-action {
+		padding: 0.75rem 2.5rem;
+		font-weight: 500;
+		border-radius: 50px;
+		margin: 1rem 0.5rem;
+		transition: all 0.3s;
+	}
+
+	.btn-retry:hover,
+	.btn-secondary-action:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	}
+
+	@keyframes shake {
+
+		0%,
+		100% {
+			transform: translateX(0);
+		}
+
+		10%,
+		30%,
+		50%,
+		70%,
+		90% {
+			transform: translateX(-5px);
+		}
+
+		20%,
+		40%,
+		60%,
+		80% {
+			transform: translateX(5px);
+		}
+	}
+
+	.troubleshooting {
+		text-align: left;
+		margin-top: 2rem;
+		padding: 1.5rem;
+		background-color: #f8f9fa;
+		border-radius: 10px;
+	}
+
+	.troubleshooting h5 {
+		color: var(--heading-color);
+		margin-bottom: 1rem;
+	}
+
+	.troubleshooting ul {
+		padding-left: 1.5rem;
+		margin-bottom: 0;
+	}
+
+	.troubleshooting li {
+		margin-bottom: 0.5rem;
+	}
+</style>
+
+<body class="index-page">
+
+	<div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
+	<div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
+
+	<main id="main">
+		<!-- ======= Error Section ======= -->
+		<section class="error-section">
+			<div class="container">
+				<div class="error-card">
+					<div class="error-icon">
+						<i class="bi bi-x-circle-fill"></i>
+					</div>
+					<h1 class="mb-3">Pago Fallido</h1>
+
+					<p class="error-message">
+						No pudimos procesar tu pago. Por favor intenta nuevamente o prueba con otro método de pago.
+					</p>
+
+					<div class="d-flex flex-wrap justify-content-center">
+						<a th:href="@{/order}" class="btn btn-retry">
+							<i class="bi bi-credit-card me-2"></i> Reintentar pago
+						</a>
+						<a th:href="@{/usuario/compras}" class="btn btn-secondary-action btn-outline-secondary">
+							<i class="bi bi-bag me-2"></i> Ver mis pedidos
+						</a>
+					</div>
+
+					<div class="troubleshooting">
+						<h5><i class="bi bi-question-circle me-2"></i>¿Necesitas ayuda?</h5>
+						<ul>
+							<li>Verifica que los datos de tu tarjeta sean correctos</li>
+							<li>Asegúrate de tener fondos suficientes</li>
+							<li>Prueba con otra tarjeta o método de pago</li>
+							<li>Contacta a tu banco si el problema persiste</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section><!-- End Error Section -->
+	</main>
+
+	<div th:insert="~{usuario/template_user.html::footer}"></div>
+
+	<!-- Scroll Top -->
+	<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+		<i class="bi bi-arrow-up-short"></i>
+	</a>
+
+	<!-- Preloader -->
+	<div id="preloader"></div>
+
+	<div th:insert="~{usuario/template_user.html::jsFiles}"></div>
+
+</body>
+
+</html>

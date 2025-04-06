@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html::head}">
+    <title>Editar Agendamiento | BarberMusic Admin</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div th:replace="~{administrador/template_admins.html::aside}"></div>
+
+        <!-- Main Content -->
+        <main class="edit-agendamiento-main">
+            <!-- Encabezado -->
+            <div class="page-header">
+                <h1>
+                    <span class="material-icons-sharp">edit_calendar</span>
+                    Editar Agendamiento
+                </h1>
+                <nav class="breadcrumbs">
+                    <a th:href="@{/administrador}">Inicio</a>
+                    <span class="material-icons-sharp">chevron_right</span>
+                    <a th:href="@{/agendamientos}">Agendamientos</a>
+                    <span class="material-icons-sharp">chevron_right</span>
+                    <span>Edición</span>
+                </nav>
+            </div>
+
+            <!-- Formulario de Edición -->
+            <section class="edit-agendamiento-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>
+                            <span th:text="${agendamiento.usuario.nombre}"></span> -
+                            <span th:text="${agendamiento.servicio.nombre}"></span>
+                        </h2>
+                    </div>
+
+                    <div class="card-body">
+                        <form th:action="@{/agendamientos/update}" method="post" class="agendamiento-form">
+                            <input type="hidden" name="id" th:value="${agendamiento.id}">
+
+                            <div class="form-grid">
+                                <!-- Columna Izquierda -->
+                                <div class="form-column">
+                                    <div class="form-group">
+                                        <label for="fechaHora">Fecha y Hora</label>
+                                        <input type="datetime-local" id="fechaHora" name="fechaHora"
+                                            th:value="${#temporals.format(agendamiento.fechaHora, 'yyyy-MM-dd') + 'T' + #temporals.format(agendamiento.fechaHora, 'HH:mm')}"
+                                            class="form-control" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="estado">Estado</label>
+                                        <select id="estado" name="estado" class="form-control" required>
+                                            <option value="">Seleccione un estado</option>
+                                            <option th:each="estado : ${estadosAgendamiento}" th:value="${estado}"
+                                                th:text="${estado}" th:selected="${estado == agendamiento.estado}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Columna Derecha -->
+                                <div class="form-column">
+                                    <div class="form-group">
+                                        <label>Cliente</label>
+                                        <div class="form-static" th:text="${agendamiento.usuario.nombre}"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Servicio</label>
+                                        <div class="form-static" th:text="${agendamiento.servicio.nombre}"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Sucursal</label>
+                                        <div class="form-static" th:text="${agendamiento.sucursal.nombre}"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Campo de mensaje (ocupa ambas columnas) -->
+                                <div class="form-group form-mensaje">
+                                    <label for="mensaje">Mensaje/Notas</label>
+                                    <textarea id="mensaje" name="mensaje" class="form-control"
+                                        th:text="${agendamiento.mensaje}"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="material-icons-sharp">save</span>
+                                    Guardar Cambios
+                                </button>
+                                <a th:href="@{/agendamientos}" class="btn btn-secondary">
+                                    <span class="material-icons-sharp">cancel</span>
+                                    Cancelar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Section -->
+        <div th:replace="~{administrador/template_admins.html::right_section}"></div>
+    </div>
+
+    <div th:replace="~{administrador/template_admins.html::jsFiles}"></div>
+
+    <script>
+        
+        // Llamar a la función cuando se cargue la página
+        document.addEventListener('DOMContentLoaded', function() {
+            setActiveLink("agendamientos-link");
+            
+            // Configuración para el input datetime-local
+            const fechaHoraInput = document.getElementById('fechaHora');
+            if (fechaHoraInput) {
+                // Establecer fecha mínima como hoy
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const hours = String(today.getHours()).padStart(2, '0');
+                const minutes = String(today.getMinutes()).padStart(2, '0');
+                
+                fechaHoraInput.min = `${year}-${month}-${day}T${hours}:${minutes}`;
+                
+                // Opcional: Si quieres forzar intervalos de 30 minutos
+                fechaHoraInput.addEventListener('change', function() {
+                    const date = new Date(this.value);
+                    const minutes = date.getMinutes();
+                    if (minutes % 30 !== 0) {
+                        date.setMinutes(Math.round(minutes / 30) * 30);
+                        const formattedDate = date.toISOString().slice(0, 16);
+                        this.value = formattedDate;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

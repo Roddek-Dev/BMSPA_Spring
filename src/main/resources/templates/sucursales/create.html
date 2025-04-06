@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html :: head}">
+	<title>Crear Sucursal | BarberMusic Admin</title>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Sidebar -->
+		<div th:replace="~{administrador/template_admins.html :: aside}"></div>
+
+		<!-- Main Content -->
+		<main class="edit-agendamiento-main">
+			<!-- Encabezado -->
+			<div class="page-header">
+				<h1>
+					<span class="material-icons-sharp">add_business</span>
+					Crear Sucursal
+				</h1>
+				<nav class="breadcrumbs">
+					<a th:href="@{/administrador}">Inicio</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<a th:href="@{/sucursales}">Sucursales</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<span>Nueva Sucursal</span>
+				</nav>
+			</div>
+
+			<!-- Formulario de Creación -->
+			<section class="edit-agendamiento-section">
+				<div class="card">
+					<div class="card-header">
+						<h2>Nueva Sucursal</h2>
+					</div>
+
+					<div class="card-body">
+						<!-- Asegúrate de que el th:object apunte a tu objeto de formulario -->
+						<form th:action="@{/sucursales/save}" method="post" enctype="multipart/form-data"
+							class="agendamiento-form">
+							<div class="form-grid">
+								<!-- Columna Izquierda -->
+								<div class="form-column">
+									<div class="form-group">
+										<label for="nombre">Nombre</label>
+										<input type="text" id="nombre" name="nombre" class="form-control"
+											placeholder="Nombre de la sucursal" required>
+									</div>
+
+									<div class="form-group">
+										<label for="ciudad">Ciudad</label>
+										<input type="text" id="ciudad" name="ciudad" class="form-control"
+											placeholder="Ciudad donde se ubica" required>
+									</div>
+
+									<div class="form-group">
+										<label for="direccion">Dirección</label>
+										<input type="text" id="direccion" name="direccion" class="form-control"
+											placeholder="Dirección completa" required>
+									</div>
+								</div>
+
+								<!-- Columna Derecha -->
+								<div class="form-column">
+									<div class="form-group">
+										<label for="link_maps">Enlace Google Maps</label>
+										<input type="url" id="link_maps" name="link_maps" class="form-control"
+											placeholder="https://maps.google.com/..." required>
+									</div>
+
+									<div class="form-group">
+										<label for="horarios">Horarios</label>
+										<input type="text" id="horarios" name="horarios" class="form-control"
+											placeholder="Ej: Lunes a Viernes 9:00-18:00" required>
+									</div>
+
+									<div class="form-group">
+										<label for="img">Imagen</label>
+										<input type="file" id="img" name="img" class="form-control"
+											accept="image/jpeg, image/png">
+										<small class="text-muted">Dimensiones recomendadas: 500x500 px (JPG/PNG)</small>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-actions">
+								<button type="submit" class="btn btn-primary">
+									<span class="material-icons-sharp">save</span>
+									Guardar Sucursal
+								</button>
+								<a th:href="@{/sucursales}" class="btn btn-secondary">
+									<span class="material-icons-sharp">cancel</span>
+									Cancelar
+								</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Right Section -->
+		<div th:replace="~{administrador/template_admins.html :: right_section}"></div>
+	</div>
+
+	<div th:replace="~{administrador/template_admins.html :: jsFiles}"></div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			setActiveLink("sucursales-link");
+
+			// Validación de imagen
+			const imgInput = document.getElementById('img');
+			if (imgInput) {
+				imgInput.addEventListener('change', function (e) {
+					const file = e.target.files[0];
+					if (file) {
+						// Validar tipo de archivo
+						const validTypes = ['image/jpeg', 'image/png'];
+						if (!validTypes.includes(file.type)) {
+							alert('Por favor sube una imagen JPG o PNG');
+							imgInput.value = '';
+							return;
+						}
+
+						// Opcional: Validar dimensiones
+						const img = new Image();
+						img.onload = function () {
+							if (this.width !== 500 || this.height !== 500) {
+								alert('La imagen debe tener dimensiones de 500x500 píxeles');
+								imgInput.value = '';
+							}
+						};
+						img.src = URL.createObjectURL(file);
+					}
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

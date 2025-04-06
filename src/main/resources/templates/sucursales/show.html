@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html :: head}">
+	<title>Sucursales | BarberMusic Admin</title>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Sidebar -->
+		<div th:replace="~{administrador/template_admins.html :: aside}"></div>
+
+		<!-- Main Content -->
+		<main class="dashboard-main">
+			<!-- Encabezado -->
+			<div class="page-header">
+				<h1>
+					<span class="material-icons-sharp">store</span>
+					Sucursales
+				</h1>
+				<nav class="breadcrumbs">
+					<a th:href="@{/administrador}">Inicio</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<span>Sucursales</span>
+				</nav>
+			</div>
+
+			<!-- Contenido Principal -->
+			<section class="tabla-section">
+				<div class="card">
+					<div class="card-header">
+						<h2>Lista de Sucursales</h2>
+						<a th:href="@{/sucursales/create}" class="btn-add">
+							<span class="material-icons-sharp">add</span>
+							Nueva Sucursal
+						</a>
+					</div>
+
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="agendamientos-table">
+								<thead>
+									<tr>
+										<th>Nombre</th>
+										<th>Dirección</th>
+										<th>Ubicación</th>
+										<th>Horarios</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="sucursal, stat : ${sucursales}" th:class="${stat.odd}? 'odd-row'">
+										<td th:text="${sucursal.nombre}"></td>
+										<td th:text="${sucursal.direccion}"></td>
+										<td>
+											<a th:href="${sucursal.link_maps}" target="_blank" rel="noopener noreferrer"
+												class="btn-map">
+												<span class="material-icons-sharp">map</span>
+												Ver Mapa
+											</a>
+										</td>
+										<td th:text="${sucursal.horarios}"></td>
+										<td class="actions">
+											<a class="btn-action btn-edit"
+												th:href="@{/sucursales/edit/{id}(id=${sucursal.id})}" title="Editar">
+												<span class="material-icons-sharp">edit</span>
+											</a>
+											<a class="btn-action"
+												th:href="@{/sucursales/delete/{id}(id=${sucursal.id})}" title="Eliminar">
+												<span class="material-icons-sharp">delete</span>
+											</a>
+										</td>
+									</tr>
+									<tr th:if="${sucursales.empty}">
+										<td colspan="5" class="text-center text-muted py-3">
+											No hay sucursales registradas
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Right Section -->
+		<div th:replace="~{administrador/template_admins.html :: right_section}"></div>
+	</div>
+
+	<div th:replace="~{administrador/template_admins.html :: jsFiles}"></div>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			setActiveLink("sucursales-link");
+
+			// Mejora para confirmación de eliminación
+			document.querySelectorAll('.btn-delete').forEach(btn => {
+				btn.addEventListener('click', function (e) {
+					if (!confirm('¿Estás seguro de eliminar esta sucursal?')) {
+						e.preventDefault();
+					}
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>

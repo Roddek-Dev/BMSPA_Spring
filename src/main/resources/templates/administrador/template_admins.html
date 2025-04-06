@@ -1,0 +1,208 @@
+<head th:fragment="head">
+	<title>ADMIN - Barber Music Spa</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+	<!-- Template Main CSS File -->
+	<link th:href="@{/assetsADMINS/css/style.css}" rel="stylesheet">
+</head>
+
+<div class="container">
+	<!-- Sidebar Section -->
+	<div th:fragment="aside">
+		<aside>
+			<div class="toggle">
+				<div class="logo">
+					<img th:src="@{/assetsADMINS/img/LogoMusic.png}" alt="">
+					<h2>Barber<span class="danger">Music & Spa</span></h2>
+				</div>
+				<div class="close" id="close-btn">
+					<span class="material-icons-sharp">
+						close
+					</span>
+				</div>
+			</div>
+
+			<div class="sidebar">
+				<a id="dashboard-link" th:href="@{/administrador}" class="active">
+					<span class="material-icons-sharp">
+						dashboard
+					</span>
+					<h3>Panel</h3>
+				</a>
+
+				<a id="agendamientos-link" th:href="@{/agendamientos}">
+					<span class="material-icons-sharp">
+						receipt_long
+					</span>
+					<h3>Agendamientos</h3>
+				</a>
+
+				<a id="sucursales-link" th:href="@{/sucursales}">
+					<span class="material-icons-sharp">
+						person_outline
+					</span>
+					<h3>Sucursales</h3>
+				</a>
+
+				<a id="servicios-link" th:href="@{/servicios}">
+					<span class="material-icons-sharp">
+						insights
+					</span>
+					<h3>Servicios</h3>
+				</a>
+
+				<a id="productos-link" th:href="@{/productos}">
+					<span class="material-icons-sharp">
+						inventory
+					</span>
+					<h3>Productos</h3>
+				</a>
+
+				<a id="ordenes-link" th:href="@{/administrador/ordenes}">
+					<span class="material-icons-sharp">
+						mail_outline
+					</span>
+					<h3>Ordenes</h3>
+					<span class="message-count">27</span>
+				</a>
+
+				<a id="nuevo-admin-link" th:href="@{/administrador/nuevo}">
+					<span class="material-icons-sharp">
+						add
+					</span>
+					<h3>Nuevo Admin</h3>
+				</a>
+				<a id="profile-link" th:href="@{/administrador/profile}" class="sidebar-item">
+					<span class="material-icons-sharp">person</span>
+					<h3>Mi perfil</h3>
+				</a>
+
+				<a id="user-view-link" th:href="@{/}" class="sidebar-item">
+					<span class="material-icons-sharp">visibility</span>
+					<h3>Vista Usuario</h3>
+				</a>
+
+				<a id="cerrar-sesion-link" th:href="@{/usuario/cerrar}">
+					<span class="material-icons-sharp">
+						logout
+					</span>
+					<h3>Cerrar Sesión</h3>
+				</a>
+			</div>
+		</aside>
+
+	</div>
+
+
+	<!-- End of Sidebar Section -->
+
+	<!-- Right Section -->
+	<div th:fragment="right_section" class="right-section">
+		<div class="nav">
+			<button id="menu-btn">
+				<span class="material-icons-sharp">
+					menu
+				</span>
+			</button>
+			<div class="dark-mode">
+				<span class="material-icons-sharp">
+					light_mode
+				</span>
+				<span class="material-icons-sharp active">
+					dark_mode
+				</span>
+			</div>
+
+			<div class="profile">
+			    <div class="info">
+			        <p>Hey, <b th:text="${usuario.nombre}">Usuario</b></p>
+			        <small class="text-muted" th:text="${usuario.tipo}">Rol</small>
+			    </div>
+			    <div class="profile-photo">
+			        <img th:src="${usuario.imagen != null && !usuario.imagen.isEmpty()} ? 
+			                      @{'/uploads/' + ${usuario.imagen}} : 
+			                      @{/assetsADMINS/img/lider.jpeg}" 
+			             alt="Foto de perfil" 
+			             onerror="this.src='/assetsADMINS/img/lider.jpeg'">
+			    </div>
+			</div>
+
+
+
+		</div>
+		<!-- End of Nav -->
+
+		<div class="user-profile">
+			<div class="logo">
+				<img th:src="@{/assetsADMINS/img/LogoMusic.png}">
+				<h2>BarberMusic&Spa</h2>
+				<p>Las mejores barberias y spas</p>
+			</div>
+		</div>
+
+		<div class="reminders">
+			<div class="header">
+				<h2>Recordatorios</h2>
+				<span class="material-icons-sharp">
+					notifications_none
+				</span>
+			</div>
+
+			<div class="notification">
+				<div class="icon">
+					<span class="material-icons-sharp">
+						volume_up
+					</span>
+				</div>
+				<div class="content">
+					<div class="info">
+						<h3>Abierto</h3>
+						<small class="text_muted">
+							08:00 AM - 12:00 PM
+						</small>
+					</div>
+					<span class="material-icons-sharp">
+						more_vert
+					</span>
+				</div>
+			</div>
+
+			<div class="notification deactive">
+				<div class="icon">
+					<span class="material-icons-sharp">
+						edit
+					</span>
+				</div>
+				<div class="content">
+					<div class="info">
+						<h3>Abierto</h3>
+						<small class="text_muted">
+							02:00 PM - 08:00 PM
+						</small>
+					</div>
+					<span class="material-icons-sharp">
+						more_vert
+					</span>
+				</div>
+			</div>
+
+			<div class="notification add-reminder">
+				<div>
+					<span class="material-icons-sharp">
+						add
+					</span>
+					<h3>Añadir Recordatorio</h3>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+</div>
+<div th:fragment="jsFiles">
+	<script th:src="@{/assetsADMINS/js/index.js}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</div>

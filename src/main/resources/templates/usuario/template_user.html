@@ -1,0 +1,179 @@
+<head th:fragments="head">
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<title>BarberMusic&Spa</title>
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+
+	<!-- Favicons -->
+	<link th:href="@{/assets/img/LogoMusic.png}" rel="icon">
+	<link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com" rel="preconnect">
+	<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+		integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- Vendor CSS Files -->
+	<link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/aos/aos.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+
+	<!-- Main CSS File -->
+	<link th:href="@{/assets/css/main.css}" rel="stylesheet">
+</head>
+
+<div th:fragment="usuarioCabecera" class="header d-flex align-items-center fixed-top">
+	<div
+		class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+		<a th:href="@{/}" class="logo d-flex align-items-center me-auto me-xl-0">
+			<img th:src="@{/assets/img/LogoMusic.png}" alt="">
+			<h1 class="sitename">BarberMusic&Spa</h1>
+		</a>
+
+		<nav id="navmenu" class="navmenu">
+			<ul>
+				<li><a href="/#hero" class="active">Inicio</a></li>
+				<li><a href="/#about">Informacion</a></li>
+				<li><a href="/#services">Servicios</a></li>
+				<li><a href="/#productos">Productos</a></li>
+				<li><a th:href="@{/getCart}">Carrito <i class="bi bi-cart"></i></a></li>
+				<li class="dropdown"><a href="#"><span>Desplegable</span> <i
+							class="bi bi-chevron-down toggle-dropdown"></i></a>
+					<ul>
+						<li><a href="/#contacto">Agenda tu cita</a></li>
+						<a th:href="@{/usuario/cerrar}">Close <i class="bi bi-box-arrow-in-right"></i></a>
+					</ul>
+				</li>
+				<i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+		</nav>
+
+		<a class="btn-getstarted" th:href="@{/administrador}">Admin <i class="bi bi-box-arrow-in-right"></i></a>
+	</div>
+</div>
+
+
+<div th:fragment="header" class="header d-flex align-items-center fixed-top">
+	<div
+		class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+		<a th:href="@{/}" class="logo d-flex align-items-center me-auto me-xl-0">
+			<img th:src="@{/assets/img/LogoMusic.png}" alt="">
+			<h1 class="sitename">BarberMusic&Spa</h1>
+		</a>
+
+		<nav id="navmenu" class="navmenu">
+			<ul>
+				<li><a href="/#hero" class="active">Inicio</a></li>
+				<li><a href="/#about">Informacion</a></li>
+				<li><a href="/#services">Servicios</a></li>
+				<li><a href="/#productos">Productos</a></li>
+				</li>
+				<li><a th:href="@{/usuario/login}">Carrito <i class="bi bi-cart"></i></a></li>
+			</ul>
+			<i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+		</nav>
+
+		<a class="btn-getstarted" th:href="@{/usuario/login}">Login <i class="bi bi-box-arrow-in-right"></i></a>
+	</div>
+</div>
+
+<div th:fragment="search">
+	<form class="form-inline my-2 my-lg-0" method="post" th:action="@{/searchU}">
+		<input class="form-control mr-sm-2" type="search" placeholder="Buscar un producto" aria-label="search"
+			name="nombreproducto" autocomplete="off"> <br>
+		<button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar <i class="bi bi-search"></i></button>
+	</form>
+</div>
+
+
+
+
+<div th:fragment="footer">
+	<div>
+		<!-- Botón flotante para abrir el chat -->
+		<div class="chatbot-float-btn" id="chatbot-float-btn">
+			<i class="fas fa-comments"></i>
+		</div>
+
+		<!-- Contenedor del chatbot (oculto inicialmente) -->
+		<div class="chatbot-container" id="chatbot-container">
+			<div class="chatbot-header">
+				<h3><i class="fas fa-robot"></i> Asistente Virtual</h3>
+				<button id="chatbot-toggle">×</button>
+			</div>
+			<div class="chatbot-messages" id="chatbot-messages"></div>
+			<div class="chatbot-input">
+				<input type="text" id="chatbot-input" placeholder="Escribe tu pregunta...">
+				<button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+			</div>
+		</div>
+	</div>
+	<footer id="footer" class="footer">
+		<div class="container footer-top">
+			<div class="row gy-3">
+				<div class="col-lg-3 col-md-6 d-flex">
+					<i class="bi bi-geo-alt icon"></i>
+					<div class="address">
+						<h4>Integrantes BarberMusic&Spa</h4>
+						<p>Rody Avila </p>
+						<p>Daniel Ortiz </p>
+						<p>Carlos Rodriguez </p>
+						<p>Daniel Gomez </p>
+					</div>
+				</div>
+
+				<div class="col-lg-3 col-md-6 d-flex">
+					<i class="bi bi-telephone icon"></i>
+					<div>
+						<h4>Tecnologo</h4>
+						<p><strong>ADSO:</strong> <span>2848170</span><br>
+						</p>
+					</div>
+				</div>
+
+				<div class="col-lg-3 col-md-6 d-flex">
+					<i class="bi bi-clock icon"></i>
+					<div>
+						<h4>Detalles Prototipo</h4>
+						<p><strong>Elaborado en: </strong> <span>Java Spring</span><br>
+							<strong>Version: </strong> <span>1.0</span>
+						</p>
+					</div>
+				</div>
+
+				<div class="col-lg-3 col-md-6">
+					<img th:src="@{/assets/img/LogoBarberMusicSpa.png}" style="width: 150px;">
+				</div>
+			</div>
+		</div>
+
+		<div class="container copyright text-center mt-4">
+			<p>© <span>Copyright</span> <strong class="px-1 sitename">iLanding</strong> <span>All Rights
+					Reserved</span>
+			</p>
+			<div class="credits">
+				Designed by <a href="https://bootstrapmade.com/" style="color: crimson;">BootstrapMade</a>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<div th:fragment="jsFiles">
+	<!-- Vendor JS Files -->
+	<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+	<script th:src="@{/assets/vendor/aos/aos.js}"></script>
+	<script th:src="@{/assets/vendor/glightbox/js/glightbox.min.js}"></script>
+	<script th:src="@{/assets/vendor/purecounter/purecounter_vanilla.js}"></script>
+	<script th:src="@{/assets/vendor/swiper/swiper-bundle.min.js}"></script>
+
+	<!-- Main JS File -->
+	<script th:src="@{/assets/js/main.js}"></script>
+</div>

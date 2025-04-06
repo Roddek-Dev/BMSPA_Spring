@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html :: head}">
+	<title>Detalle de Orden | BarberMusic Admin</title>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Sidebar -->
+		<div th:replace="~{administrador/template_admins.html :: aside}"></div>
+
+		<!-- Main Content -->
+		<main class="edit-agendamiento-main">
+			<!-- Encabezado -->
+			<div class="page-header">
+				<h1>
+					<span class="material-icons-sharp">receipt_long</span>
+					Detalle de Orden
+				</h1>
+				<nav class="breadcrumbs">
+					<a th:href="@{/administrador}">Inicio</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<a th:href="@{/administrador/ordenes}">Órdenes</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<span>Detalle</span>
+				</nav>
+			</div>
+
+			<!-- Contenido del Detalle -->
+			<section class="tabla-section">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Productos en la orden</h5>
+
+						<div class="table-container">
+							<table class="custom-table">
+								<thead>
+									<tr>
+										<th>Producto</th>
+										<th>Cantidad</th>
+										<th>Precio Unitario</th>
+										<th>Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="detalle : ${detalles}">
+										<td th:text="${detalle.nombre}"></td>
+										<td th:text="${detalle.cantidad}"></td>
+										<td th:text="${'$' + #numbers.formatDecimal(detalle.precio, 1, 2, 'COMMA')}">
+										</td>
+										<td th:text="${'$' + #numbers.formatDecimal(detalle.total, 1, 2, 'COMMA')}">
+										</td>
+									</tr>
+									<tr th:if="${detalles.empty}">
+										<td colspan="4" class="text-center text-muted py-3">
+											No hay productos en esta orden
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="back-button mt-4">
+							<a th:href="@{/administrador/ordenes}" class="btn btn-secondary">
+								<span class="material-icons-sharp">arrow_back</span>
+								Volver a Órdenes
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Right Section -->
+		<div th:replace="~{administrador/template_admins.html :: right_section}"></div>
+	</div>
+
+	<div th:replace="~{administrador/template_admins.html :: jsFiles}"></div>
+	<script>
+		setActiveLink("ordenes-link");
+	</script>
+</body>
+
+</html>

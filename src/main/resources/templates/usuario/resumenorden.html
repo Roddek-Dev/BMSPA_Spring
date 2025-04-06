@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{usuario/template_user.html::head}">
+	<title>Confirmar Orden | BarberMusicSpa</title>
+
+</head>
+<style>
+	#main {
+		margin-top: 4em;
+	}
+
+	section {
+		padding: 60px 0 0 0 !important;
+	}
+
+	.customer-info-card {
+		background-color: #f8f9fa;
+		border-radius: 10px;
+		padding: 20px;
+		margin-bottom: 20px;
+	}
+
+	.payment-methods {
+		display: flex;
+		gap: 15px;
+		margin-top: 15px;
+	}
+
+	.payment-method {
+		border: 1px solid #dee2e6;
+		border-radius: 8px;
+		padding: 10px 15px;
+		cursor: pointer;
+		transition: all 0.3s;
+	}
+
+	.payment-method:hover {
+		border-color: var(--accent-color);
+	}
+
+	.payment-method.active {
+		border-color: var(--accent-color);
+		background-color: rgba(255, 0, 0, 0.05);
+	}
+</style>
+
+<body class="index-page">
+
+	<div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
+	<div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
+
+	<main id="main">
+		<!-- ======= Breadcrumbs Section ======= -->
+		<section class="breadcrumbs">
+			<div class="container">
+				<h2>Confirmar tu Orden</h2>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+					<li class="breadcrumb-item"><a th:href="@{/cart}">Carrito</a></li>
+					<li class="breadcrumb-item active">Confirmación</li>
+				</ol>
+			</div>
+		</section><!-- End Breadcrumbs -->
+
+		<!-- ======= Order Confirmation Section ======= -->
+		<section class="inner-page">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="card shadow-sm mb-4">
+							<div class="card-body">
+								<h3 class="card-title mb-4">Información del Cliente</h3>
+
+								<div class="customer-info-card">
+									<div class="row">
+										<div class="col-md-6 mb-3">
+											<h5 class="mb-2"><i class="bi bi-person me-2"></i> Información Personal</h5>
+											<p class="mb-1"><strong>Nombre:</strong> <span
+													th:text="${usuario.nombre}"></span></p>
+											<p class="mb-1"><strong>Correo:</strong> <span
+													th:text="${usuario.email}"></span></p>
+											<p class="mb-0"><strong>Teléfono:</strong> <span
+													th:text="${usuario.telefono ?: 'No especificado'}"></span></p>
+										</div>
+										<div class="col-md-6 mb-3">
+											<h5 class="mb-2"><i class="bi bi-geo-alt me-2"></i> Dirección de Envío</h5>
+											<p th:text="${usuario.direccion ?: 'No especificada'}"></p>
+											<a href="#" class="btn btn-outline-primary btn-sm mt-2">
+												<i class="bi bi-pencil me-1"></i> Editar dirección
+											</a>
+										</div>
+									</div>
+								</div>
+
+								<h3 class="card-title mb-3 mt-4">Método de Pago</h3>
+								<div class="payment-methods">
+									<div class="payment-method active">
+										<i class="bi bi-credit-card me-2"></i> Tarjeta de Crédito
+									</div>
+									<div class="payment-method">
+										<i class="bi bi-wallet2 me-2"></i> Pago Contra Entrega
+									</div>
+									<div class="payment-method">
+										<i class="bi bi-paypal me-2"></i> PayPal
+									</div>
+								</div>
+
+								<div class="mt-4">
+									<h5 class="mb-3">Detalles de Pago con Tarjeta</h5>
+									<div class="row">
+										<div class="col-md-12 mb-3">
+											<label for="cardNumber" class="form-label">Número de Tarjeta</label>
+											<input type="text" class="form-control" id="cardNumber"
+												placeholder="1234 5678 9012 3456">
+										</div>
+										<div class="col-md-6 mb-3">
+											<label for="expiryDate" class="form-label">Fecha de Expiración</label>
+											<input type="text" class="form-control" id="expiryDate" placeholder="MM/AA">
+										</div>
+										<div class="col-md-6 mb-3">
+											<label for="cvv" class="form-label">CVV</label>
+											<input type="text" class="form-control" id="cvv" placeholder="123">
+										</div>
+										<div class="col-md-12 mb-3">
+											<label for="cardName" class="form-label">Nombre en la Tarjeta</label>
+											<input type="text" class="form-control" id="cardName"
+												placeholder="Nombre Completo">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="card shadow-sm">
+							<div class="card-body">
+								<h3 class="card-title mb-4">Resumen de la Orden</h3>
+
+								<h5 class="mb-3">Productos</h5>
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>Producto</th>
+												<th class="text-end">Total</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="dtorden: ${cart}">
+												<td>
+													<span th:text="${dtorden.nombre}"></span>
+													<small class="d-block text-muted"
+														th:text="'Cantidad: ' + ${dtorden.cantidad}"></small>
+												</td>
+												<td class="text-end"
+													th:text="${#strings.concat('$', #numbers.formatDecimal(dtorden.total, 0, 'POINT',0, 'POINT'))}">
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<div class="border-top pt-3 mt-3">
+									<div class="d-flex justify-content-between mb-2">
+										<span>Subtotal:</span>
+										<span
+											th:text="${#strings.concat('$', #numbers.formatDecimal(orden.total, 0, 'POINT',0, 'POINT'))}"></span>
+									</div>
+									<div class="d-flex justify-content-between mb-2">
+										<span>Envío:</span>
+										<span class="text-success">Gratis</span>
+									</div>
+									<div class="d-flex justify-content-between mb-2">
+										<span>Descuento:</span>
+										<span class="text-danger">$0</span>
+									</div>
+									<div class="d-flex justify-content-between mt-3 pt-2 border-top">
+										<h5>Total:</h5>
+										<h5 class="text-primary"
+											th:text="${#strings.concat('$', #numbers.formatDecimal(orden.total, 0, 'POINT',0, 'POINT'))}">
+										</h5>
+									</div>
+								</div>
+
+								<div class="form-check mt-3 mb-4">
+									<input class="form-check-input" type="checkbox" id="termsCheck">
+									<label class="form-check-label small" for="termsCheck">
+										Acepto los <a href="#">términos y condiciones</a> y la <a href="#">política de
+											privacidad</a>
+									</label>
+								</div>
+
+								<a th:href="@{/saveOrder}" class="btn btn-danger w-100 py-3">
+									<i class="bi bi-credit-card me-2"></i> Confirmar y Pagar
+								</a>
+
+								<div class="alert alert-light border mt-3">
+									<div class="d-flex align-items-center">
+										<i class="bi bi-shield-lock fs-4 me-3 text-primary"></i>
+										<span class="small">Transacción segura protegida por encriptación SSL</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section><!-- End Order Confirmation Section -->
+	</main>
+
+	<div th:insert="~{usuario/template_user.html::footer}"></div>
+
+	<!-- Scroll Top -->
+	<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+		<i class="bi bi-arrow-up-short"></i>
+	</a>
+
+	<!-- Preloader -->
+	<div id="preloader"></div>
+
+	<div th:insert="~{usuario/template_user.html::jsFiles}"></div>
+
+</body>
+
+</html>

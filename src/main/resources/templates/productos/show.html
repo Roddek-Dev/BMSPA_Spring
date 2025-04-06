@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html :: head}">
+	<title>Productos | BarberMusic Admin</title>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Sidebar -->
+		<div th:replace="~{administrador/template_admins.html :: aside}"></div>
+
+		<!-- Main Content -->
+		<main class="agendamientos-main">
+			<!-- Encabezado -->
+			<div class="page-header">
+				<h1>
+					<span class="material-icons-sharp">inventory</span>
+					Productos
+				</h1>
+				<nav class="breadcrumbs">
+					<a th:href="@{/administrador}">Inicio</a>
+					<span class="material-icons-sharp">chevron_right</span>
+					<span>Productos</span>
+				</nav>
+			</div>
+
+			<!-- Contenido Principal -->
+			<section class="tabla-section">
+				<div class="card">
+					<div class="card-header">
+						<h2>Lista de Productos</h2>
+						<a th:href="@{/productos/create}" class="btn-add">
+							<span class="material-icons-sharp">add</span>
+							Nuevo Producto
+						</a>
+					</div>
+
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="agendamientos-table">
+								<thead>
+									<tr>
+										<th>Nombre</th>
+										<th>Descripción</th>
+										<th>Precio</th>
+										<th>Cantidad</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="producto, stat : ${productos}">
+										<td th:text="${producto.nombreproducto}"></td>
+										<td>
+											<span class="text-truncate" style="max-width: 200px; display: inline-block;"
+												th:text="${producto.descripcion}">
+											</span>
+										</td>
+
+										<td th:text="${'$' + #numbers.formatDecimal(producto.precio, 1, 2, 'COMMA')}">
+										</td>
+										<td th:text="${producto.cantidad}"
+											th:class="${producto.cantidad < 5} ? 'text-danger fw-bold : '"></td>
+										<td class="actions">
+											<a class="btn-action btn-edit"
+												th:href="@{/productos/edit/{id}(id=${producto.id})}" title="Editar">
+												<span class="material-icons-sharp">edit</span>
+											</a>
+											<a class="btn-action btn-delete"
+												th:href="@{/productos/delete/{id}(id=${producto.id})}" title="Eliminar">
+												<span class="material-icons-sharp">delete</span>
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- Right Section -->
+		<div th:replace="~{administrador/template_admins.html :: right_section}"></div>
+	</div>
+
+	<div th:replace="~{administrador/template_admins.html :: jsFiles}"></div>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			setActiveLink("productos-link");
+		})
+	</script>
+</body>
+
+</html>

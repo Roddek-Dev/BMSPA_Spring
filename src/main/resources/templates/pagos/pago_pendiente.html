@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{usuario/template_user.html::head}">
+	<title>Pago Pendiente | BarberMusicSpa</title>
+	<style>
+		.pending-section {
+			padding: 100px 0;
+			text-align: center;
+			background-color: #f8f9fa;
+		}
+
+		.pending-icon {
+			font-size: 5rem;
+			color: #ffc107;
+			margin-bottom: 2rem;
+			animation: pulse 2s infinite;
+		}
+
+		.pending-card {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 3rem;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+			background: white;
+			border-top: 5px solid #ffc107;
+		}
+
+		.pending-message {
+			font-size: 1.1rem;
+			color: #6c757d;
+			margin: 1.5rem 0;
+			line-height: 1.6;
+		}
+
+		.order-number {
+			font-size: 1.25rem;
+			font-weight: 600;
+			color: var(--heading-color);
+			margin: 1rem 0;
+			padding: 0.5rem 1rem;
+			background-color: rgba(255, 193, 7, 0.1);
+			border-radius: 50px;
+			display: inline-block;
+		}
+
+		.btn-primary-action {
+			padding: 0.75rem 2.5rem;
+			font-weight: 500;
+			border-radius: 50px;
+			margin: 1rem 0.5rem;
+			transition: all 0.3s;
+			background-color: var(--accent-color);
+			color: white;
+		}
+
+		.btn-secondary-action {
+			padding: 0.75rem 2.5rem;
+			font-weight: 500;
+			border-radius: 50px;
+			margin: 1rem 0.5rem;
+			transition: all 0.3s;
+		}
+
+		.btn-primary-action:hover,
+		.btn-secondary-action:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		@keyframes pulse {
+			0% {
+				transform: scale(1);
+			}
+
+			50% {
+				transform: scale(1.1);
+			}
+
+			100% {
+				transform: scale(1);
+			}
+		}
+
+		.status-info {
+			text-align: left;
+			margin-top: 2rem;
+			padding: 1.5rem;
+			background-color: #fffbf0;
+			border-radius: 10px;
+			border-left: 4px solid #ffc107;
+		}
+
+		.status-info h5 {
+			color: var(--heading-color);
+			margin-bottom: 1rem;
+			display: flex;
+			align-items: center;
+		}
+
+		.status-info p {
+			margin-bottom: 0;
+		}
+
+		.progress-container {
+			margin: 2rem 0;
+		}
+
+		.progress {
+			height: 8px;
+			border-radius: 4px;
+			background-color: #e9ecef;
+		}
+
+		.progress-bar {
+			background-color: #ffc107;
+			width: 75%;
+			animation: progressAnimation 2s ease-in-out infinite;
+		}
+
+		@keyframes progressAnimation {
+			0% {
+				width: 75%;
+			}
+
+			50% {
+				width: 85%;
+			}
+
+			100% {
+				width: 75%;
+			}
+		}
+	</style>
+</head>
+
+<body class="index-page">
+
+	<div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
+	<div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
+
+	<main id="main">
+		<!-- ======= Pending Section ======= -->
+		<section class="pending-section">
+			<div class="container">
+				<div class="pending-card">
+					<div class="pending-icon">
+						<i class="bi bi-hourglass-split"></i>
+					</div>
+					<h1 class="mb-3">Pago Pendiente</h1>
+
+					<div class="order-number" th:text="'Orden #' + ${orden.numero}"></div>
+
+					<div class="progress-container">
+						<div class="progress">
+							<div class="progress-bar"></div>
+						</div>
+					</div>
+
+					<p class="pending-message">
+						Tu pago está siendo procesado. Te notificaremos por correo electrónico
+						cuando se complete la transacción. Este proceso puede tardar unos minutos.
+					</p>
+
+					<div class="d-flex flex-wrap justify-content-center">
+						<a th:href="@{/usuario/compras}" class="btn btn-primary-action">
+							<i class="bi bi-bag-check me-2"></i> Ver mis compras
+						</a>
+						<a th:href="@{/}" class="btn btn-secondary-action btn-outline-secondary">
+							<i class="bi bi-house me-2"></i> Volver al inicio
+						</a>
+					</div>
+
+					<div class="status-info">
+						<h5><i class="bi bi-info-circle me-2"></i>¿Qué significa esto?</h5>
+						<p>
+							Algunos métodos de pago pueden requerir tiempo adicional para su verificación.
+							Mientras tanto, tu pedido ha sido reservado y no perderás tu lugar en la fila.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section><!-- End Pending Section -->
+	</main>
+
+	<div th:insert="~{usuario/template_user.html::footer}"></div>
+
+	<!-- Scroll Top -->
+	<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+		<i class="bi bi-arrow-up-short"></i>
+	</a>
+
+	<!-- Preloader -->
+	<div id="preloader"></div>
+
+	<div th:insert="~{usuario/template_user.html::jsFiles}"></div>
+
+</body>
+
+</html>

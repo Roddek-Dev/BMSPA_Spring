@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{usuario/template_user.html::head}">
+	<title>Detalle de Compra | BarberMusicSpa</title>
+	<style>
+		#main {
+			margin-top: 3em;
+		}
+
+		section {
+			padding: 60px 0 0 0;
+		}
+
+		.order-status {
+			padding: 8px 12px;
+			border-radius: 20px;
+			font-weight: 500;
+			font-size: 0.9rem;
+		}
+
+		.status-pending {
+			background-color: #fff3cd;
+			color: #856404;
+		}
+
+		.status-completed {
+			background-color: #d4edda;
+			color: #155724;
+		}
+
+		.status-cancelled {
+			background-color: #f8d7da;
+			color: #721c24;
+		}
+	</style>
+</head>
+
+<body class="index-page">
+
+	<div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
+	<div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
+
+	<main id="main">
+		<!-- ======= Breadcrumbs Section ======= -->
+		<section class="breadcrumbs">
+			<div class="container">
+				<h2>Detalle de tu Compra</h2>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+					<li class="breadcrumb-item"><a th:href="@{/usuario/compras}">Mis Compras</a></li>
+					<li class="breadcrumb-item active">Detalle</li>
+				</ol>
+			</div>
+		</section><!-- End Breadcrumbs -->
+
+		<!-- ======= Order Details Section ======= -->
+		<section class="inner-page">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="card shadow-sm mb-4">
+							<div class="card-body">
+								<div class="d-flex justify-content-between align-items-center mb-4">
+									<h3 class="card-title mb-0">Productos comprados</h3>
+
+								</div>
+
+								<div class="table-responsive">
+									<table class="table table-hover">
+										<thead class="table-light">
+											<tr>
+												<th scope="col" style="width: 15%">Cantidad</th>
+												<th scope="col" style="width: 55%">Producto</th>
+												<th scope="col" class="text-end" style="width: 15%">Precio Unitario</th>
+												<th scope="col" class="text-end" style="width: 15%">Total</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="detalle:${detalles}">
+												<td class="align-middle" th:text="${detalle.cantidad}"></td>
+												<td class="align-middle fw-semibold" th:text="${detalle.nombre}"></td>
+												<td class="align-middle text-end"
+													th:text="${#strings.concat('$', #numbers.formatDecimal(detalle.precio, 0, 'POINT',0, 'POINT'))}">
+												</td>
+												<td class="align-middle text-end"
+													th:text="${#strings.concat('$', #numbers.formatDecimal(detalle.precio * detalle.cantidad, 0, 'POINT',0, 'POINT'))}">
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<div class="d-flex justify-content-end mt-4">
+									<a th:href="@{/usuario/compras}" class="btn btn-outline-secondary">
+										<i class="bi bi-arrow-left me-2"></i> Volver a mis compras
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="card shadow-sm mb-4">
+							<div class="card-body">
+								<h3 class="card-title mb-4">Resumen de la compra</h3>
+
+								<div class="mb-3">
+									<h5 class="mb-2">Información de la orden</h5>
+									<div class="ps-3">
+										<p class="mb-1"><strong>N° de orden:</strong> <span
+												th:text="${orden.numero}"></span></p>
+										<p class="mb-1"><strong>Fecha:</strong> <span
+												th:text="${#dates.format(orden.fecha, 'dd/MM/yyyy HH:mm')}"></span></p>
+										<!--										<p class="mb-1"><strong>Método de pago:</strong> <span-->
+										<!--												th:text="${orden.metodoPago}"></span></p>-->
+									</div>
+								</div>
+
+								<div class="border-top pt-3">
+									<div class="d-flex justify-content-between mb-2">
+										<span>Subtotal:</span>
+										<span class="fw-semibold"
+											th:text="${#strings.concat('$', #numbers.formatDecimal(orden.total, 0, 'POINT',0, 'POINT'))}"></span>
+									</div>
+									<div class="d-flex justify-content-between mb-2">
+										<span>Envío:</span>
+										<span class="text-success">Gratis</span>
+									</div>
+									<div class="d-flex justify-content-between mb-3">
+										<span>Descuento:</span>
+										<span class="text-danger">$0</span>
+									</div>
+
+									<div class="d-flex justify-content-between border-top pt-2 mb-3">
+										<h5>Total:</h5>
+										<h5 class="text-primary"
+											th:text="${#strings.concat('$', #numbers.formatDecimal(orden.total, 0, 'POINT',0, 'POINT'))}">
+										</h5>
+									</div>
+								</div>
+
+								<!--								<div th:if="${orden.estado == 'PENDIENTE'}" class="alert alert-warning mt-3">-->
+								<!--									<i class="bi bi-info-circle me-2"></i> Tu orden está siendo procesada. Te-->
+								<!--									notificaremos cuando esté lista.-->
+								<!--								</div>-->
+
+								<!--								<div th:if="${orden.estado == 'COMPLETADO'}" class="alert alert-success mt-3">-->
+								<!--									<i class="bi bi-check-circle me-2"></i> ¡Tu orden ha sido completada con éxito!-->
+								<!--								</div>-->
+							</div>
+						</div>
+
+						<div class="card shadow-sm">
+							<div class="card-body">
+								<h5 class="card-title mb-3">¿Necesitas ayuda?</h5>
+								<p class="small mb-3">Si tienes alguna pregunta sobre tu pedido, no dudes en
+									contactarnos.</p>
+								<a href="#" class="btn btn-outline-primary w-100">
+									<i class="bi bi-headset me-2"></i> Contactar soporte
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section><!-- End Order Details Section -->
+	</main>
+
+	<div th:insert="~{usuario/template_user.html::footer}"></div>
+
+	<!-- Scroll Top -->
+	<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+		<i class="bi bi-arrow-up-short"></i>
+	</a>
+
+	<!-- Preloader -->
+	<div id="preloader"></div>
+
+	<div th:insert="~{usuario/template_user.html::jsFiles}"></div>
+
+</body>
+
+</html>
