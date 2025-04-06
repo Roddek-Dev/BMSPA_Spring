@@ -217,3 +217,92 @@ main {
 .containerL.active .toggle-right {
 	transform: translateX(200%);
 }
+
+/* Añade estos estilos en tu archivo style.css */
+.social-icons {
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	margin: 20px 0;
+}
+
+.social-icons .icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	font-size: 18px;
+	transition: all 0.3s ease;
+	color: white;
+}
+
+.social-icons .icon:hover {
+	transform: scale(1.1);
+}
+
+.social-icons .icon i.fa-google-plus-g {
+	background-color: #db4437;
+	padding: 11px;
+	border-radius: 50%;
+}
+
+.social-icons .icon i.fa-facebook-f {
+	background-color: #3b5998;
+	padding: 11px 14px;
+	border-radius: 50%;
+}
+
+.social-icons .icon i.fa-github {
+	background-color: #333;
+	padding: 11px;
+	border-radius: 50%;
+}
+
+.social-icons .icon i.fa-linkedin-in {
+	background-color: #0077b5;
+	padding: 11px;
+	border-radius: 50%;
+}
+
+/* Estilos para botones grandes (opcional para la segunda versión) */
+.social-login-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 10px;
+	margin: 10px 0;
+	border-radius: 5px;
+	font-weight: 500;
+	color: white;
+	text-decoration: none;
+	transition: all 0.3s;
+}
+
+.social-login-btn:hover {
+	opacity: 0.9;
+	transform: translateY(-2px);
+}
+
+.social-login-btn i {
+	margin-right: 10px;
+	font-size: 18px;
+}
+
+.google-btn {
+	background-color: #db4437;
+}
+
+.facebook-btn {
+	background-color: #3b5998;
+}
+
+.github-btn {
+	background-color: #333;
+}
+
+.linkedin-btn {
+	background-color: #0077b5;
+}

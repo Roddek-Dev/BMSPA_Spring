@@ -3,41 +3,63 @@ package com.sena.barberspa.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
-// esta clase es el interceptor con dos anotaciones JPA
 @Configuration
+@EnableWebSecurity
 public class SpringBootSecurity {
 
-	// objeto inyectado a la clase
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private UserDetailServiceImplement userDetailService;
 
-	// validar que el usuario sea el correcto
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(getEncoder());
+	@Autowired
+	private CustomOAuth2UserService customOAuth2UserService;
 
+	@Bean
+	public AuthenticationSuccessHandler successHandler() {
+		SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
+		handler.setDefaultTargetUrl("/usuario/acceder");
+		handler.setUseReferer(true);
+		return handler;
 	}
 
-	// metodo para restringir vistas al usuario
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests().requestMatchers("/administrador/**").hasRole("ADMIN").requestMatchers("/productos/**")
-				.hasRole("ADMIN").and()
-				// csrf es el que evita que inyecten codigo malisioso a la aplicacion
-				.csrf(csfr -> csfr.disable()).formLogin().loginPage("/usuario/login").permitAll()
-				.defaultSuccessUrl("/usuario/acceder").and().logout().permitAll();
+		http
+				.authorizeRequests(authorize -> authorize
+						.requestMatchers("/administrador/**").hasRole("ADMIN")
+						.requestMatchers("/productos/**").hasRole("ADMIN")
+						.requestMatchers("/assets/**", "/assetsADMINS/**", "/css/**", "/js/**", "/images/**",
+								"/", "/serviciosVista", "/productosVista", "/usuario/registro",
+								"/usuario/login", "/usuario/save", "/error/**").permitAll()
+						.anyRequest().authenticated()
+				)
+				.formLogin(formLogin -> formLogin
+						.loginPage("/usuario/login")
+						.permitAll()
+						.defaultSuccessUrl("/usuario/acceder")
+				)
+				.oauth2Login(oauth2 -> oauth2
+						.loginPage("/usuario/login")
+						.userInfoEndpoint(userInfo -> userInfo
+								.userService(customOAuth2UserService)
+						)
+						.successHandler(successHandler())
+						.failureUrl("/error/oauth2_error")
+				)
+				.logout(logout -> logout
+						.logoutSuccessUrl("/")
+						.permitAll()
+				)
+				.exceptionHandling(exceptionHandling -> exceptionHandling
+						.accessDeniedPage("/error/403")
+				)
+				.csrf(csrf -> csrf.disable());
+
 		return http.build();
-
 	}
-
-	@Bean
-	public BCryptPasswordEncoder getEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 }

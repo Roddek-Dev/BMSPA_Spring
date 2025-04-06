@@ -22,31 +22,29 @@ public class UserDetailServiceImplement implements UserDetailsService {
 	@Autowired
 	private IUsuarioService usuarioService;
 
-	// encriptador de contraseña
 	@Autowired
 	private BCryptPasswordEncoder bCrypt;
 
-	// guardado de sesion de usuario
 	@Autowired
 	HttpSession session;
 
-	// logger para evitar el curso del system.out.println
 	private Logger log = LoggerFactory.getLogger(UserDetailServiceImplement.class);
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		log.info("Este es el username");
+		log.info("Este es el username: {}", username);
 		Optional<Usuario> optionalUser = usuarioService.findByEmail(username);
 		if (optionalUser.isPresent()) {
 			log.info("Esto es el ID del usuario: {}", optionalUser.get().getId());
 			session.setAttribute("idUsuario", optionalUser.get().getId());
 			Usuario usuario = optionalUser.get();
-			return User.builder().username(usuario.getNombre()).password(usuario.getPassword()).roles(usuario.getTipo())
+			return User.builder()
+					.username(usuario.getNombre())
+					.password(usuario.getPassword())
+					.roles(usuario.getTipo())
 					.build();
 		} else {
-			// exepcion
 			throw new UsernameNotFoundException("usuario no encontrado");
 		}
 	}
-
 }
