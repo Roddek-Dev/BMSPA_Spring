@@ -3,13 +3,23 @@ const menuBtn = document.getElementById('menu-btn');
 const closeBtn = document.getElementById('close-btn');
 const darkMode = document.querySelector('.dark-mode');
 
-// Inicializar modo oscuro
-const initDarkMode = () => {
+// Inicializar modo oscuro desde localStorage al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+	// Verificar si hay una preferencia guardada
 	const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+	// Aplicar tema según la preferencia guardada
 	document.body.classList.toggle('dark-mode-variables', isDarkMode);
-	darkMode.querySelector('span:nth-child(1)').classList.toggle('active', !isDarkMode);
-	darkMode.querySelector('span:nth-child(2)').classList.toggle('active', isDarkMode);
-};
+
+	// Activar el icono correspondiente
+	const lightModeIcon = darkMode.querySelector('span:nth-child(1)');
+	const darkModeIcon = darkMode.querySelector('span:nth-child(2)');
+
+	if (lightModeIcon && darkModeIcon) {
+		lightModeIcon.classList.toggle('active', !isDarkMode);
+		darkModeIcon.classList.toggle('active', isDarkMode);
+	}
+});
 
 // Toggle sidebar
 menuBtn.addEventListener('click', () => sideMenu.classList.add('active'));
@@ -18,10 +28,19 @@ closeBtn.addEventListener('click', () => sideMenu.classList.remove('active'));
 // Toggle dark mode
 darkMode.addEventListener('click', () => {
 	document.body.classList.toggle('dark-mode-variables');
-	darkMode.querySelector('span:nth-child(1)').classList.toggle('active');
-	darkMode.querySelector('span:nth-child(2)').classList.toggle('active');
+
+	const lightModeIcon = darkMode.querySelector('span:nth-child(1)');
+	const darkModeIcon = darkMode.querySelector('span:nth-child(2)');
+
+	if (lightModeIcon && darkModeIcon) {
+		lightModeIcon.classList.toggle('active');
+		darkModeIcon.classList.toggle('active');
+	}
+
+	// Guardar preferencia en localStorage
 	localStorage.setItem('darkMode', document.body.classList.contains('dark-mode-variables'));
 });
+
 // Función para marcar el enlace activo en el sidebar
 function setActiveLink(linkId) {
 	const link = document.getElementById(linkId);
@@ -34,6 +53,7 @@ function setActiveLink(linkId) {
 		link.classList.add('active');
 	}
 }
+
 // Confirmación de eliminación mejorada
 document.querySelectorAll('.btn-delete').forEach(btn => {
 	btn.addEventListener('click', function(e) {
@@ -42,6 +62,3 @@ document.querySelectorAll('.btn-delete').forEach(btn => {
 		}
 	});
 });
-
-// Iniciar
-document.addEventListener('DOMContentLoaded', initDarkMode);

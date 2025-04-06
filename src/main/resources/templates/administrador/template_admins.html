@@ -145,61 +145,168 @@
 		<div class="reminders">
 			<div class="header">
 				<h2>Recordatorios</h2>
-				<span class="material-icons-sharp">
-					notifications_none
-				</span>
+				<a href="/recordatorios/create" class="add-reminder-button">
+            <span class="material-icons-sharp">
+                notifications_none
+            </span>
+				</a>
 			</div>
 
-			<div class="notification">
+			<!-- Recordatorios fijados primero -->
+			<div th:each="recordatorio : ${recordatorios}" th:if="${recordatorio.fijado}"
+				 class="notification" th:id="'recordatorio-' + ${recordatorio.id}">
 				<div class="icon">
-					<span class="material-icons-sharp">
-						volume_up
-					</span>
+            <span class="material-icons-sharp">
+                push_pin
+            </span>
 				</div>
 				<div class="content">
 					<div class="info">
-						<h3>Abierto</h3>
-						<small class="text_muted">
-							08:00 AM - 12:00 PM
-						</small>
+						<h3 th:text="${recordatorio.titulo}"></h3>
+						<small class="text_muted" th:text="${#temporals.format(recordatorio.fechaHora, 'dd/MM/yyyy HH:mm')}"></small>
+						<p th:if="${recordatorio.descripcion}" th:text="${recordatorio.descripcion}" class="reminder-desc"></p>
 					</div>
-					<span class="material-icons-sharp">
-						more_vert
-					</span>
+					<div class="dropdown">
+                <span class="material-icons-sharp dropdown-toggle">
+                    more_vert
+                </span>
+						<div class="dropdown-menu">
+							<a href="#" th:onclick="'fijarRecordatorio(' + ${recordatorio.id} + ', false); return false;'"
+							   class="dropdown-item">
+								<span class="material-icons-sharp">push_pin_off</span> Quitar fijado
+							</a>
+							<a href="#" th:onclick="'eliminarRecordatorio(' + ${recordatorio.id} + '); return false;'"
+							   class="dropdown-item">
+								<span class="material-icons-sharp">delete</span> Eliminar
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="notification deactive">
+			<!-- Recordatorios no fijados -->
+			<div th:each="recordatorio : ${recordatorios}" th:unless="${recordatorio.fijado}"
+				 class="notification" th:id="'recordatorio-' + ${recordatorio.id}">
 				<div class="icon">
-					<span class="material-icons-sharp">
-						edit
-					</span>
+            <span class="material-icons-sharp">
+                event_note
+            </span>
 				</div>
 				<div class="content">
 					<div class="info">
-						<h3>Abierto</h3>
-						<small class="text_muted">
-							02:00 PM - 08:00 PM
-						</small>
+						<h3 th:text="${recordatorio.titulo}"></h3>
+						<small class="text_muted" th:text="${#temporals.format(recordatorio.fechaHora, 'dd/MM/yyyy HH:mm')}"></small>
+						<p th:if="${recordatorio.descripcion}" th:text="${recordatorio.descripcion}" class="reminder-desc"></p>
 					</div>
-					<span class="material-icons-sharp">
-						more_vert
-					</span>
+					<div class="dropdown">
+                <span class="material-icons-sharp dropdown-toggle">
+                    more_vert
+                </span>
+						<div class="dropdown-menu">
+							<a href="#" th:onclick="'fijarRecordatorio(' + ${recordatorio.id} + ', true); return false;'"
+							   class="dropdown-item">
+								<span class="material-icons-sharp">push_pin</span> Fijar
+							</a>
+							<a href="#" th:onclick="'eliminarRecordatorio(' + ${recordatorio.id} + '); return false;'"
+							   class="dropdown-item">
+								<span class="material-icons-sharp">delete</span> Eliminar
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<div class="notification add-reminder">
-				<div>
-					<span class="material-icons-sharp">
-						add
-					</span>
-					<h3>Añadir Recordatorio</h3>
-				</div>
+				<a href="/recordatorios/create">
+					<div>
+                <span class="material-icons-sharp">
+                    add
+                </span>
+						<h3>Añadir Recordatorio</h3>
+					</div>
+				</a>
 			</div>
+		</div>
 
 		</div>
 	</div>
+<script>
+	function fijarRecordatorio(id, fijar) {
+		fetch('/recordatorios/fijar/' + id, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+				.then(response => {
+					if (response.ok) {
+						// Recargar la página para reflejar los cambios
+						location.reload();
+					} else {
+						alert('Error al cambiar estado del recordatorio');
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					alert('Error al cambiar estado del recordatorio');
+				});
+	}
 
+	function eliminarRecordatorio(id) {
+		if (confirm('¿Está seguro de eliminar este recordatorio?')) {
+			fetch('/recordatorios/delete/' + id, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+					.then(response => {
+						if (response.ok) {
+							// Eliminar el elemento de la interfaz sin recargar la página
+							const elemento = document.getElementById('recordatorio-' + id);
+							if (elemento) {
+								elemento.remove();
+							}
+						} else {
+							alert('Error al eliminar el recordatorio');
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+						alert('Error al eliminar el recordatorio');
+					});
+		}
+	}
+
+	// Activar los dropdowns en las notificaciones
+	document.addEventListener('DOMContentLoaded', function() {
+		const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+		dropdownToggles.forEach(toggle => {
+			toggle.addEventListener('click', function(e) {
+				e.stopPropagation();
+				const dropdown = this.nextElementSibling;
+
+				// Cerrar todos los demás dropdowns
+				document.querySelectorAll('.dropdown-menu').forEach(menu => {
+					if (menu !== dropdown) {
+						menu.classList.remove('show');
+					}
+				});
+
+				// Alternar el estado del dropdown actual
+				dropdown.classList.toggle('show');
+			});
+		});
+
+		// Cerrar dropdowns al hacer clic en cualquier parte
+		document.addEventListener('click', function() {
+			document.querySelectorAll('.dropdown-menu').forEach(menu => {
+				menu.classList.remove('show');
+			});
+		});
+	});
+</script>
 
 </div>
 <div th:fragment="jsFiles">

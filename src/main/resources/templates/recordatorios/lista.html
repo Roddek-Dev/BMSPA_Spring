@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{administrador/template_admins.html :: head}">
+  <title>Recordatorios | BarberMusic Admin</title>
+  <style>/* Estilos para los recordatorios */
+  .recordatorios-section {
+    margin-bottom: 2rem;
+  }
+
+  .recordatorios-group {
+    margin-bottom: 2rem;
+  }
+
+  .recordatorios-group h2 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: var(--color-dark);
+  }
+
+  .recordatorios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .recordatorio-card {
+    background-color: var(--color-white);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius-2);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .dark-mode-variables .recordatorio-card {
+    background-color: var(--color-dark);
+  }
+
+  .recordatorio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .recordatorio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .recordatorio-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .recordatorio-icon .material-icons-sharp {
+    color: var(--color-primary);
+    font-size: 1.2rem;
+  }
+
+  .recordatorio-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-dark);
+  }
+
+  .dark-mode-variables .recordatorio-content h3 {
+    color: var(--color-white);
+  }
+
+  .recordatorio-content .fecha {
+    font-size: 0.85rem;
+    color: var(--color-dark-variant);
+    margin-bottom: 0.5rem;
+  }
+
+  .recordatorio-content .descripcion {
+    font-size: 0.9rem;
+    color: var(--color-dark-variant);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+  }
+
+  .badge .material-icons-sharp {
+    font-size: 0.9rem;
+    margin-right: 0.25rem;
+  }
+
+  .badge-info {
+    background-color: rgba(var(--color-info-rgb), 0.1);
+    color: var(--color-info);
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-2);
+    box-shadow: var(--box-shadow);
+    color: var(--color-dark-variant);
+  }
+
+  .dark-mode-variables .empty-state {
+    background-color: var(--color-dark);
+    color: var(--color-light);
+  }
+
+  .btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-dark-variant);
+    transition: all 0.3s ease;
+  }
+
+  .btn-icon:hover {
+    color: var(--color-primary);
+  }
+
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: var(--color-white);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius-1);
+    min-width: 180px;
+    z-index: 100;
+    display: none;
+    padding: 0.5rem 0;
+  }
+
+  .dark-mode-variables .dropdown-menu {
+    background-color: var(--color-dark);
+  }
+
+  .dropdown-menu.show {
+    display: block;
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: var(--color-dark);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .dark-mode-variables .dropdown-item {
+    color: var(--color-light);
+  }
+
+  .dropdown-item:hover {
+    background-color: var(--color-light);
+    color: var(--color-primary);
+  }
+
+  .dark-mode-variables .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .dropdown-item .material-icons-sharp {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .actions-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-add {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: var(--border-radius-1);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-add:hover {
+    background-color: var(--color-primary-variant);
+    transform: translateY(-2px);
+  }
+
+  .btn-add .material-icons-sharp {
+    margin-right: 0.5rem;
+  }
+
+  /* Estilos para los recordatorios en la barra lateral derecha */
+  .notification {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+  }
+
+  .dark-mode-variables .notification {
+    background-color: var(--color-dark);
+  }
+
+  .notification .icon {
+    padding: 0.5rem;
+    border-radius: 30%;
+    margin-right: 1rem;
+    display: flex;
+  }
+
+  .notification .icon span {
+    font-size: 1.5rem;
+  }
+
+  .notification .content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .notification .content .info h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .notification .content .info .text_muted {
+    font-size: 0.8rem;
+    color: var(--color-dark-variant);
+  }
+
+  .notification .content .info .reminder-desc {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    color: var(--color-dark-variant);
+  }
+
+  /* Estilo para recordatorios activos/inactivos */
+  .notification.deactive {
+    background-color: var(--color-light);
+  }
+
+  .notification.deactive .icon {
+    background: var(--color-light);
+  }
+
+  .notification.deactive .icon span,
+  .notification.deactive .content .info h3,
+  .notification.deactive .content .info .text_muted {
+    color: var(--color-dark-variant);
+  }
+
+  .notification .dropdown-toggle {
+    cursor: pointer;
+  }
+
+  /* Añadir recordatorio */
+  .notification.add-reminder {
+    background-color: transparent;
+    border: 2px dashed var(--color-info-dark);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: none;
+    display: block;
+    text-align: center;
+  }
+
+  .notification.add-reminder:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-light);
+  }
+
+  .notification.add-reminder a {
+    text-decoration: none;
+    color: var(--color-dark);
+    display: block;
+  }
+
+  .dark-mode-variables .notification.add-reminder a {
+    color: var(--color-light);
+  }
+
+  .notification.add-reminder div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .notification.add-reminder span {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+  }
+
+  .notification.add-reminder h3 {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <!-- Sidebar -->
+  <div th:replace="~{administrador/template_admins.html :: aside}"></div>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <!-- Encabezado -->
+    <div class="page-header">
+      <h1>
+        <span class="material-icons-sharp">notifications</span>
+        Recordatorios
+      </h1>
+      <nav class="breadcrumbs">
+        <a th:href="@{/administrador}">Inicio</a>
+        <span class="material-icons-sharp">chevron_right</span>
+        <span>Recordatorios</span>
+      </nav>
+    </div>
+
+    <!-- Alertas -->
+    <div th:if="${success != null}" class="alert alert-success">
+      <span class="material-icons-sharp">check_circle</span>
+      <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error != null}" class="alert alert-danger">
+      <span class="material-icons-sharp">error</span>
+      <span th:text="${error}"></span>
+    </div>
+
+    <!-- Botón Crear Nuevo -->
+    <div class="actions-bar">
+      <a th:href="@{/recordatorios/create}" class="btn-add">
+        <span class="material-icons-sharp">add</span>
+        Nuevo Recordatorio
+      </a>
+    </div>
+
+    <!-- Lista de Recordatorios -->
+    <section class="recordatorios-section">
+      <!-- Recordatorios Fijados -->
+      <div class="recordatorios-group">
+        <h2>Recordatorios Fijados</h2>
+
+        <div class="recordatorios-grid">
+          <div th:each="recordatorio : ${recordatorios}" th:if="${recordatorio.fijado}"
+               class="recordatorio-card" th:id="'recordatorio-' + ${recordatorio.id}">
+            <div class="recordatorio-header">
+              <div class="recordatorio-icon">
+                <span class="material-icons-sharp">push_pin</span>
+              </div>
+              <div class="recordatorio-actions">
+                <div class="dropdown">
+                  <button class="btn-icon dropdown-toggle">
+                    <span class="material-icons-sharp">more_vert</span>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a href="#" th:onclick="'fijarRecordatorio(' + ${recordatorio.id} + ', false); return false;'"
+                       class="dropdown-item">
+                      <span class="material-icons-sharp">push_pin_off</span> Quitar fijado
+                    </a>
+                    <a href="#" th:onclick="'eliminarRecordatorio(' + ${recordatorio.id} + '); return false;'"
+                       class="dropdown-item">
+                      <span class="material-icons-sharp">delete</span> Eliminar
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="recordatorio-content">
+              <h3 th:text="${recordatorio.titulo}"></h3>
+              <p class="fecha" th:text="${#temporals.format(recordatorio.fechaHora, 'dd/MM/yyyy HH:mm')}"></p>
+              <p th:if="${recordatorio.descripcion}" th:text="${recordatorio.descripcion}" class="descripcion"></p>
+              <p th:if="${recordatorio.agendamiento}" class="badge badge-info">
+                <span class="material-icons-sharp">event_note</span> Agendamiento
+              </p>
+            </div>
+          </div>
+          <div th:if="${#lists.isEmpty(recordatorios) || !#lists.contains(recordatorios.![fijado], true)}" class="empty-state">
+            <p>No hay recordatorios fijados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recordatorios Próximos -->
+      <div class="recordatorios-group">
+        <h2>Recordatorios Próximos</h2>
+
+        <div class="recordatorios-grid">
+          <div th:each="recordatorio : ${recordatorios}" th:unless="${recordatorio.fijado}"
+               class="recordatorio-card" th:id="'recordatorio-' + ${recordatorio.id}">
+            <div class="recordatorio-header">
+              <div class="recordatorio-icon">
+                <span class="material-icons-sharp">notifications</span>
+              </div>
+              <div class="recordatorio-actions">
+                <div class="dropdown">
+                  <button class="btn-icon dropdown-toggle">
+                    <span class="material-icons-sharp">more_vert</span>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a href="#" th:onclick="'fijarRecordatorio(' + ${recordatorio.id} + ', true); return false;'"
+                       class="dropdown-item">
+                      <span class="material-icons-sharp">push_pin</span> Fijar
+                    </a>
+                    <a href="#" th:onclick="'eliminarRecordatorio(' + ${recordatorio.id} + '); return false;'"
+                       class="dropdown-item">
+                      <span class="material-icons-sharp">delete</span> Eliminar
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="recordatorio-content">
+              <h3 th:text="${recordatorio.titulo}"></h3>
+              <p class="fecha" th:text="${#temporals.format(recordatorio.fechaHora, 'dd/MM/yyyy HH:mm')}"></p>
+              <p th:if="${recordatorio.descripcion}" th:text="${recordatorio.descripcion}" class="descripcion"></p>
+              <p th:if="${recordatorio.agendamiento}" class="badge badge-info">
+                <span class="material-icons-sharp">event_note</span> Agendamiento
+              </p>
+            </div>
+          </div>
+          <div th:if="${#lists.isEmpty(recordatorios)}" class="empty-state">
+            <p>No hay recordatorios próximos</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Right Section -->
+  <div th:replace="~{administrador/template_admins.html :: right_section}"></div>
+</div>
+
+<div th:replace="~{administrador/template_admins.html :: jsFiles}"></div>
+<script>
+  function fijarRecordatorio(id, fijar) {
+    fetch('/recordatorios/fijar/' + id, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+            .then(response => {
+              if (response.ok) {
+                // Recargar la página para reflejar los cambios
+                location.reload();
+              } else {
+                alert('Error al cambiar estado del recordatorio');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('Error al cambiar estado del recordatorio');
+            });
+  }
+
+  function eliminarRecordatorio(id) {
+    if (confirm('¿Está seguro de eliminar este recordatorio?')) {
+      fetch('/recordatorios/delete/' + id, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+              .then(response => {
+                if (response.ok) {
+                  // Eliminar el elemento de la interfaz sin recargar la página
+                  const elemento = document.getElementById('recordatorio-' + id);
+                  if (elemento) {
+                    elemento.remove();
+                  }
+                } else {
+                  alert('Error al eliminar el recordatorio');
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar el recordatorio');
+              });
+    }
+  }
+
+  // Activar los dropdowns
+  document.addEventListener('DOMContentLoaded', function() {
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+    dropdownToggles.forEach(toggle => {
+      toggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const dropdown = this.nextElementSibling;
+
+        // Cerrar todos los demás dropdowns
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+          if (menu !== dropdown) {
+            menu.classList.remove('show');
+          }
+        });
+
+        // Alternar el estado del dropdown actual
+        dropdown.classList.toggle('show');
+      });
+    });
+
+    // Cerrar dropdowns al hacer clic en cualquier parte
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.classList.remove('show');
+      });
+    });
+  });
+</script>
+</body>
+
+</html>

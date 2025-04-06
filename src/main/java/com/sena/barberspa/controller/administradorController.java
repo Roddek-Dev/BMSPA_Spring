@@ -168,5 +168,9 @@ public class administradorController {
 		return "administrador/detalleorden";
 
 	}
-
+	// Agrega este método al controlador administradorController.java
+	@GetMapping("/nuevo")
+	public String nuevoAdmin() {
+		return "redirect:/admin/usuarios";
+	}
 }
