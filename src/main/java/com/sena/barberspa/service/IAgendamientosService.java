@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sena.barberspa.model.Agendamiento;
+import com.sena.barberspa.model.Usuario;
 
 public interface IAgendamientosService {
 	public Agendamiento save(Agendamiento agendamiento);
@@ -15,4 +16,6 @@ public interface IAgendamientosService {
 	public void delete(Integer id);
 
 	public List<Agendamiento> findAll();
+
+	List<Agendamiento> findByUsuario(Usuario usuario);
 }

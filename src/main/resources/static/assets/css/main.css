@@ -2534,3 +2534,162 @@ section,
 .starter-section {
 	/* Add your styles here */
 }
+
+/* Estilos mejorados para el footer */
+.footer {
+	padding-top: 40px;
+	background-color: #f8f9fa;
+	color: #444444;
+}
+
+.footer-top {
+	padding-bottom: 20px;
+}
+
+.footer .icon {
+	font-size: 24px;
+	color: var(--accent-color, #dc3545);
+	margin-right: 15px;
+	margin-top: 5px;
+}
+
+.footer h4 {
+	font-size: 18px;
+	font-weight: 600;
+	color: #333;
+	margin-bottom: 10px;
+}
+
+.footer p {
+	font-size: 14px;
+	line-height: 1.4;
+	margin-bottom: 5px;
+}
+
+.footer .address p {
+	margin-bottom: 3px;
+}
+
+.footer .address p:last-child {
+	margin-bottom: 0;
+}
+
+/* Estilos para los iconos de redes sociales */
+.social-links {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+}
+
+.social-links a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: #f1f1f1;
+	color: #555;
+	transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+	transform: translateY(-5px);
+}
+
+.social-links a i {
+	font-size: 18px;
+}
+
+/* Colores para redes sociales específicas */
+.social-links .facebook:hover {
+	background-color: #3b5998;
+	color: white;
+}
+
+.social-links .instagram:hover {
+	background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+	color: white;
+}
+
+.social-links .twitter:hover {
+	background-color: #000000;
+	color: white;
+}
+
+.social-links .whatsapp:hover {
+	background-color: #25d366;
+	color: white;
+}
+
+/* Sección de copyright */
+.container.copyright {
+	padding-top: 15px;
+	border-top: 1px solid #e1e1e1;
+}
+
+.copyright p {
+	margin-bottom: 5px;
+}
+
+.sitename {
+	color: var(--accent-color, #dc3545);
+}
+
+/* Estilos para corregir posición del dropdown */
+.navmenu .user-dropdown {
+	position: relative;
+}
+
+.navmenu .user-dropdown .dropdown-menu {
+	position: absolute;
+	right: 0;
+	left: auto;
+	top: 100%;
+	min-width: 180px;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	padding: 10px 0;
+	margin-top: 10px;
+	transition: all 0.3s ease;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(10px);
+	z-index: 99;
+}
+
+.navmenu .user-dropdown:hover .dropdown-menu {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.navmenu .dropdown-menu li {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+
+.navmenu .dropdown-menu a {
+	padding: 10px 20px;
+	display: flex;
+	align-items: center;
+	color: #333;
+	font-size: 0.9rem;
+	transition: all 0.2s ease;
+}
+
+.navmenu .dropdown-menu a:hover {
+	background-color: #f1f1f1;
+	color: var(--accent-color, #dc3545);
+}
+
+.dropdown-toggle .bi-chevron-down {
+	font-size: 0.8rem;
+	transition: transform 0.3s ease;
+}
+
+.user-dropdown:hover .dropdown-toggle .bi-chevron-down {
+	transform: rotate(180deg);
+}

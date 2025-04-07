@@ -1,5 +1,6 @@
 package com.sena.barberspa.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,12 +11,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sena.barberspa.model.Agendamiento;
 import com.sena.barberspa.model.Orden;
 import com.sena.barberspa.model.Usuario;
+import com.sena.barberspa.service.IAgendamientosService;
 import com.sena.barberspa.service.IOrdenService;
 import com.sena.barberspa.service.IUsuarioService;
+import com.sena.barberspa.service.UploadFileService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -30,6 +35,12 @@ public class UsuarioController {
 
 	@Autowired
 	private IOrdenService ordenService;
+
+	@Autowired
+	private IAgendamientosService agendamientosService;
+
+	@Autowired
+	private UploadFileService upload;
 
 	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -60,13 +71,9 @@ public class UsuarioController {
 		return "usuario/login";
 	}
 
-	// cambiar post por get en spring security
-	// metodo de autentificacion 1 con postmapping sin spring security en post
-	// metodo con spring security en get
 	@GetMapping("/acceder")
 	public String acceder(Usuario usuario, HttpSession session) {
 		LOGGER.info("Accesos: {}", usuario);
-		// Optional<Usuario> userEmail = usuarioService.findByEmail(usuario.getEmail());
 		Optional<Usuario> user = usuarioService
 				.findById(Integer.parseInt(session.getAttribute("idUsuario").toString()));
 		LOGGER.info("Usuario db obtenido: {}", user.get());
@@ -131,10 +138,24 @@ public class UsuarioController {
 			return "redirect:/usuario/login";
 		}
 
-		Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idUsuario").toString()))
+		Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+		Usuario usuario = usuarioService.findById(idUsuario)
 				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+		// Obtener agendamientos del usuario
+		List<Agendamiento> agendamientos = agendamientosService.findByUsuario(usuario);
+
+		// Obtener órdenes del usuario
+		List<Orden> ordenes = ordenService.findByUsuario(usuario);
+
+		// Agregar los datos al modelo
 		model.addAttribute("usuario", usuario);
+		model.addAttribute("agendamientos", agendamientos);
+		model.addAttribute("ordenes", ordenes);
+		model.addAttribute("ordenesCount", ordenes.size());
+		model.addAttribute("citasCount", agendamientos.size());
+		model.addAttribute("sesion", session.getAttribute("idUsuario"));
+
 		return "usuario/perfil";
 	}
 
@@ -152,7 +173,10 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/actualizar")
-	public String updateProfile(Usuario usuario, HttpSession session, RedirectAttributes redirectAttributes) {
+	public String updateProfile(Usuario usuario,
+								@RequestParam(value = "img", required = false) MultipartFile file,
+								HttpSession session,
+								RedirectAttributes redirectAttributes) throws IOException {
 		if (session.getAttribute("idUsuario") == null) {
 			return "redirect:/usuario/login";
 		}
@@ -170,6 +194,12 @@ public class UsuarioController {
 
 			if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
 				existingUser.setPassword(passwordEncoder.encode(usuario.getPassword()));
+			}
+
+			// Manejar la imagen de perfil si se subió una nueva
+			if (file != null && !file.isEmpty()) {
+				String nombreImagen = upload.saveImages(file, existingUser.getNombre());
+				existingUser.setImagen(nombreImagen);
 			}
 
 			usuarioService.save(existingUser);

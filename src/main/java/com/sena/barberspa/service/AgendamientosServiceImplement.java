@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sena.barberspa.model.Agendamiento;
+import com.sena.barberspa.model.Usuario;
 import com.sena.barberspa.repository.IAgendamientosRepository;
 
 @Service
@@ -17,33 +18,31 @@ public class AgendamientosServiceImplement implements IAgendamientosService {
 
 	@Override
 	public Agendamiento save(Agendamiento agendamiento) {
-		// TODO Auto-generated method stub
 		return agendamientoRepository.save(agendamiento);
 	}
 
 	@Override
 	public Optional<Agendamiento> get(Integer id) {
-		// TODO Auto-generated method stub
 		return agendamientoRepository.findById(id);
 	}
 
 	@Override
 	public void update(Agendamiento agendamiento) {
-		// TODO Auto-generated method stub
 		agendamientoRepository.save(agendamiento);
 	}
 
 	@Override
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
 		agendamientoRepository.deleteById(id);
-
 	}
 
 	@Override
 	public List<Agendamiento> findAll() {
-		// TODO Auto-generated method stub
 		return agendamientoRepository.findAll();
 	}
 
+	@Override
+	public List<Agendamiento> findByUsuario(Usuario usuario) {
+		return agendamientoRepository.findByUsuario(usuario);
+	}
 }
