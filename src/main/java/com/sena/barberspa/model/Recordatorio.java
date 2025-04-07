@@ -13,7 +13,10 @@ public class Recordatorio {
 
     private String titulo;
     private String descripcion;
+
+    @Column(name = "fecha_hora")
     private LocalDateTime fechaHora;
+
     private boolean activo;
     private boolean fijado;
 

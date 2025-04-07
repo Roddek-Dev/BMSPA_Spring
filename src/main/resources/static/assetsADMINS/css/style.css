@@ -7,6 +7,7 @@
 	--color-warning: #F7D060;
 	--color-white: #fff;
 	--color-info-dark: #7d8da1;
+	--color-info: #4285f4;
 	--color-dark: #363949;
 	--color-light: rgba(132, 139, 200, 0.18);
 	--color-dark-variant: #677483;
@@ -17,21 +18,16 @@
 	--color-border: #e5e5e5;
 	--color-success-rgb: 27, 156, 133;
 	--color-primary-rgb: 108, 155, 207;
+	--color-primary-dark: #5a84b1;
+	--color-primary-light: rgba(108, 155, 207, 0.2);
+	--color-info-rgb: 66, 133, 244;
+	--color-primary-variant: #111e88;
 
 	--card-border-radius: 2rem;
 	--border-radius-1: 0.4rem;
 	--border-radius-2: 1.2rem;
 	--card-padding: 1.8rem;
 	--box-shadow: 0 2rem 3rem var(--color-light);
-
-	--color-card: #ffffff;
-	--color-dark-variant: #677483;
-	--color-text: #363949;
-	--color-text-muted: #7d8da1;
-	--color-border: #e5e5e5;
-	--color-light: rgba(132, 139, 200, 0.18);
-	--color-success-rgb: 27, 156, 133;
-	--color-primary-rgb: 108, 155, 207;
 }
 
 .dark-mode-variables {
@@ -43,13 +39,7 @@
 	--color-light: rgba(0, 0, 0, 0.4);
 	--color-background: #181a1e;
 	--color-white: #202528;
-	--color-card: #202528;
 	--color-dark: #edeffd;
-	--color-dark-variant: #a3bdcc;
-	--color-light: rgba(0, 0, 0, 0.4);
-	--color-text: #edeffd;
-	--color-text-muted: #a3bdcc;
-	--color-border: #2d2f33;
 }
 
 * {
@@ -57,7 +47,6 @@
 	padding: 0;
 	box-sizing: border-box;
 	-webkit-tap-highlight-color: transparent;
-	/* Mejorar experiencia táctil */
 }
 
 *:focus {
@@ -68,7 +57,6 @@
 html {
 	font-size: 14px;
 	scroll-behavior: smooth;
-	/* Desplazamiento suave */
 }
 
 body {
@@ -81,7 +69,6 @@ body {
 	color: var(--color-text);
 	background-color: var(--color-background);
 	transition: background-color 0.3s ease, color 0.3s ease;
-	/* Transición suave para modo oscuro */
 }
 
 a {
@@ -101,12 +88,7 @@ img {
 	object-fit: cover;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
 	line-height: 1.3;
 	color: var(--color-text);
 }
@@ -140,8 +122,7 @@ p {
 	margin-bottom: 1rem;
 }
 
-b,
-strong {
+b, strong {
 	color: var(--color-text);
 	font-weight: 600;
 }
@@ -179,13 +160,11 @@ aside {
 	position: fixed !important;
 	top: 0;
 	height: 100vh;
-	/* Se mantiene fijo ocupando toda la altura */
 }
 
 aside .toggle {
 	display: flex;
 	align-items: center;
-
 	justify-content: space-between;
 	margin-top: 1.4rem;
 	padding: 0 0.5rem;
@@ -196,7 +175,6 @@ aside .toggle .logo {
 	align-items: center;
 	gap: 0.5rem;
 	width: 180px;
-
 }
 
 aside .toggle .logo img {
@@ -265,46 +243,25 @@ aside .sidebar a.active::before {
 	border-radius: 0 var(--border-radius-1) var(--border-radius-1) 0;
 }
 
-/* --------------------------*/
-
-
-/* Iconos del sidebar */
 aside .sidebar a span {
 	font-size: 1.6rem;
 	transition: all 0.3s ease;
 	color: inherit;
-	/* Hereda el color del elemento padre */
 }
 
-/* Último elemento del sidebar (normalmente logout) */
 aside .sidebar a:last-child {
 	position: absolute;
 	bottom: 2rem;
 	width: calc(100% - 3rem);
-	/* Ajuste para padding */
 	margin: 0 1.5rem;
-	/* Alineación con otros items */
 }
 
-/* Elemento activo del sidebar */
 aside .sidebar a.active {
 	color: var(--color-primary);
 	background-color: var(--color-light);
 	font-weight: 500;
 }
 
-/* Indicador de elemento activo */
-aside .sidebar a.active::before {
-	content: '';
-	position: absolute;
-	left: 0;
-	height: 100%;
-	width: 4px;
-	background-color: var(--color-primary);
-	border-radius: 0 var(--border-radius-1) var(--border-radius-1) 0;
-}
-
-/* Efectos hover */
 aside .sidebar a:hover {
 	color: var(--color-primary);
 	transform: translateX(4px);
@@ -314,7 +271,6 @@ aside .sidebar a:hover span {
 	transform: scale(1.1);
 }
 
-/* Notificación de mensajes */
 aside .sidebar .message-count {
 	background-color: var(--color-danger);
 	padding: 0.15rem 0.5rem;
@@ -337,7 +293,7 @@ main .analyse {
 	gap: 1.6rem;
 }
 
-main .analyse>div {
+main .analyse > div {
 	background-color: var(--color-card);
 	padding: var(--card-padding);
 	border-radius: var(--card-border-radius);
@@ -348,7 +304,7 @@ main .analyse>div {
 	flex-direction: column;
 }
 
-main .analyse>div:hover {
+main .analyse > div:hover {
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	transform: translateY(-3px);
 }
@@ -365,7 +321,6 @@ main .analyse h3 {
 	color: var(--color-text);
 }
 
-/* Gráficos circulares */
 main .analyse .progresss {
 	position: relative;
 	width: 92px;
@@ -499,40 +454,31 @@ main .recent-orders a:hover {
 	box-shadow: 0 2px 8px rgba(var(--color-primary), 0.2);
 }
 
-
-/* ----------------------- */
+/* Right Section */
 .right-section {
 	-ms-overflow-style: none;
-	/* Para Internet Explorer y Edge */
 	scrollbar-width: none;
-	/* Para Firefox */
 	margin-top: 1.4rem;
 	max-height: calc(100vh - 2rem);
-	/* Ajusta la altura máxima para evitar que crezca demasiado */
 	overflow-y: auto;
-	/* Agrega scroll solo cuando sea necesario */
 }
 
 .right-section::-webkit-scrollbar {
 	width: 3px !important;
-	/* Hacerla más delgada */
 }
 
 .right-section::-webkit-scrollbar-thumb {
 	background-color: rgba(255, 255, 255, 0.1) !important;
-	/* Más discreto */
 	border-radius: 4px !important;
 }
 
 .right-section::-webkit-scrollbar-track {
 	background: transparent !important;
-	/* Para que no se note */
 }
 
 .right-section .reminders {
 	overflow-y: auto;
 	max-height: 60vh;
-	/* Ajusta este valor según lo necesario */
 }
 
 .right-section .nav {
@@ -633,7 +579,7 @@ main .recent-orders a:hover {
 .right-section .reminders .notification {
 	background-color: var(--color-white);
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	gap: 1rem;
 	margin-bottom: 0.7rem;
 	padding: 1.4rem var(--card-padding);
@@ -686,6 +632,349 @@ main .recent-orders a:hover {
 	display: flex;
 	align-items: center;
 	gap: 0.6rem;
+}
+
+/* Estilos para los recordatorios */
+.recordatorios-section {
+	margin-bottom: 2rem;
+}
+
+.recordatorios-group {
+	margin-bottom: 2rem;
+}
+
+.recordatorios-group h2 {
+	margin-bottom: 1rem;
+	font-size: 1.2rem;
+	color: var(--color-text);
+}
+
+.recordatorios-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 1.5rem;
+}
+
+.recordatorio-card {
+	background-color: var(--color-card);
+	box-shadow: var(--box-shadow);
+	border-radius: var(--border-radius-2);
+	padding: 1.5rem;
+	transition: all 0.3s ease;
+}
+
+.recordatorio-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.recordatorio-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.recordatorio-icon {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: var(--color-primary-light);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.recordatorio-icon .material-icons-sharp {
+	color: var(--color-primary);
+	font-size: 1.2rem;
+}
+
+.recordatorio-content h3 {
+	font-size: 1.1rem;
+	margin-bottom: 0.5rem;
+	color: var(--color-text);
+}
+
+.recordatorio-content .fecha {
+	font-size: 0.85rem;
+	color: var(--color-text-muted);
+	margin-bottom: 0.5rem;
+}
+
+.recordatorio-content .descripcion {
+	font-size: 0.9rem;
+	color: var(--color-text-muted);
+	margin-bottom: 0.5rem;
+	line-height: 1.4;
+}
+
+.badge {
+	display: inline-block;
+	padding: 0.25rem 0.5rem;
+	font-size: 0.75rem;
+	border-radius: 50px;
+	display: flex;
+	align-items: center;
+	width: fit-content;
+}
+
+.badge .material-icons-sharp {
+	font-size: 0.9rem;
+	margin-right: 0.25rem;
+}
+
+.badge-info {
+	background-color: rgba(var(--color-info-rgb), 0.1);
+	color: var(--color-info);
+}
+
+.empty-state {
+	grid-column: 1 / -1;
+	text-align: center;
+	padding: 2rem;
+	background-color: var(--color-card);
+	border-radius: var(--border-radius-2);
+	box-shadow: var(--box-shadow);
+	color: var(--color-text-muted);
+}
+
+.btn-icon {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: var(--color-text-muted);
+	transition: all 0.3s ease;
+}
+
+.btn-icon:hover {
+	color: var(--color-primary);
+}
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown-menu {
+	position: absolute;
+	right: 0;
+	top: 100%;
+	background-color: var(--color-card);
+	box-shadow: var(--box-shadow);
+	border-radius: var(--border-radius-1);
+	min-width: 180px;
+	z-index: 100;
+	display: none;
+	padding: 0.5rem 0;
+}
+
+.dropdown-menu.show {
+	display: block;
+}
+
+.dropdown-item {
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 1rem;
+	color: var(--color-text);
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+	background-color: var(--color-light);
+	color: var(--color-primary);
+}
+
+.dropdown-item .material-icons-sharp {
+	margin-right: 0.5rem;
+	font-size: 1rem;
+}
+
+.actions-bar {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 1.5rem;
+}
+
+.btn-add {
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 1rem;
+	background-color: var(--color-primary);
+	color: white;
+	border-radius: var(--border-radius-1);
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.btn-add:hover {
+	background-color: var(--color-primary-dark);
+	transform: translateY(-2px);
+}
+
+.btn-add .material-icons-sharp {
+	margin-right: 0.5rem;
+}
+
+.add-reminder-button {
+	background: none;
+	border: none;
+	color: var(--color-text);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	transition: all 0.3s ease;
+}
+
+.add-reminder-button:hover {
+	background-color: var(--color-light);
+	color: var(--color-primary);
+}
+
+/* Estilo para recordatorios en el sidebar */
+.notification {
+	background-color: var(--color-card);
+	border-radius: var(--border-radius-1);
+	padding: 1rem;
+	margin-bottom: 1rem;
+	display: flex;
+	align-items: flex-start;
+	box-shadow: var(--box-shadow);
+	transition: all 0.3s ease;
+}
+
+.notification .icon {
+	padding: 0.5rem;
+	border-radius: 30%;
+	margin-right: 1rem;
+	display: flex;
+}
+
+.notification .icon span {
+	font-size: 1.5rem;
+}
+
+.notification .content {
+	flex: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+.notification .content .info h3 {
+	font-size: 0.9rem;
+	margin-bottom: 0.2rem;
+}
+
+.notification .content .info .text_muted {
+	font-size: 0.8rem;
+	color: var(--color-text-muted);
+}
+
+.notification .content .info .reminder-desc {
+	font-size: 0.8rem;
+	margin-top: 0.5rem;
+	color: var(--color-text-muted);
+}
+
+.notification.deactive {
+	background-color: var(--color-light);
+}
+
+.notification.deactive .icon {
+	background: var(--color-light);
+}
+
+.notification.deactive .icon span,
+.notification.deactive .content .info h3,
+.notification.deactive .content .info .text_muted {
+	color: var(--color-text-muted);
+}
+
+.notification .dropdown-toggle {
+	cursor: pointer;
+}
+
+.notification.add-reminder {
+	background-color: transparent;
+	border: 2px dashed var(--color-text-muted);
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: none;
+	display: block;
+	text-align: center;
+}
+
+.notification.add-reminder:hover {
+	border-color: var(--color-primary);
+	background-color: var(--color-light);
+}
+
+.notification.add-reminder a {
+	text-decoration: none;
+	color: var(--color-text);
+	display: block;
+}
+
+.notification.add-reminder div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.notification.add-reminder span {
+	font-size: 1.5rem;
+	margin-bottom: 0.5rem;
+	color: var(--color-primary);
+}
+
+.notification.add-reminder h3 {
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+/* Alertas */
+.alert {
+	padding: 1rem;
+	border-radius: var(--border-radius-1);
+	margin-bottom: 1.5rem;
+	display: flex;
+	align-items: center;
+	color: var(--color-white);
+}
+
+.alert .material-icons-sharp {
+	margin-right: 0.5rem;
+}
+
+.alert-success {
+	background-color: var(--color-success);
+}
+
+.alert-danger {
+	background-color: var(--color-danger);
+}
+
+/* Formulario de recordatorios */
+.form-check {
+	display: flex;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.form-check-input {
+	margin-right: 0.5rem;
+}
+
+.form-check-label {
+	font-size: 0.9rem;
+	color: var(--color-text);
 }
 
 @media screen and (max-width: 1200px) {
@@ -745,12 +1034,7 @@ main .recent-orders a:hover {
 	main table tbody tr td:first-child {
 		display: none;
 	}
-
 }
-
-
-/* ----------------------------- */
-
 
 @media screen and (max-width: 768px) {
 	.container {
@@ -866,6 +1150,9 @@ main .recent-orders a:hover {
 		font-size: 2rem;
 	}
 
+	.recordatorios-grid {
+		grid-template-columns: 1fr;
+	}
 }
 
 /* ==================== DASHBOARD ==================== */
@@ -1057,14 +1344,9 @@ main .recent-orders a:hover {
 	transform: translateY(-2px);
 }
 
-
-
 .dark-mode-variables .card:hover {
 	border-color: var(--color-primary);
 }
-
-/* Asegúrate que estos elementos usen variables en modo oscuro */
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -1091,8 +1373,6 @@ main .recent-orders a:hover {
 		height: 150px;
 	}
 }
-
-/* ------------------------ */
 
 /* Responsive */
 @media (max-width: 1200px) {
@@ -1290,6 +1570,15 @@ main .recent-orders a:hover {
 	color: white;
 }
 
+.btn-view {
+	background-color: rgba(var(--color-success-rgb), 0.1);
+	color: var(--color-success);
+}
+
+.btn-view:hover {
+	background-color: var(--color-success);
+	color: white;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -1396,7 +1685,6 @@ main .recent-orders a:hover {
 	border-radius: var(--border-radius-1);
 	background-color: var(--color-background);
 	color: var(--color-text);
-
 	font-family: 'Poppins', sans-serif;
 	transition: all 0.3s ease;
 }
@@ -1457,7 +1745,6 @@ main .recent-orders a:hover {
 	background-color: var(--color-info-dark);
 	color: white;
 }
-
 
 /* Responsive */
 @media (max-width: 992px) {
@@ -1589,29 +1876,6 @@ main .recent-orders a:hover {
 .back-button {
 	display: flex;
 	justify-content: flex-end;
-}
-
-.btn {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	padding: 0.75rem 1.5rem;
-	border-radius: var(--border-radius-1);
-	font-weight: 500;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	text-decoration: none;
-	border: none;
-}
-
-.btn-secondary {
-	background-color: var(--color-light);
-	color: var(--color-dark);
-}
-
-.btn-secondary:hover {
-	background-color: var(--color-info-dark);
-	color: white;
 }
 
 /* Estilos específicos para el perfil */
@@ -1746,40 +2010,6 @@ main .recent-orders a:hover {
 	margin-top: 1rem;
 }
 
-.form-grid {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 1.5rem;
-	margin-bottom: 1.5rem;
-}
-
-.form-group {
-	margin-bottom: 1rem;
-}
-
-.form-group label {
-	display: block;
-	margin-bottom: 0.5rem;
-	font-weight: 500;
-	color: var(--color-dark);
-}
-
-.form-group input {
-	width: 100%;
-	padding: 0.75rem 1rem;
-	border: 1px solid var(--color-light);
-	border-radius: var(--border-radius-1);
-	background-color: var(--color-background);
-	color: var(--color-text);
-	transition: all 0.3s ease;
-	/* Para mantener consistencia tipográfica */
-}
-
-.form-group input:focus {
-	border-color: var(--color-primary);
-	box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.1);
-}
-
 .checkbox-group {
 	display: flex;
 	flex-direction: column;
@@ -1905,4 +2135,90 @@ main .recent-orders a:hover {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+}
+
+/* Elementos para mensajes de formulario */
+.form-mensaje {
+	grid-column: 1 / -1;
+}
+
+.form-full-width {
+	grid-column: 1 / -1;
+}
+
+.input-group {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	width: 100%;
+}
+
+.input-group-text {
+	display: flex;
+	align-items: center;
+	padding: 0.75rem 1rem;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: var(--color-text);
+	text-align: center;
+	white-space: nowrap;
+	background-color: var(--color-light);
+	border: 1px solid var(--color-light);
+	border-radius: var(--border-radius-1) 0 0 var(--border-radius-1);
+}
+
+.input-group > .form-control {
+	position: relative;
+	flex: 1 1 auto;
+	width: 1%;
+	min-width: 0;
+	border-radius: 0 var(--border-radius-1) var(--border-radius-1) 0;
+}
+
+.current-image {
+	margin-top: 0.5rem;
+}
+
+.img-thumbnail {
+	padding: 0.25rem;
+	background-color: var(--color-background);
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius-1);
+	max-width: 100%;
+	height: auto;
+}
+
+.text-muted {
+	color: var(--color-text-muted);
+}
+
+.small {
+	font-size: 0.875em;
+}
+
+.d-none {
+	display: none !important;
+}
+
+.mt-2 {
+	margin-top: 0.5rem !important;
+}
+
+.btn-map {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 0.75rem;
+	border-radius: var(--border-radius-1);
+	font-size: 0.85rem;
+	color: var(--color-primary);
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.btn-map:hover {
+	background-color: var(--color-primary);
+	color: white;
 }

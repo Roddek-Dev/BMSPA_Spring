@@ -33,6 +33,7 @@ public class SpringBootSecurity {
 				.authorizeRequests(authorize -> authorize
 						.requestMatchers("/administrador/**").hasRole("ADMIN")
 						.requestMatchers("/productos/**").hasRole("ADMIN")
+						.requestMatchers("/recordatorios/**").hasRole("ADMIN") // Añadir esta línea
 						.requestMatchers("/assets/**", "/assetsADMINS/**", "/css/**", "/js/**", "/images/**",
 								"/", "/serviciosVista", "/productosVista", "/usuario/registro",
 								"/usuario/login", "/usuario/save", "/error/**").permitAll()
