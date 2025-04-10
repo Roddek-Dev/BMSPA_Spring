@@ -2,300 +2,282 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:insert="~{usuario/template_user.html::head}"></head>
-<!-- Estilos para el modal (añade esto en tu CSS) -->
-<style>
-	.modal-cita {
-		display: none;
-		position: fixed;
-		z-index: 1000;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.7);
-	}
-
-	.modal-contenido {
-		background-color: #fff;
-		margin: 5% auto;
-		padding: 20px;
-		width: 90%;
-		max-width: 600px;
-		border-radius: 5px;
-		position: relative;
-	}
-
-	.cerrar-modal {
-		position: absolute;
-		right: 15px;
-		top: 10px;
-		font-size: 24px;
-		cursor: pointer;
-	}
-
-	/* Mantén tus estilos existentes para el formulario */
-	.contact-form {
-		padding: 20px;
-	}
-
-	.php-email-form .loading {
-		display: none;
-	}
-
-	.php-email-form .error-message {
-		display: none;
-	}
-
-	.php-email-form .sent-message {
-		display: none;
-	}
-</style>
 
 <body class="index-page">
 
-	<div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
-	<div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
+<div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
+<div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
 
-	<main class="main">
+<main class="main">
 
-		<!-- Page Title -->
-		<div class="page-title light-background">
-			<div class="container">
-				<h1>Servicios</h1>
-				<nav class="breadcrumbs">
-					<ol>
-						<li><a th:href="@{/}">Inicio</a></li>
-						<li class="current">Servicios</li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-		<!-- End Page Title -->
+    <!-- Page Title -->
+    <div class="page-title light-background">
+        <div class="container">
+            <h1>Servicios</h1>
+            <nav class="breadcrumbs">
+                <ol>
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li class="current">Servicios</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!-- End Page Title -->
 
-		<!-- Service Details Section -->
-		<section id="service-details" class="service-details section">
+    <!-- Service Details Section -->
+    <section id="service-details" class="service-details section">
 
-			<div class="container">
-				<div class="row gy-5">
+        <div class="container">
+            <div class="row gy-5">
 
-					<div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-						<div class="service-box">
-							<h4>Lista de Servicios</h4>
-							<div class="services-list" th:each="servicio : ${servicios}">
-								<a th:href="@{/servicioHome/{id} (id=${servicio.id})}" th:text="${servicio.nombre}">
-									<i class="bi bi-arrow-right-circle"></i>
-								</a>
-							</div>
-						</div>
-						<!-- End Services List -->
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-box">
+                        <h4>Lista de Servicios</h4>
+                        <div class="services-list" th:each="servicio : ${servicios}">
+                            <a th:href="@{/servicioHome/{id} (id=${servicio.id})}" th:text="${servicio.nombre}">
+                                <i class="bi bi-arrow-right-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- End Services List -->
 
-						<div class="service-box">
-							<h4>Descargar Catálogo</h4>
-							<div class="download-catalog">
-								<a href="#"><i class="bi bi-filetype-pdf"></i> <span>Catálogo PDF</span></a>
-								<a href="#"><i class="bi bi-file-earmark-word"></i> <span>Catálogo DOC</span></a>
-							</div>
-						</div>
-						<!-- End Services List -->
+                    <div class="service-box">
+                        <h4>Descargar Catálogo</h4>
+                        <div class="download-catalog">
+                            <a href="#"><i class="bi bi-filetype-pdf"></i> <span>Catálogo PDF</span></a>
+                            <a href="#"><i class="bi bi-file-earmark-word"></i> <span>Catálogo DOC</span></a>
+                        </div>
+                    </div>
+                    <!-- End Services List -->
 
-						<div class="help-box d-flex flex-column justify-content-center align-items-center">
-							<i class="bi bi-headset help-icon"></i>
-							<h4>Tienes una pregunta</h4>
-							<p class="d-flex align-items-center mt-2 mb-0">
-								<i class="bi bi-telephone me-2"></i> <span>+52 993 315 5664</span>
-							</p>
-							<p class="d-flex align-items-center mt-1 mb-0">
-								<i class="bi bi-envelope me-2"></i>
-								<a th:href="@{/mantenimiento}">catcomarketing@gmail.com</a>
-							</p>
-						</div>
-					</div>
+                    <div class="help-box d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-headset help-icon"></i>
+                        <h4>Tienes una pregunta</h4>
+                        <p class="d-flex align-items-center mt-2 mb-0">
+                            <i class="bi bi-telephone me-2"></i> <span>+52 993 315 5664</span>
+                        </p>
+                        <p class="d-flex align-items-center mt-1 mb-0">
+                            <i class="bi bi-envelope me-2"></i>
+                            <a th:href="@{/mantenimiento}">catcomarketing@gmail.com</a>
+                        </p>
+                    </div>
+                </div>
 
-					<div th:if="${sesion == null}" class="col-lg-8 ps-lg-5" data-aos="fade-up" data-aos-delay="200">
-						<img th:src="@{/images/{img} (img=${servicio.imagen})}" alt="Servicio de Barbería y Spa"
-							class="img-fluid services-img" />
-						<h3 th:text="${servicio.nombre}"></h3>
-						<h5
-							th:text="'Precio ' + ${#strings.concat('$', #numbers.formatDecimal(servicio.precio, 0, 'POINT', 0, 'POINT'))}">
-						</h5>
-						<p th:text="'Descripción: ' + ${servicio.descripcion}"></p>
-						<a th:href="@{/usuario/login}">
-							<button type="button" class="btn btn-dark">Añadir al carrito</button>
-						</a>
-					</div>
+                <div th:if="${sesion == null}" class="col-lg-8 ps-lg-5" data-aos="fade-up" data-aos-delay="200">
+                    <img th:src="@{/images/{img} (img=${servicio.imagen})}" alt="Servicio de Barbería y Spa"
+                         class="img-fluid services-img">
+                    <h3 th:text="${servicio.nombre}"></h3>
+                    <h5
+                            th:text="'Precio ' + ${#strings.concat('$', #numbers.formatDecimal(servicio.precio, 0, 'POINT', 0, 'POINT'))}">
+                    </h5>
+                    <p th:text="'Descripción: ' + ${servicio.descripcion}"></p>
+                    <a th:href="@{/usuario/login}">
+                        <button type="button" class="btn btn-dark">Añadir al carrito</button>
+                    </a>
+                </div>
 
-					<div th:unless="${sesion == null}" class="col-lg-8 ps-lg-5" data-aos="fade-up" data-aos-delay="200">
-						<img th:src="@{/images/{img} (img=${servicio.imagen})}" alt="Servicio de Barbería y Spa"
-							class="img-fluid services-img" />
-						<h3 th:text="${servicio.nombre}"></h3>
-						<h5
-							th:text="'Precio ' + ${#strings.concat('$', #numbers.formatDecimal(servicio.precio, 0, 'POINT', 0, 'POINT'))}">
-						</h5>
-						<p th:text="'Descripción: ' + ${servicio.descripcion}"></p>
-						<a>
-							<!-- Botón que abre el modal - reemplaza tu botón actual por este -->
-							<button type="button" class="btn btn-dark" onclick="abrirModal()">Agendar Cita</button>
-						</a>
-					</div>
+                <div th:unless="${sesion == null}" class="col-lg-8 ps-lg-5" data-aos="fade-up" data-aos-delay="200">
+                    <img th:src="@{/images/{img} (img=${servicio.imagen})}" alt="Servicio de Barbería y Spa"
+                         class="img-fluid services-img" />
+                    <h3 th:text="${servicio.nombre}"></h3>
+                    <h5
+                            th:text="'Precio ' + ${#strings.concat('$', #numbers.formatDecimal(servicio.precio, 0, 'POINT', 0, 'POINT'))}">
+                    </h5>
+                    <p th:text="'Descripción: ' + ${servicio.descripcion}"></p>
+                    <a>
+                        <!-- Botón que abre el modal - reemplaza tu botón actual por este -->
+                        <button type="button" class="btn btn-dark" onclick="abrirModal()">Agendar Cita</button>
+                    </a>
+                </div>
+            </div>
+            <div id="modalCita" class="modal-cita" style="display:none;">
+                <div class="modal-contenido">
+                    <span class="cerrar-modal" onclick="cerrarModal()">&times;</span>
 
-				</div>
-			</div>
-
-		</section>
-		<!-- End Service Details Section -->
-
-	</main>
-
-	<div th:insert="~{usuario/template_user.html::footer}"></div>
-
-	<!-- Scroll Top -->
-	<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-		<i class="bi bi-arrow-up-short"></i>
-	</a>
-
-	<!-- Preloader -->
-	<div id="preloader"></div>
-
-	<div th:insert="~{usuario/template_user.html::jsFiles}"></div>
-
-	<!-- Modal para agendar cita - añade esto antes del cierre del body -->
-	<div id="modalCita" class="modal-cita" style="display:none;">
-		<div class="modal-contenido">
-			<span class="cerrar-modal" onclick="cerrarModal()">&times;</span>
-
-			<!-- Contenido del formulario adaptado -->
-			<div class="contact-form">
-				<h3>¡Agenda Tu Cita!</h3>
-				<p>
-					¡Agenda tu cita en nuestra barbería y spa! Relájate, renueva tu estilo y vive una
-					experiencia única. ✨💇‍♂️💆‍♀️
-				</p>
-
-				<div th:if="${sesion == null}">
-					<form enctype="multipart/form-data" class="php-email-form">
-						<div class="row gy-4">
-							<div class="col-12">
-								<input placeholder="Selecciona fecha y hora" class="form-control" type="datetime-local"
-									id="fechaHoraNoAuth" name="fechaHora" required>
-							</div>
-
-							<div class="col-12">
-								<select class="form-control" name="servicio" required>
-									<option th:each="servicio : ${servicios}" th:value="${servicio.id}"
-										th:text="${servicio.nombre}"></option>
-								</select>
-							</div>
-
-							<div class="col-12">
-								<select class="form-control" name="sucursal" required>
-									<option th:each="sucursal : ${sucursales}" th:value="${sucursal.id}"
-										th:text="${sucursal.ciudad}"></option>
-								</select>
-							</div>
-
-							<div class="col-12">
-								<textarea class="form-control" name="mensaje" rows="6" placeholder="Mensaje / Asunto"
-									required></textarea>
-							</div>
-
-							<div class="col-12 text-center">
-								<div class="loading">Loading</div>
-								<div class="sent-message">
-									Tu reserva ha sido enviada. Gracias!
-								</div>
-								<a th:href="@{/usuario/login}">
-									<button class="btn" type="button">
-										Enviar Mensaje
-									</button>
-								</a>
-							</div>
-						</div>
-					</form>
-				</div>
-
-				<div th:unless="${sesion == null}">
-					<form th:action="@{/agendamientos/save}" method="post" enctype="multipart/form-data"
-						class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-						<div class="row gy-4">
-							<div class="col-12">
-								<input placeholder="Selecciona fecha y hora" class="form-control" type="datetime-local"
-									id="fechaHora" name="fechaHora" step="900" min="08:00" max="20:00" required>
-								<small class="text-muted">Seleccione en intervalos de 15 minutos (8:00 am -
-									8:00 pm)</small>
-							</div>
-
-							<div class="col-12">
-								<select class="form-control" name="servicio" required>
-									<option th:each="servicio : ${servicios}" th:value="${servicio.id}"
-										th:text="${servicio.nombre}"></option>
-								</select>
-							</div>
-
-							<div class="col-12">
-								<select class="form-control" name="sucursal" required>
-									<option th:each="sucursal : ${sucursales}" th:value="${sucursal.id}"
-										th:text="${sucursal.ciudad}"></option>
-								</select>
-							</div>
-
-							<div class="col-12">
-								<textarea class="form-control" id="mensaje" name="mensaje" rows="6"
-									placeholder="Mensaje / Asunto" required></textarea>
-							</div>
-
-							<div class="col-12 text-center">
-								<div class="loading">Loading</div>
-								<div class="error-message"></div>
-								<div class="sent-message">
-									Tu reserva ha sido enviada. Gracias!
-								</div>
-								<button class="btn btn-danger" type="submit">
-									Enviar Mensaje
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <!-- Contenido del formulario adaptado -->
+                    <div class="contact-form">
+                        <h3>¡Agenda Tu Cita!</h3>
+                        <p>
+                            ¡Agenda tu cita en nuestra barbería y spa! Relájate, renueva tu estilo y vive una
+                            experiencia única. ✨💇‍♂️💆‍♀️
+                        </p>
 
 
+                        <div>
+                            <form th:action="@{/save}" method="post" enctype="multipart/form-data"
+                                  class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+                                <div class="row gy-4">
+                                    <div class="col-12">
+                                        <input placeholder="Selecciona fecha y hora" class="form-control"
+                                               type="datetime-local" id="fechaHora" name="fechaHora" step="900"
+                                               min="08:00" max="20:00" required>
+                                        <small class="text-muted">Seleccione en intervalos de 15 minutos (8:00 am -
+                                            8:00 pm)</small>
+                                    </div>
 
-	<script>
-		function abrirModal() {
-			document.getElementById('modalCita').style.display = 'block';
-		}
+                                    <div class="col-12">
+                                        <select class="form-control" name="servicio" required>
+                                            <option th:each="servicio : ${servicios}" th:value="${servicio.id}"
+                                                    th:text="${servicio.nombre}"></option>
+                                        </select>
+                                    </div>
 
-		function cerrarModal() {
-			document.getElementById('modalCita').style.display = 'none';
-		}
+                                    <div class="col-12">
+                                        <select class="form-control" name="sucursal" required>
+                                            <option value="" disabled selected>Selecciona sucursal</option>
+                                            <option th:each="sucursal : ${sucursales}" th:value="${sucursal.id}"
+                                                    th:text="${sucursal.nombre}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+											<textarea class="form-control" id="mensaje" name="mensaje" rows="6"
+                                                      placeholder="Mensaje / Asunto" required></textarea>
+                                    </div>
 
-		// Cerrar al hacer clic fuera del modal
-		window.onclick = function (event) {
-			if (event.target == document.getElementById('modalCita')) {
-				cerrarModal();
-			}
-		}
+                                    <div class="col-12 text-center">
+                                        <div class="loading">Loading</div>
+                                        <div class="error-message"></div>
+                                        <div class="sent-message">
+                                            Tu reserva ha sido enviada. Gracias!
+                                        </div>
+                                        <button class="btn btn-danger" type="submit">
+                                            Enviar Mensaje
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		// Validación para usuarios autenticados
-		document.getElementById('fechaHoraAuth')?.addEventListener('change', function () {
-			const fechaHora = new Date(this.value);
-			const horas = fechaHora.getHours();
-			const minutos = fechaHora.getMinutes();
+    </section>
+    <!-- End Service Details Section -->
 
-			if (horas < 8 || horas >= 20) {
-				alert('Por favor seleccione un horario entre 8:00 am y 8:00 pm');
-				this.value = '';
-				return;
-			}
+</main>
 
-			if (minutos % 15 !== 0) {
-				alert('Las citas deben ser en intervalos de 15 minutos (00, 15, 30, 45)');
-				this.value = '';
-			}
-		});
-	</script>
+<div th:insert="~{usuario/template_user.html::footer}"></div>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+</a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<div th:insert="~{usuario/template_user.html::jsFiles}"></div>
+
+<!-- Estilos para el modal (añade esto en tu CSS) -->
+<style>
+    .modal-cita {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-contenido {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .cerrar-modal {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    /* Mantén tus estilos existentes para el formulario */
+    .contact-form {
+        padding: 20px;
+    }
+
+    .php-email-form .loading {
+        display: none;
+    }
+
+    .php-email-form .error-message {
+        display: none;
+    }
+
+    .php-email-form .sent-message {
+        display: none;
+    }
+</style>
+
+<script>
+    function abrirModal() {
+        // Primero abre el modal
+        document.getElementById('modalCita').style.display = 'block';
+
+        // Luego carga las sucursales (solo si el select está vacío)
+        const sucursalSelect = document.querySelector('select[name="sucursal"]');
+
+        // Verifica si ya tiene opciones (excepto la primera)
+        if (sucursalSelect && sucursalSelect.options.length <= 1) {
+            // Hacer una petición simple para obtener las sucursales
+            fetch('/servicios/sucursales/json')
+                .then(response => response.json())
+                .then(sucursales => {
+                    // Limpiar opciones existentes (excepto la primera)
+                    while (sucursalSelect.options.length > 1) {
+                        sucursalSelect.remove(1);
+                    }
+
+                    // Agregar las nuevas opciones
+                    sucursales.forEach(sucursal => {
+                        const option = new Option(sucursal.nombre, sucursal.id);
+                        sucursalSelect.add(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar sucursales:', error);
+                });
+        }
+    }
+
+    function cerrarModal() {
+        document.getElementById('modalCita').style.display = 'none';
+    }
+
+    // El resto de tu código se mantiene igual
+    window.onclick = function (event) {
+        if (event.target == document.getElementById('modalCita')) {
+            cerrarModal();
+        }
+    }
+
+    document.getElementById('fechaHoraAuth')?.addEventListener('change', function () {
+        const fechaHora = new Date(this.value);
+        const horas = fechaHora.getHours();
+        const minutos = fechaHora.getMinutes();
+
+        if (horas < 8 || horas >= 20) {
+            alert('Por favor seleccione un horario entre 8:00 am y 8:00 pm');
+            this.value = '';
+            return;
+        }
+
+        if (minutos % 15 !== 0) {
+            alert('Las citas deben ser en intervalos de 15 minutos (00, 15, 30, 45)');
+            this.value = '';
+        }
+    });
+</script>
 
 </body>
 

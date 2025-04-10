@@ -36,7 +36,7 @@
 						<div class="service-box">
 							<h4>Lista de Servicios</h4>
 							<div class="services-list" th:each="servicio: ${servicios}">
-								<a th:href="@{/servicioHome/{id} (id=${servicio.id})}" th:text="${servicio.nombre}"><i
+								<a th:href="@{servicios/servicioHome/{id} (id=${servicio.id})}" th:text="${servicio.nombre}"><i
 										class="bi bi-arrow-right-circle"></i><span></span></a>
 							</div>
 						</div><!-- End Services List -->

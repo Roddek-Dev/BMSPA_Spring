@@ -119,14 +119,7 @@ public class homeUserController {
 		return "usuario/productoHome";
 	}
 
-	@GetMapping("servicioHome/{id}")
-	public String servicioHome(@PathVariable Integer id, Model model, HttpSession session) {
-		Servicio servicio = servicioService.get(id).orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
 
-		model.addAttribute("servicio", servicio);
-		model.addAttribute("sesion", session.getAttribute("idUsuario"));
-		return "usuario/servicioHome";
-	}
 
 	@PostMapping("/cart")
 	public String addCart(@RequestParam Integer id, @RequestParam Double cantidad, Model model, HttpSession session) {

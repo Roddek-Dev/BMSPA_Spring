@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sena.barberspa.model.Servicio;
+import com.sena.barberspa.model.Sucursal;
 import com.sena.barberspa.model.Usuario;
 import com.sena.barberspa.service.IServiciosService;
+import com.sena.barberspa.service.ISucursalesService;
 import com.sena.barberspa.service.IUsuarioService;
 import com.sena.barberspa.service.UploadFileService;
 
@@ -34,6 +37,9 @@ import jakarta.validation.Valid;
 public class ServicioController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(ServicioController.class);
+
+	@Autowired
+	private ISucursalesService sucursalService;
 
 	@Autowired
 	private IServiciosService servicioService;
@@ -57,7 +63,9 @@ public class ServicioController {
 		if (idUsuario != null) {
 			Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
 			if (usuario != null) {
+				model.addAttribute("sesion", usuario);
 				model.addAttribute("usuario", usuario);
+
 			}
 		}
 	}
@@ -70,7 +78,7 @@ public class ServicioController {
 
 	@PostMapping("/save")
 	public String save(@Valid Servicio servicio, BindingResult result, @RequestParam("img") MultipartFile file,
-			HttpSession session, RedirectAttributes redirectAttributes) throws IOException {
+					   HttpSession session, RedirectAttributes redirectAttributes) throws IOException {
 
 		if (result.hasErrors()) {
 			return "servicios/create";
@@ -107,7 +115,7 @@ public class ServicioController {
 
 	@PostMapping("/update")
 	public String update(@Valid Servicio servicio, BindingResult result, @RequestParam("img") MultipartFile file,
-			RedirectAttributes redirectAttributes) throws IOException {
+						 RedirectAttributes redirectAttributes) throws IOException {
 
 		if (result.hasErrors()) {
 			return "servicios/edit";
@@ -165,4 +173,30 @@ public class ServicioController {
 		model.addAttribute("servicios", servicios);
 		return "servicios/show";
 	}
+
+	@GetMapping("/servicioHome/{id}")
+	public String servicioHome(@PathVariable Integer id, Model model) {
+		// Obtener el servicio
+		Servicio servicio = servicioService.get(id).orElseThrow();
+
+		// Obtener sucursales desde la base de datos
+		List<Sucursal> sucursales = sucursalService.findAll();
+
+		// Verificación en consola (eliminar después)
+		System.out.println("Número de sucursales encontradas: " + sucursales.size());
+		sucursales.forEach(s -> System.out.println(s.getNombre()));
+
+		// Pasar datos al modelo
+		model.addAttribute("servicio", servicio);
+		model.addAttribute("sucursales", sucursales); // Esto es crucial
+		model.addAttribute("servicios", servicioService.findAll());
+
+		return "usuario/servicioHome";
+	}
+//
+//	@GetMapping("/sucursales/json")
+//	@ResponseBody
+//	public List<Sucursal> getSucursalesJson() {
+//	    return sucursalService.findAll();
+//	}
 }
