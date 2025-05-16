@@ -38,11 +38,11 @@
 			<h1 class="sitename">BarberMusic&Spa</h1>
 		</a>
 
-		<nav id="navmenu" class="navmenu">
+		<nav id="navmenu" class="navmenu justify-content-around">
 			<ul>
 				<li><a href="/#hero" class="active">Inicio</a></li>
 				<li><a href="/#about">Información</a></li>
-				<li><a href="/#services">Servicios</a></li>
+				<li><a href="/#slider">Servicios</a></li>
 				<li><a href="/#productos">Productos</a></li>
 				<!-- Carrito con solo ícono -->
 				<li><a th:href="@{/getCart}" title="Carrito de compras"><i class="bi bi-cart fs-5"></i></a></li>
@@ -57,6 +57,7 @@
 					</ul>
 				</li>
 			</ul>
+
 			<i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
 		</nav>
 
@@ -78,10 +79,12 @@
 			<ul>
 				<li><a href="/#hero" class="active">Inicio</a></li>
 				<li><a href="/#about">Informacion</a></li>
-				<li><a href="/#services">Servicios</a></li>
+				<li><a href="/#slider">Servicios</a></li>
 				<li><a href="/#productos">Productos</a></li>
-				</li>
-				<li><a th:href="@{/usuario/login}">Carrito <i class="bi bi-cart"></i></a></li>
+				<!-- Carrito con solo ícono -->
+				<li><a th:href="@{/getCart}" title="Carrito de compras"><i class="bi bi-cart fs-5"></i></a></li>
+				<!-- Ícono de calendario para agendar cita -->
+				<li><a href="/#contacto" title="Agendar cita"><i class="bi bi-calendar-check fs-5"></i></a></li>
 			</ul>
 			<i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
 		</nav>
@@ -97,9 +100,6 @@
 		<button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar <i class="bi bi-search"></i></button>
 	</form>
 </div>
-
-
-
 
 <div th:fragment="footer">
 	<div>

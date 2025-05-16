@@ -2,213 +2,217 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{administrador/template_admins.html::head}">
-	<title th:text="${usuario.nombre} + ' | Perfil'">Perfil de Administrador</title>
+    <title th:text="${usuario.nombre} + ' | Perfil'">Perfil de Administrador</title>
 </head>
 
 <body>
-	<div class="container">
-		<!-- Sidebar -->
-		<div th:replace="~{administrador/template_admins.html::aside}"></div>
+<div class="container">
+    <!-- Sidebar -->
+    <div th:replace="~{administrador/template_admins.html::aside}"></div>
 
-		<!-- Main Content -->
-		<main class="profile-main">
-			<!-- Encabezado -->
-			<div class="page-header">
-				<h1>
-					<span class="material-icons-sharp">person</span>
-					Mi Perfil
-				</h1>
-				<nav class="breadcrumbs">
-					<a th:href="@{/administrador}">Inicio</a>
-					<span class="material-icons-sharp">chevron_right</span>
-					<span>Perfil</span>
-				</nav>
-			</div>
+    <!-- Main Content -->
+    <main class="profile-main">
+        <!-- Encabezado -->
+        <div class="page-header">
+            <h1>
+                <span class="material-icons-sharp">person</span>
+                Mi Perfil
+            </h1>
+            <nav class="breadcrumbs">
+                <a th:href="@{/administrador}">Inicio</a>
+                <span class="material-icons-sharp">chevron_right</span>
+                <span>Perfil</span>
+            </nav>
+        </div>
 
-			<!-- Contenido Principal -->
-			<section class="profile-section">
-				<div class="profile-grid">
-					<!-- Tarjeta de Perfil -->
-					<div class="profile-card">
-						<div class="profile-image-container">
-							<img th:src="${usuario.imagen != null} ? @{'/uploads/' + ${usuario.imagen}} : @{/assetsADMIN/img/lider.png}"
-								th:alt="${usuario.nombre}" class="profile-image">
-							<label for="img" class="change-image-btn">
-								<span class="material-icons-sharp">edit</span>
-								Cambiar imagen
-							</label>
-						</div>
-						<div class="profile-info">
-							<h2 th:text="${usuario.nombre}">Nombre Usuario</h2>
-							<h3 th:text="${usuario.tipo}">Rol</h3>
-							<p class="user-status"
-								th:classappend="${usuario.estado == 'ACTIVO'} ? 'active' : 'inactive'"
-								th:text="${usuario.estado}"></p>
-						</div>
-					</div>
+        <!-- Contenido Principal -->
+        <section class="profile-section">
+            <div class="profile-grid">
+                <!-- Tarjeta de Perfil -->
+                <div class="profile-card">
+                    <div class="profile-image-container">
+                        <img th:src="${usuario.imagen != null} ? @{'/uploads/' + ${usuario.imagen}} : @{/assetsADMINS/img/default_admin.png}"
+                             th:alt="${usuario.nombre}" class="profile-image">
+                        <label for="img" class="change-image-btn">
+                            <span class="material-icons-sharp">edit</span>
+                            Cambiar imagen
+                        </label>
+                    </div>
+                    <div class="profile-info">
+                        <h2 th:text="${usuario.nombre}">Nombre Usuario</h2>
+                        <h3 th:text="${usuario.tipo}">Rol</h3>
+                        <p class="user-status"
+                           th:classappend="${usuario.estado == 'ACTIVO'} ? 'active' : 'inactive'"
+                           th:text="${usuario.estado}"></p>
+                    </div>
+                </div>
 
-					<!-- Contenido de Pestañas -->
-					<div class="profile-content">
-						<div class="profile-tabs">
-							<!-- Pestañas -->
-							<div class="tabs-header">
-								<button class="tab-btn active" data-tab="edit">Editar Perfil</button>
-								<button class="tab-btn" data-tab="settings">Configuración</button>
-								<button class="tab-btn" data-tab="password">Contraseña</button>
-							</div>
+                <!-- Contenido de Pestañas -->
+                <div class="profile-content">
+                    <div class="profile-tabs">
+                        <!-- Pestañas -->
+                        <div class="tabs-header">
+                            <button class="tab-btn active" data-tab="edit">Editar Perfil</button>
+                            <button class="tab-btn" data-tab="settings">Configuración</button>
+                            <button class="tab-btn" data-tab="password">Contraseña</button>
+                        </div>
 
-							<!-- Contenido de Pestañas -->
-							<div class="tabs-content">
-								<!-- Pestaña Editar Perfil -->
-								<div class="tab-pane active" id="edit">
-									<form th:action="@{/administrador/updateProfile}" method="post"
-										enctype="multipart/form-data" class="profile-form">
-										<input type="file" id="img" name="img" class="d-none">
+                        <!-- Contenido de Pestañas -->
+                        <div class="tabs-content">
+                            <!-- Pestaña Editar Perfil -->
+                            <div class="tab-pane active" id="edit">
+                                <form th:action="@{/administrador/updateProfile}" method="post"
+                                      enctype="multipart/form-data" class="profile-form">
+                                    <!-- Agrega un campo visible para seleccionar la imagen -->
+                                    <div class="form-group">
+                                        <label for="img">Imagen de perfil:</label>
+                                        <input type="file" id="img" name="img" class="form-control" accept="image/*">
+                                    </div>
 
-										<div class="form-grid">
-											<div class="form-group">
-												<label for="nombre">Nombre</label>
-												<input type="text" id="nombre" name="nombre"
-													th:value="${usuario.nombre}" required>
-											</div>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="nombre">Nombre</label>
+                                            <input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}"
+                                                   required>
+                                        </div>
 
-											<div class="form-group">
-												<label for="email">Correo Electrónico</label>
-												<input type="email" id="email" name="email" th:value="${usuario.email}"
-													required>
-											</div>
+                                        <div class="form-group">
+                                            <label for="email">Correo Electrónico</label>
+                                            <input type="email" id="email" name="email" th:value="${usuario.email}"
+                                                   required>
+                                        </div>
 
-											<div class="form-group">
-												<label for="telefono">Teléfono</label>
-												<input type="text" id="telefono" name="telefono"
-													th:value="${usuario.telefono}" required>
-											</div>
+                                        <div class="form-group">
+                                            <label for="telefono">Teléfono</label>
+                                            <input type="text" id="telefono" name="telefono"
+                                                   th:value="${usuario.telefono}" required>
+                                        </div>
 
-											<div class="form-group">
-												<label for="direccion">Dirección</label>
-												<input type="text" id="direccion" name="direccion"
-													th:value="${usuario.direccion}" required>
-											</div>
-										</div>
+                                        <div class="form-group">
+                                            <label for="direccion">Dirección</label>
+                                            <input type="text" id="direccion" name="direccion"
+                                                   th:value="${usuario.direccion}" required>
+                                        </div>
+                                    </div>
 
-										<div class="form-actions">
-											<button type="submit" class="btn btn-primary">
-												<span class="material-icons-sharp">save</span>
-												Guardar Cambios
-											</button>
-										</div>
-									</form>
-								</div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">
+                                            <span class="material-icons-sharp">save</span>
+                                            Guardar Cambios
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
 
-								<!-- Pestaña Configuración -->
-								<div class="tab-pane" id="settings">
-									<form class="settings-form">
-										<h3>Preferencias de Notificaciones</h3>
+                            <!-- Pestaña Configuración -->
+                            <div class="tab-pane" id="settings">
+                                <form class="settings-form">
+                                    <h3>Preferencias de Notificaciones</h3>
 
-										<div class="form-group checkbox-group">
-											<label class="checkbox-label">
-												<input type="checkbox" checked>
-												<span class="checkmark"></span>
-												Cambios en mi cuenta
-											</label>
+                                    <div class="form-group checkbox-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            Cambios en mi cuenta
+                                        </label>
 
-											<label class="checkbox-label">
-												<input type="checkbox" checked>
-												<span class="checkmark"></span>
-												Actualizaciones del sistema
-											</label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            Actualizaciones del sistema
+                                        </label>
 
-											<label class="checkbox-label">
-												<input type="checkbox">
-												<span class="checkmark"></span>
-												Promociones y ofertas
-											</label>
-										</div>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                            Promociones y ofertas
+                                        </label>
+                                    </div>
 
-										<div class="form-actions">
-											<button type="submit" class="btn btn-primary">
-												Guardar Preferencias
-											</button>
-										</div>
-									</form>
-								</div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">
+                                            Guardar Preferencias
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
 
-								<!-- Pestaña Contraseña -->
-								<div class="tab-pane" id="password">
-									<form class="password-form">
-										<div class="form-group">
-											<label for="currentPassword">Contraseña Actual</label>
-											<input type="password" id="currentPassword" name="currentPassword" required>
-										</div>
+                            <!-- Pestaña Contraseña -->
+                            <div class="tab-pane" id="password">
+                                <form class="password-form">
+                                    <div class="form-group">
+                                        <label for="currentPassword">Contraseña Actual</label>
+                                        <input type="password" id="currentPassword" name="currentPassword" required>
+                                    </div>
 
-										<div class="form-group">
-											<label for="newPassword">Nueva Contraseña</label>
-											<input type="password" id="newPassword" name="newPassword" required>
-										</div>
+                                    <div class="form-group">
+                                        <label for="newPassword">Nueva Contraseña</label>
+                                        <input type="password" id="newPassword" name="newPassword" required>
+                                    </div>
 
-										<div class="form-group">
-											<label for="confirmPassword">Confirmar Contraseña</label>
-											<input type="password" id="confirmPassword" name="confirmPassword" required>
-										</div>
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirmar Contraseña</label>
+                                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                                    </div>
 
-										<div class="form-actions">
-											<button type="submit" class="btn btn-primary">
-												Cambiar Contraseña
-											</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</main>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">
+                                            Cambiar Contraseña
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-		<!-- Right Section -->
-		<div th:replace="~{administrador/template_admins.html::right_section}"></div>
-	</div>
+    <!-- Right Section -->
+    <div th:replace="~{administrador/template_admins.html::right_section}"></div>
+</div>
 
-	<div th:replace="~{administrador/template_admins.html::jsFiles}"></div>
+<div th:replace="~{administrador/template_admins.html::jsFiles}"></div>
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			setActiveLink("profile-link");
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        setActiveLink("profile-link");
 
-			// Sistema de pestañas
-			const tabBtns = document.querySelectorAll('.tab-btn');
-			tabBtns.forEach(btn => {
-				btn.addEventListener('click', function () {
-					const tabId = this.dataset.tab;
+        // Sistema de pestañas
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const tabId = this.dataset.tab;
 
-					// Remover activos
-					document.querySelectorAll('.tab-btn.active, .tab-pane.active').forEach(el => {
-						el.classList.remove('active');
-					});
+                // Remover activos
+                document.querySelectorAll('.tab-btn.active, .tab-pane.active').forEach(el => {
+                    el.classList.remove('active');
+                });
 
-					// Activar actual
-					this.classList.add('active');
-					document.getElementById(tabId).classList.add('active');
-				});
-			});
+                // Activar actual
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
 
-			// Cambiar imagen de perfil
-			const imgInput = document.getElementById('img');
-			const profileImg = document.querySelector('.profile-image');
+        // Cambiar imagen de perfil
+        const imgInput = document.getElementById('img');
+        const profileImg = document.querySelector('.profile-image');
 
-			if (imgInput && profileImg) {
-				imgInput.addEventListener('change', function (e) {
-					if (e.target.files && e.target.files[0]) {
-						const reader = new FileReader();
-						reader.onload = function (event) {
-							profileImg.src = event.target.result;
-						};
-						reader.readAsDataURL(e.target.files[0]);
-					}
-				});
-			}
-		});
-	</script>
+        if (imgInput && profileImg) {
+            imgInput.addEventListener('change', function (e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        profileImg.src = event.target.result;
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
+    });
+</script>
 </body>
 
 </html>

@@ -9,11 +9,11 @@
 
 <body class="index-page">
 
-	<div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
-	<div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
+<div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
+<div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
 
-	<section><!--Buscador--></section>
-	<main>
+<section><!--Buscador--></section>
+<main>
 	<div class="containerL" id="containerL">
 		<!-- Formulario de Registro -->
 		<div class="form-containerL sign-up">
@@ -47,7 +47,7 @@
 				<span>o usa tu correo electrónico y contraseña</span>
 				<input type="email" name="username" placeholder="Correo electrónico" required autocomplete="off">
 				<input type="password" name="password" placeholder="Contraseña" required autocomplete="off">
-				<a href="#">¿Olvidaste tu contraseña?</a>
+				<a href="#" id="forgot-password-link">¿Olvidaste tu contraseña?</a>
 				<button type="submit">Iniciar Sesión</button>
 			</form>
 		</div>
@@ -70,20 +70,110 @@
 	</div>
 </main>
 
-
-
-
-	<div th:insert="~{usuario/template_user.html::footer}"></div>
-	<!-- Scroll Top -->
-	<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-			class="bi bi-arrow-up-short"></i></a>
-
-	<!-- Preloader -->
-	<div id="preloader"></div>
-
-	<div th:insert="~{usuario/template_user.html::jsFiles}">
+<!-- Modal para Recuperar Contraseña -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="forgotPasswordModalLabel">Recuperar Contraseña</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="resetPasswordForm" th:action="@{/usuario/resetPassword}" method="post">
+					<div class="mb-3">
+						<label for="resetEmail" class="form-label">Correo Electrónico</label>
+						<input type="email" class="form-control" id="resetEmail" name="resetEmail" required>
+						<div class="form-text">Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña.</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Enviar</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
-	<script th:src="@{/assets/login/script.js}"></script>
+</div>
+
+<!-- Alerta de éxito -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+	<div id="resetSuccessToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header bg-success text-white">
+			<strong class="me-auto">Recuperación de Contraseña</strong>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body">
+			Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña.
+		</div>
+	</div>
+</div>
+
+<div th:insert="~{usuario/template_user.html::footer}"></div>
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+		class="bi bi-arrow-up-short"></i></a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<div th:insert="~{usuario/template_user.html::jsFiles}">
+</div>
+<script th:src="@{/assets/login/script.js}"></script>
+
+<!-- Script para controlar el modal -->
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		// Manejar el clic en "¿Olvidaste tu contraseña?"
+		const forgotPasswordLink = document.getElementById('forgot-password-link');
+		if (forgotPasswordLink) {
+			forgotPasswordLink.addEventListener('click', function(e) {
+				e.preventDefault();
+				const modal = new bootstrap.Modal(document.getElementById('forgotPasswordModal'));
+				modal.show();
+			});
+		}
+
+		// Manejar envío del formulario de restablecimiento
+		const resetForm = document.getElementById('resetPasswordForm');
+		if (resetForm) {
+			resetForm.addEventListener('submit', function(e) {
+				e.preventDefault();
+
+				const email = document.getElementById('resetEmail').value;
+
+				// Enviar solicitud AJAX
+				fetch('/usuario/resetPassword', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: 'resetEmail=' + encodeURIComponent(email)
+				})
+						.then(response => {
+							if (response.ok) {
+								// Cerrar el modal
+								const modal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
+								modal.hide();
+
+								// Mostrar mensaje de éxito
+								const toast = new bootstrap.Toast(document.getElementById('resetSuccessToast'));
+								toast.show();
+
+								// Limpiar el formulario
+								resetForm.reset();
+							} else {
+								// Manejar error
+								alert('No se pudo procesar la solicitud. Por favor, intenta nuevamente.');
+							}
+						})
+						.catch(error => {
+							console.error('Error:', error);
+							alert('Ocurrió un error. Por favor, intenta nuevamente.');
+						});
+			});
+		}
+	});
+</script>
 </body>
 
 </html>

@@ -62,3 +62,79 @@ document.querySelectorAll('.btn-delete').forEach(btn => {
 		}
 	});
 });
+
+function fijarRecordatorio(id, fijar) {
+	fetch('/recordatorios/fijar/' + id, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+		.then(response => {
+			if (response.ok) {
+				// Recargar la página para reflejar los cambios
+				location.reload();
+			} else {
+				alert('Error al cambiar estado del recordatorio');
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+			alert('Error al cambiar estado del recordatorio');
+		});
+}
+
+function eliminarRecordatorio(id) {
+	if (confirm('¿Está seguro de eliminar este recordatorio?')) {
+		fetch('/recordatorios/delete/' + id, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(response => {
+				if (response.ok) {
+					// Eliminar el elemento de la interfaz sin recargar la página
+					const elemento = document.getElementById('recordatorio-' + id);
+					if (elemento) {
+						elemento.remove();
+					}
+				} else {
+					alert('Error al eliminar el recordatorio');
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert('Error al eliminar el recordatorio');
+			});
+	}
+}
+
+// Activar los dropdowns
+document.addEventListener('DOMContentLoaded', function () {
+	const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+	dropdownToggles.forEach(toggle => {
+		toggle.addEventListener('click', function (e) {
+			e.stopPropagation();
+			const dropdown = this.nextElementSibling;
+
+			// Cerrar todos los demás dropdowns
+			document.querySelectorAll('.dropdown-menu').forEach(menu => {
+				if (menu !== dropdown) {
+					menu.classList.remove('show');
+				}
+			});
+
+			// Alternar el estado del dropdown actual
+			dropdown.classList.toggle('show');
+		});
+	});
+
+	// Cerrar dropdowns al hacer clic en cualquier parte
+	document.addEventListener('click', function () {
+		document.querySelectorAll('.dropdown-menu').forEach(menu => {
+			menu.classList.remove('show');
+		});
+	});
+});

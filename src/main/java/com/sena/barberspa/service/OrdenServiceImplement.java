@@ -85,5 +85,9 @@ public class OrdenServiceImplement implements IOrdenService {
 		// TODO Auto-generated method stub
 		return ordenRepository.findById(id);
 	}
+	@Override
+	public long countAll() {
+		return ordenRepository.count();
+	}
 
 }

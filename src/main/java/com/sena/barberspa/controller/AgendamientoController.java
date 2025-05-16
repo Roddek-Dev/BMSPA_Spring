@@ -2,8 +2,12 @@ package com.sena.barberspa.controller;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import com.sena.barberspa.model.Recordatorio;
+import com.sena.barberspa.service.IOrdenService;
+import com.sena.barberspa.service.IRecordatorioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +18,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import java.time.format.DateTimeFormatter;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.sena.barberspa.service.IServiciosService;
+import com.sena.barberspa.service.ISucursalesService;
 import com.sena.barberspa.model.Agendamiento;
-
+import java.time.LocalDateTime;
 import com.sena.barberspa.model.Usuario;
 import com.sena.barberspa.service.IAgendamientosService;
 import com.sena.barberspa.service.IUsuarioService;
@@ -35,6 +43,16 @@ public class AgendamientoController {
 
 	@Autowired
 	private IUsuarioService usuarioService;
+	@Autowired
+	private IRecordatorioService recordatorioService;
+	@Autowired
+	private IOrdenService ordenService;
+
+	@Autowired
+	private IServiciosService servicioService;
+
+	@Autowired
+	private ISucursalesService sucursalService;
 
 	@GetMapping("")
 	public String show(Model model) {
@@ -50,6 +68,12 @@ public class AgendamientoController {
 			Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
 			if (usuario != null) {
 				model.addAttribute("usuario", usuario);
+				// Procesar agendamientos próximos y convertirlos en recordatorios
+				recordatorioService.procesarAgendamientosProximos(usuario, 3);
+
+				// Obtener recordatorios para mostrar en la barra lateral
+				List<Recordatorio> recordatorios = recordatorioService.findByUsuario(usuario);
+				model.addAttribute("recordatorios", recordatorios);
 			}
 		}
 	}
@@ -82,5 +106,43 @@ public class AgendamientoController {
 		agendamientosService.delete(id);
 		return "redirect:/agendamientos";
 	}
+	// Agregar este método al AgendamientoController.java
+	@PostMapping("/save")
+	public String save(@RequestParam("servicio") Integer idServicio,
+					   @RequestParam("sucursal") Integer idSucursal,
+					   @RequestParam String fechaHora,
+					   @RequestParam String mensaje,
+					   HttpSession session,
+					   RedirectAttributes redirectAttributes) {
 
+		try {
+			// Obtener usuario de la sesión
+			Integer idUsuario = (Integer) session.getAttribute("idUsuario");
+			if (idUsuario == null) {
+				return "redirect:/usuario/login";
+			}
+
+			Usuario usuario = usuarioService.findById(idUsuario)
+					.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+			// Crear nuevo agendamiento
+			Agendamiento agendamiento = new Agendamiento();
+			agendamiento.setFechaHora(LocalDateTime.parse(fechaHora, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
+			agendamiento.setMensaje(mensaje);
+			agendamiento.setServicio(servicioService.get(idServicio).orElseThrow());
+			agendamiento.setSucursal(sucursalService.get(idSucursal).orElseThrow());
+			agendamiento.setEstado("SOLICITADA");
+			agendamiento.setUsuario(usuario);
+
+			agendamientosService.save(agendamiento);
+			redirectAttributes.addFlashAttribute("success", "Cita agendada exitosamente");
+
+			return "redirect:/";
+
+		} catch (Exception e) {
+			LOGGER.error("Error al guardar agendamiento: {}", e.getMessage());
+			redirectAttributes.addFlashAttribute("error", "Error al agendar cita: " + e.getMessage());
+			return "redirect:/";
+		}
+	}
 }

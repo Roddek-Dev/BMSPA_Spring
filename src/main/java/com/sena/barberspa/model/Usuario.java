@@ -72,9 +72,7 @@ public class Usuario {
 		this.estado = estado;
 	}
 
-	public void setImagen(String imagen) {
-		this.imagen = imagen;
-	}
+
 
 	public Integer getId() {
 		return id;
@@ -156,14 +154,12 @@ public class Usuario {
 		this.ordenes = ordenes;
 	}
 
-	public Object getImagen() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getImagen() {
+		return imagen;
 	}
 
-	public void setImagen(Object object) {
-		// TODO Auto-generated method stub
-
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
 
 	// Método toString para depuración

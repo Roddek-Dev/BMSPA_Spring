@@ -1,5 +1,8 @@
 package com.sena.barberspa.controller;
 
+import com.sena.barberspa.model.Recordatorio;
+import com.sena.barberspa.service.IOrdenService;
+import com.sena.barberspa.service.IRecordatorioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +22,12 @@ public class AdminUsuarioController {
 
     @Autowired
     private IUsuarioService usuarioService;
+    @Autowired
+    private IRecordatorioService recordatorioService;
+    @Autowired
+    private IOrdenService ordenService;
 
+    // Método para agregar el usuario a todos los modelos
     @ModelAttribute
     public void addUsuarioToModel(Model model, HttpSession session) {
         Integer idUsuario = (Integer) session.getAttribute("idUsuario");
@@ -27,6 +35,18 @@ public class AdminUsuarioController {
             Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
             if (usuario != null) {
                 model.addAttribute("usuario", usuario);
+                // Procesar agendamientos próximos y convertirlos en recordatorios
+                recordatorioService.procesarAgendamientosProximos(usuario, 3);
+
+                // Obtener recordatorios para mostrar en la barra lateral
+                List<Recordatorio> recordatorios = recordatorioService.findByUsuario(usuario);
+                model.addAttribute("recordatorios", recordatorios);
+
+                // Contar las órdenes utilizando el servicio
+                long numeroDeOrdenes = ordenService.countAll();
+
+                // Añadir el conteo al modelo
+                model.addAttribute("totalOrdenes", numeroDeOrdenes);
             }
         }
     }

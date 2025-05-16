@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.sena.barberspa.model.Recordatorio;
+import com.sena.barberspa.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sena.barberspa.model.Producto;
 import com.sena.barberspa.model.Usuario;
-import com.sena.barberspa.service.IProductoService;
-import com.sena.barberspa.service.IUsuarioService;
-import com.sena.barberspa.service.UploadFileService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -43,6 +42,10 @@ public class ProductoController {
 
 	@Autowired
 	private UploadFileService upload;
+	@Autowired
+	private IRecordatorioService recordatorioService;
+	@Autowired
+	private IOrdenService ordenService;
 
 	@GetMapping("")
 	public String show(Model model) {
@@ -57,6 +60,12 @@ public class ProductoController {
 			Usuario usuario = usuarioService.findById(idUsuario).orElse(null);
 			if (usuario != null) {
 				model.addAttribute("usuario", usuario);
+				// Procesar agendamientos próximos y convertirlos en recordatorios
+				recordatorioService.procesarAgendamientosProximos(usuario, 3);
+
+				// Obtener recordatorios para mostrar en la barra lateral
+				List<Recordatorio> recordatorios = recordatorioService.findByUsuario(usuario);
+				model.addAttribute("recordatorios", recordatorios);
 			}
 		}
 	}
@@ -144,7 +153,11 @@ public class ProductoController {
 			Producto producto = optionalProducto.get();
 
 			if (!producto.getImagen().equals("default.jpg")) {
-				upload.deleteImage(producto.getImagen());
+				try {
+					upload.deleteImage(producto.getImagen());
+				} catch (IOException e) {
+					LOGGER.error("Error al eliminar la imagen: " + producto.getImagen(), e);
+				}
 			}
 
 			productoService.delete(id);

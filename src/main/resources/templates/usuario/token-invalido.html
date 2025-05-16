@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{usuario/template_user.html::head}">
+    <title>Enlace Inválido | BarberMusic&Spa</title>
+</head>
+
+<body class="index-page">
+
+<div th:insert="~{usuario/template_user.html::header}"></div>
+
+<main id="main" style="min-height: 70vh; display: flex; align-items: center; padding: 80px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="error-icon mb-4">
+                    <i class="bi bi-exclamation-triangle text-danger" style="font-size: 5rem;"></i>
+                </div>
+
+                <h2 class="mb-4">Enlace Inválido o Expirado</h2>
+
+                <div class="card shadow-sm p-5 mb-4">
+                    <p class="mb-4">
+                        El enlace para restablecer la contraseña que has utilizado no es válido o ha expirado.
+                        Los enlaces para restablecer la contraseña solo son válidos durante 24 horas por motivos de seguridad.
+                    </p>
+
+                    <p>
+                        Por favor, solicita un nuevo enlace para restablecer tu contraseña desde la página de inicio de sesión.
+                    </p>
+                </div>
+
+                <a href="/usuario/login" class="btn btn-primary btn-lg">
+                    <i class="bi bi-arrow-left me-2"></i> Volver al Inicio de Sesión
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:insert="~{usuario/template_user.html::footer}"></div>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+</a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<div th:insert="~{usuario/template_user.html::jsFiles}"></div>
+
+</body>
+</html>

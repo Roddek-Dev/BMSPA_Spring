@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmins:th="https://thymeLeaf.org">
+<html lang="es" xmlns:th="https://thymeLeaf.org">
 
-<head th:insert="~{usuario/template_user.html::head}"> </head>
+<head th:replace="~{usuario/template_user.html::head}"></head>
 
 <body class="index-page">
 
 <div th:insert="~{usuario/template_user.html::header}" th:if="${sesion == null}"></div>
 <div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
-
 
 <main class="main">
     <!-- Hero Section -->
@@ -23,7 +22,7 @@
                         </div>
 
                         <h1 class="mb-4">
-                            Barber Music<br />
+                            Barber Music<br/>
                             <span class="accent-text">& Spa</span>
                         </h1>
 
@@ -36,9 +35,10 @@
                             <a href="#contacto" class="btn btn-primary me-0 me-sm-2 mx-1">Iniciar</a>
 
 
-                            <a href="#services" class="btn btn-link mt-2 mt-sm-0 glightbox">
+                            <a href="https://www.instagram.com/reel/C9-kDfMykqh/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+                               class="btn btn-link mt-2 mt-sm-0 glightbox">
 
-                                <i class="bi bi-play-circle me-1"></i></a>
+                                <i class="bi bi-play-circle me-1"></i>Conocenos</a>
 
 
                             </a>
@@ -49,17 +49,17 @@
                 <div class="col-lg-6">
                     <div class="hero-image" data-aos="zoom-out" data-aos-delay="300">
                         <img th:src="@{/assets/img/ImagenPrincipal.png}" alt="Hero Image" class="img-fluid"
-                             style="height: 500px; width: 500px" />
+                             style="height: 500px; width: 500px"/>
 
                         <div class="customers-badge">
                             <div class="customer-avatars">
                                 <img src="assets/img/musicspavillahermosa-500x500.jpg" alt="Sucursal 1"
-                                     class="avatar" />
-                                <img src="assets/img/musisss-500x500.jpg" alt="Sucursal 2" class="avatar" />
-                                <img src="assets/img/proxim500x500.jpg" alt="Sucursal 3" class="avatar" />
-                                <img src="assets/img/barbermusicspa-500x500.jpg" alt="Sucursal 4" class="avatar" />
-                                <img src="assets/img/bspa500x500.jpg" alt="Sucursal 5" class="avatar" />
-                                <span class="avatar more">1+</span>
+                                     class="avatar"/>
+                                <img src="assets/img/musisss-500x500.jpg" alt="Sucursal 2" class="avatar"/>
+                                <img src="assets/img/proxim500x500.jpg" alt="Sucursal 3" class="avatar"/>
+                                <img src="assets/img/barbermusicspa-500x500.jpg" alt="Sucursal 4" class="avatar"/>
+                                <img src="assets/img/bspa500x500.jpg" alt="Sucursal 5" class="avatar"/>
+                                <span class="avatar more">3+</span>
                             </div>
                             <p class="mb-0 mt-2">
                                 <span th:text="${#lists.size(sucursales)} + ' sucursales'"></span> distribuidas por
@@ -94,20 +94,25 @@
                         hombre moderno.
                     </p>
 
-                    <div class="info-wrapper">
-                        <div class="row gy-4">
-                            <div class="col-lg-5">
-                                <div class="profile d-flex align-items-center gap-3">
-                                    <img th:src="@{/assets/img/logo.enc}" alt="CEO Profile" class="profile-image" />
-                                    <div>
-                                        <h4 class="profile-name">BarberMusic&Spa</h4>
-                                        <p class="profile-position">
-                                            Centro de Spa &amp; Barberia
-                                        </p>
-                                    </div>
+                    <div class="info-wrapper bg-light py-4 mb-4 shadow-sm">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 col-md-10">
+                                    <figure class="profile d-flex flex-column flex-sm-row align-items-center gap-3 gap-sm-4 mb-0 text-center text-sm-start">
+                                        <img th:src="@{/assets/img/logo.enc}"
+                                             alt="Logo de BarberMusic&Spa"
+                                             class="profile-image img-fluid mb-3 mb-sm-0"
+                                             style="max-width: 100px; height: auto; flex-shrink: 0;"/>
+                                        <figcaption>
+                                            <h3 class="profile-name mb-1 fw-bold text-primary">BarberMusic&Spa</h3>
+                                            <p class="profile-position mb-0 text-muted lead"> Centro de Spa &amp;
+                                                Barberia
+                                            </p>
+                                        </figcaption>
+                                    </figure>
+
                                 </div>
                             </div>
-                            <div class="col-lg-7"></div>
                         </div>
                     </div>
                 </div>
@@ -116,13 +121,13 @@
                     <div class="image-wrapper">
                         <div class="images position-relative" data-aos="zoom-out" data-aos-delay="400">
                             <img th:src="@{/assets/img/07.jpg}" alt="Business Meeting"
-                                 class="img-fluid main-image rounded-4" />
+                                 class="img-fluid main-image rounded-4"/>
                             <img th:src="@{/assets/img/02.jfif}" alt="Team Discussion"
-                                 class="img-fluid small-image rounded-4" />
+                                 class="img-fluid small-image rounded-4"/>
 
                         </div>
                         <div class="experience-badge floating">
-                            <h3>+18 <span>Años</span></h3>
+                            <h3>+20 <span>Años</span></h3>
                             <p>de experiencia en estetica y belleza</p>
                         </div>
                     </div>
@@ -131,99 +136,78 @@
         </div>
     </section>
     <!-- /About Section -->
+    <!-- Custom Slider Section -->
+    <section id="slider" class="custom-slider section">
+        <div class="container" data-aos="fade-up">
+            <!-- Section Title -->
+            <div class="section-title">
+                <h2>Descubre BarberMusicSpa</h2>
+                <p>Explora nuestros servicios premium y nuestras lujosas sucursales</p>
+            </div>
+            <!-- End Section Title -->
 
-    <!-- Services Section -->
-    <section id="services" class="services section light-background">
-        <!-- Section Title -->
-        <div class="container section-title" data-aos="fade-up">
-            <h2>Servicios</h2>
-            <p>Ofrecemos una amplia gama de tratamientos faciales y corporales diseñados para brindarte relajación,
-                cuidado personal y resultados visibles..</p>
-        </div>
-        <!-- End Section Title -->
-
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-            <div class="row g-4">
-                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="service-card d-flex">
-                        <div class="icon flex-shrink-0">
-                            <i class="bi bi-check-circle-fill"></i>
+            <div class="slider-container">
+                <div class="slider-track">
+                    <!-- Slide 1 - Servicios -->
+                    <div class="slide">
+                        <div class="slide-content">
+                            <div class="slide-image">
+                                <img th:src="@{/assets/img/Limpieza Facial_limpieza facial.jpeg}"
+                                     alt="Nuestros Servicios">
+                            </div>
+                            <div class="slide-text">
+                                <h3>Servicios Exclusivos</h3>
+                                <p>En BarberMusicSpa ofrecemos una experiencia única de relajación y cuidado personal
+                                    con nuestros tratamientos profesionales.</p>
+                                <ul class="slide-features">
+                                    <li><i class="bi bi-check-circle"></i> Tratamientos corporales con tecnología
+                                        avanzada
+                                    </li>
+                                    <li><i class="bi bi-check-circle"></i> Terapias faciales personalizadas</li>
+                                    <li><i class="bi bi-check-circle"></i> Servicios de barbería de lujo</li>
+                                    <li><i class="bi bi-check-circle"></i> Ambiente relajante con música terapéutica
+                                    </li>
+                                </ul>
+                                <a th:href="@{/servicios/servicioHome/{id}(id=1)}" class="btn-slider">
+                                    Ver todos los servicios <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
                         </div>
-                        <div>
-                            <h3>Tratamientos Corporales</h3>
-                            <p>
-                                Es un tratamiento no invasivo de reducción de grasa que
-                                utiliza tecnología de láser diodo para destruir las células
-                                de grasa de forma permanente en áreas específicas del
-                                cuerpo..
-                            </p>
-                            <a th:href="@{/serviciosVista}" class="read-more">Leer Más <i
-                                    class="bi bi-arrow-left-circle"></i>
-                            </a>
+                    </div>
+
+                    <!-- Slide 2 - Sucursales -->
+                    <div  class="slide">
+                        <div class="slide-content">
+                            <div class="slide-image">
+                                <img th:src="@{/assets/img/Sucursal San Luis Potosí_barbermusicspa-500x500.jpg}"
+                                     alt="Nuestras Sucursales">
+                            </div>
+                            <div class="slide-text">
+                                <h3>Nuestras Sucursales</h3>
+                                <p>Contamos con ubicaciones estratégicas en las principales ciudades de México, cada una
+                                    diseñada para ofrecerte la mejor experiencia.</p>
+                                <ul class="slide-features">
+                                    <li><i class="bi bi-geo-alt"></i> Plaza San Luis - San Luis Potosí</li>
+                                    <li><i class="bi bi-geo-alt"></i> Plaza Forum - Coatzacoalcos</li>
+                                    <li><i class="bi bi-geo-alt"></i> Plaza Altabrisa - Mérida</li>
+                                    <li><i class="bi bi-geo-alt"></i> Plaza Zentralia - Ciudad del Carmen</li>
+                                </ul>
+                                <a th:href="@{#contacto}" class="btn-slider">
+                                    Ver todas las sucursales <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- End Service Card -->
 
-                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="service-card d-flex">
-                        <div class="icon flex-shrink-0">
-                            <i class="bi bi-check-circle-fill"></i>
-                        </div>
-                        <div>
-                            <h3>Tratamientos Faciales</h3>
-                            <p>
-                                Son procedimientos estéticos diseñados para mejorar la apariencia, salud y textura
-                                de la piel del rostro.
-                            </p>
-                            <a th:href="@{/serviciosVista}" class="read-more">Leer Más <i
-                                    class="bi bi-arrow-left-circle"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="service-card d-flex">
-                        <div class="icon flex-shrink-0">
-                            <i class="bi bi-check-circle-fill"></i>
-                        </div>
-                        <div>
-                            <h3>Despigmentacion</h3>
-                            <p>
-                                Es un tratamiento estético que elimina o aclara pigmentos indeseados en la piel,
-                                como manchas, tatuajes o maquillaje permanente, utilizando técnicas avanzadas como
-                                láser o productos especializados.
-                            </p>
-                            <a th:href="@{/serviciosVista}" class="read-more">Leer Más <i
-                                    class="bi bi-arrow-left-circle"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="service-card d-flex">
-                        <div class="icon flex-shrink-0">
-                            <i class="bi bi-check-circle-fill"></i>
-                        </div>
-                        <div>
-                            <h3>Radio Frecuencia</h3>
-                            <p>
-                                La radiofrecuencia es un tratamiento no invasivo que estimula la producción de
-                                colágeno mediante ondas electromagnéticas, ayudando a reafirmar la piel, reducir
-                                arrugas y mejorar la apariencia en áreas específicas del cuerpo y rostro. Ideal para
-                                relajarte y rejuvenecer en el spa.
-                            </p>
-                            <a th:href="@{/serviciosVista}" class="read-more">Leer Más <i
-                                    class="bi bi-arrow-left-circle"></i></a>
-                        </div>
-                    </div>
+                <div class="slider-nav">
+                    <div class="slider-dot active" data-slide="0"></div>
+                    <div class="slider-dot" data-slide="1"></div>
                 </div>
             </div>
         </div>
-        </div>
-        </div>
     </section>
-    <!-- /Services Section -->
-
+    <!-- End Custom Slider Section -->
     <!-- Features Section -->
     <section id="productos" class="features section">
 
@@ -385,28 +369,28 @@
                                 <p>Plaza San Luis</p>
                                 <p>San Luis Potosi, México</p>
                                 <p>+52 444 334 0295</p>
-                                <br />
+                                <br/>
                                 <p>Plaza Forum</p>
                                 <p>Coatzacoalcos, México</p>
                                 <p>+52 921 145 8851</p>
-                                <br />
+                                <br/>
                                 <p></p>
                                 <p>Plaza Altabrisa</p>
                                 <p>Merida, México</p>
                                 <p>+52 999 503 8545</p>
-                                <br />
+                                <br/>
                                 <p>Plaza Zentralia</p>
                                 <p>Ciudad Carmen, México</p>
                                 <p>+52 938 106 1531</p>
-                                <br />
+                                <br/>
                                 <p>Plaza Altabrisa</p>
                                 <p>Villahermosa, México</p>
                                 <p></p>
-                                <br />
+                                <br/>
                                 <p>Plaza Strada</p>
                                 <p>Villahermosa, México</p>
                                 <p>+52 938 160 4378</p>
-                                <br />
+                                <br/>
                                 <p>Plaza Las Americas</p>
                                 <p>Villahermosa, México</p>
                                 <p>+52 921 145 8851</p>
@@ -564,6 +548,54 @@
                 alert('Las citas deben ser en intervalos de 15 minutos (00, 15, 30, 45)');
                 this.value = '';
             }
+        });
+    });
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Slider functionality
+        const sliderTrack = document.querySelector('.slider-track');
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentIndex = 0;
+        const slideCount = slides.length;
+
+        // Auto-slide every 5 seconds
+        let slideInterval = setInterval(nextSlide, 5000);
+
+        // Function to go to specific slide
+        function goToSlide(index) {
+            currentIndex = index;
+            sliderTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            // Update dots
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+
+            // Reset auto-slide timer
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        // Next slide function
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slideCount;
+            goToSlide(currentIndex);
+        }
+
+        // Dot click event
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => goToSlide(index));
+        });
+
+        // Pause on hover
+        const sliderContainer = document.querySelector('.slider-container');
+        sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
+        sliderContainer.addEventListener('mouseleave', () => {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000);
         });
     });
 </script>

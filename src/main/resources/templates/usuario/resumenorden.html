@@ -1,82 +1,104 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:insert="~{usuario/template_user.html::head}">
-	<title>Confirmar Orden | BarberMusicSpa</title>
+<head th:replace="~{usuario/template_user.html::head}">
+    <title>Confirmar Orden | BarberMusicSpa</title>
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy"
+          content="frame-src https://*.mercadopago.com; script-src 'self' https://*.mercadopago.com;">
 </head>
+<script>
+    // Puedes agregar esto al inicio de tu script
+    fetch('https://sdk.mercadopago.com/js/v2')
+        .then(response => {
+            if (!response.ok) {
+                console.error('No se pudo cargar el SDK de MercadoPago');
+            }
+        })
+        .catch(error => {
+            console.error('Error de red al intentar cargar el SDK:', error);
+        });
+</script>
 <style>
-	#main {
-		margin-top: 4em;
-	}
+    #main {
+        margin-top: 4em;
+    }
 
-	section {
-		padding: 60px 0 0 0 !important;
-	}
+    section {
+        padding: 60px 0 0 0 !important;
+    }
 
-	.customer-info-card {
-		background-color: #f8f9fa;
-		border-radius: 10px;
-		padding: 20px;
-		margin-bottom: 20px;
-	}
+    .customer-info-card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
 
-	.payment-methods {
-		display: flex;
-		gap: 15px;
-		margin-top: 15px;
-	}
+    .payment-methods {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+    }
 
-	.payment-method {
-		border: 1px solid #dee2e6;
-		border-radius: 8px;
-		padding: 10px 15px;
-		cursor: pointer;
-		transition: all 0.3s;
-	}
+    .payment-method {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
 
-	.payment-method:hover {
-		border-color: var(--accent-color);
-	}
+    .payment-method:hover {
+        border-color: var(--accent-color);
+    }
 
-	.payment-method.active {
-		border-color: var(--accent-color);
-		background-color: rgba(255, 0, 0, 0.05);
-	}
+    .payment-method.active {
+        border-color: var(--accent-color);
+        background-color: rgba(255, 0, 0, 0.05);
+    }
 
-	/* Estilos para opciones de pago */
-	.payment-option {
-		border: 1px solid #dee2e6;
-		border-radius: 8px;
-		padding: 15px;
-		margin-bottom: 15px;
-		cursor: pointer;
-		transition: all 0.3s;
-	}
+    /* Estilos para opciones de pago */
+    .payment-option {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
 
-	.payment-option:hover {
-		border-color: var(--accent-color);
-		background-color: rgba(255, 0, 0, 0.05);
-	}
+    .payment-option:hover {
+        border-color: var(--accent-color);
+        background-color: rgba(255, 0, 0, 0.05);
+    }
 
-	.payment-option.selected {
-		border-color: var(--accent-color);
-		background-color: rgba(255, 0, 0, 0.05);
-	}
+    .payment-option.selected {
+        border-color: var(--accent-color);
+        background-color: rgba(255, 0, 0, 0.05);
+    }
 
-	.payment-logo {
-		height: 30px;
-		margin-right: 10px;
-	}
+    .payment-logo {
+        height: 30px;
+        margin-right: 10px;
+    }
 
-	.payment-buttons {
-		margin-top: 25px;
-	}
+    .payment-buttons {
+        margin-top: 25px;
+    }
 
-	paypal-button-container {
-		margin-top: 20px;
-		width: 100%;
-	}
+    .form-group {
+        margin-bottom: 15px;
+    }
 
+    #form-checkout {
+        display: block;
+        width: 100%;
+    }
+
+    .mp-hidden {
+        display: none;
+    }
 </style>
 
 <body class="index-page">
@@ -85,203 +107,265 @@
 <div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
 
 <main id="main">
-	<!-- ======= Breadcrumbs Section ======= -->
-	<section class="breadcrumbs">
-		<div class="container">
-			<h2>Confirmar tu Orden</h2>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
-				<li class="breadcrumb-item"><a th:href="@{/cart}">Carrito</a></li>
-				<li class="breadcrumb-item active">Confirmación</li>
-			</ol>
-		</div>
-	</section><!-- End Breadcrumbs -->
+    <!-- ======= Breadcrumbs Section ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+            <h2>Confirmar tu Orden</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Inicio</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/cart}">Carrito</a></li>
+                <li class="breadcrumb-item active">Confirmación</li>
+            </ol>
+        </div>
+    </section><!-- End Breadcrumbs -->
 
-	<!-- ======= Order Confirmation Section ======= -->
-	<section class="inner-page">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="card shadow-sm mb-4">
-						<div class="card-body">
-							<h3 class="card-title mb-4">Información del Cliente</h3>
+    <!-- ======= Order Confirmation Section ======= -->
+    <section class="inner-page">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title mb-4">Información del Cliente</h3>
 
-							<div class="customer-info-card">
-								<div class="row">
-									<div class="col-md-6 mb-3">
-										<h5 class="mb-2"><i class="bi bi-person me-2"></i> Información Personal</h5>
-										<p class="mb-1"><strong>Nombre:</strong> <span
-												th:text="${usuario.nombre}"></span></p>
-										<p class="mb-1"><strong>Correo:</strong> <span
-												th:text="${usuario.email}"></span></p>
-										<p class="mb-0"><strong>Teléfono:</strong> <span
-												th:text="${usuario.telefono ?: 'No especificado'}"></span></p>
-									</div>
-									<div class="col-md-6 mb-3">
-										<h5 class="mb-2"><i class="bi bi-geo-alt me-2"></i> Dirección de Envío</h5>
-										<p th:text="${usuario.direccion ?: 'No especificada'}"></p>
-										<a href="#" class="btn btn-outline-primary btn-sm mt-2">
-											<i class="bi bi-pencil me-1"></i> Editar dirección
-										</a>
-									</div>
-								</div>
-							</div>
+                            <div class="customer-info-card">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <h5 class="mb-2"><i class="bi bi-person me-2"></i> Información Personal</h5>
+                                        <p class="mb-1"><strong>Nombre:</strong> <span
+                                                th:text="${usuario.nombre}"></span></p>
+                                        <p class="mb-1"><strong>Correo:</strong> <span
+                                                th:text="${usuario.email}"></span></p>
+                                        <p class="mb-0"><strong>Teléfono:</strong> <span
+                                                th:text="${usuario.telefono ?: 'No especificado'}"></span></p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <h5 class="mb-2"><i class="bi bi-geo-alt me-2"></i> Dirección de Envío</h5>
+                                        <p th:text="${usuario.direccion ?: 'No especificada'}"></p>
+                                        <a href="#" class="btn btn-outline-primary btn-sm mt-2">
+                                            <i class="bi bi-pencil me-1"></i> Editar dirección
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
 
-							<h3 class="card-title mb-3 mt-4">Método de Pago</h3>
+                            <h3 class="card-title mb-3 mt-4">Método de Pago</h3>
 
-							<!-- Nuevas Opciones de Pago -->
-							<div class="payment-options">
-								<div class="payment-option selected" id="mercadopago-option" onclick="selectPaymentMethod('mercadopago')">
-									<div class="d-flex align-items-center">
-										<img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.1/mercadopago/logo__large.png"
-											 alt="MercadoPago" class="payment-logo">
-										<div>
-											<h5 class="mb-0">MercadoPago</h5>
-											<p class="text-muted small mb-0">Paga con tarjeta de crédito, débito o saldo en MercadoPago</p>
-										</div>
-									</div>
-								</div>
+                            <!-- Nuevas Opciones de Pago -->
+                            <div class="payment-options">
+                                <div class="payment-option selected" id="mercadopago-option"
+                                     onclick="selectPaymentMethod('mercadopago')">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.1/mercadopago/logo__large.png"
+                                             alt="MercadoPago" class="payment-logo">
+                                        <div>
+                                            <h5 class="mb-0">MercadoPago</h5>
+                                            <p class="text-muted small mb-0">Paga con tarjeta de crédito, débito o saldo
+                                                en MercadoPago</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-								<div class="payment-option" id="paypal-option" onclick="selectPaymentMethod('paypal')">
-									<div class="d-flex align-items-center">
-										<img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg"
-											 alt="PayPal" class="payment-logo">
-										<div>
-											<h5 class="mb-0">PayPal</h5>
-											<p class="text-muted small mb-0">Paga de manera segura con tu cuenta de PayPal</p>
-										</div>
-									</div>
-								</div>
-							</div>
+                                <div class="payment-option" id="paypal-option" onclick="selectPaymentMethod('paypal')">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg"
+                                             alt="PayPal" class="payment-logo">
+                                        <div>
+                                            <h5 class="mb-0">PayPal</h5>
+                                            <p class="text-muted small mb-0">Paga de manera segura con tu cuenta de
+                                                PayPal</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-							<!-- Detalles de pago según método seleccionado -->
-							<div id="mercadopago-details" class="payment-details">
-								<h5 class="mb-3 mt-4">Detalles de Pago con Tarjeta</h5>
-								<div class="row">
-									<div class="col-md-12 mb-3">
-										<label for="cardNumber" class="form-label">Número de Tarjeta</label>
-										<input type="text" class="form-control" id="cardNumber"
-											   placeholder="1234 5678 9012 3456">
-									</div>
-									<div class="col-md-6 mb-3">
-										<label for="expiryDate" class="form-label">Fecha de Expiración</label>
-										<input type="text" class="form-control" id="expiryDate" placeholder="MM/AA">
-									</div>
-									<div class="col-md-6 mb-3">
-										<label for="cvv" class="form-label">CVV</label>
-										<input type="text" class="form-control" id="cvv" placeholder="123">
-									</div>
-									<div class="col-md-12 mb-3">
-										<label for="cardName" class="form-label">Nombre en la Tarjeta</label>
-										<input type="text" class="form-control" id="cardName"
-											   placeholder="Nombre Completo">
-									</div>
-								</div>
-							</div>
+                            <!-- Detalles de pago según método seleccionado -->
+                            <div id="mercadopago-details" class="payment-details">
+                                <h5 class="mb-3 mt-4">Detalles de Pago con Tarjeta</h5>
 
-							<div id="paypal-details" class="payment-details" style="display: none;">
-								<div class="alert alert-info mt-4">
-									<i class="bi bi-info-circle me-2"></i>
-									Serás redirigido a PayPal para completar tu pago de forma segura.
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+                                <!-- Formulario de checkout para MercadoPago -->
+                                <form id="form-checkout">
+                                    <div class="form-group">
+                                        <label for="form-checkout__cardNumber">Número de la tarjeta</label>
+                                        <input type="tel" id="form-checkout__cardNumber" class="form-control"
+                                               inputmode="numeric" maxlength="19"
+                                               placeholder="1234 5678 9012 3456" autocomplete="cc-number">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="form-checkout__expirationDate">Fecha de vencimiento</label>
+                                                <input type="tel" id="form-checkout__expirationDate"
+                                                       class="form-control"
+                                                       inputmode="numeric" maxlength="5"
+                                                       placeholder="MM/YY" autocomplete="cc-exp">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="form-checkout__securityCode">Código de seguridad</label>
+                                                <input type="tel" id="form-checkout__securityCode" class="form-control"
+                                                       inputmode="numeric" maxlength="4"
+                                                       placeholder="CVV" autocomplete="cc-csc">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="form-checkout__cardholderName">Titular de la tarjeta</label>
+                                        <input type="text" id="form-checkout__cardholderName" class="form-control"
+                                               placeholder="Nombre completo del titular" autocomplete="cc-name"
+                                               required/>
+                                    </div>
 
-				<div class="col-lg-4">
-					<div class="card shadow-sm">
-						<div class="card-body">
-							<h3 class="card-title mb-4">Resumen de la Orden</h3>
+                                    <div class="form-group">
+                                        <label for="form-checkout__cardholderEmail">E-mail</label>
+                                        <input type="email" id="form-checkout__cardholderEmail" class="form-control"
+                                               th:value="${usuario.email}" placeholder="ejemplo@correo.com"
+                                               autocomplete="email" required/>
+                                    </div>
 
-							<h5 class="mb-3">Productos</h5>
-							<div class="table-responsive">
-								<table class="table">
-									<thead>
-									<tr>
-										<th>Producto</th>
-										<th class="text-end">Total</th>
-									</tr>
-									</thead>
-									<tbody>
-									<tr th:each="dtorden: ${cart}">
-										<td>
-											<span th:text="${dtorden.nombre}"></span>
-											<small class="d-block text-muted"
-												   th:text="'Cantidad: ' + ${dtorden.cantidad}"></small>
-										</td>
-										<td class="text-end"
-											th:text="${#strings.concat('$', #numbers.formatDecimal(dtorden.total, 0, 'POINT',0, 'POINT'))}">
-										</td>
-									</tr>
-									</tbody>
-								</table>
-							</div>
+                                    <div class="form-group">
+                                        <label for="form-checkout__identificationType">Tipo de documento</label>
+                                        <select id="form-checkout__identificationType" class="form-control">
+                                            <!-- El SDK de MercadoPago llenará automáticamente estas opciones -->
+                                        </select>
+                                    </div>
 
-							<div class="border-top pt-3 mt-3">
-								<div class="d-flex justify-content-between mb-2">
-									<span>Subtotal:</span>
-									<span
-											th:text="${#strings.concat('$', #numbers.formatDecimal(orden.total, 0, 'POINT',0, 'POINT'))}"></span>
-								</div>
-								<div class="d-flex justify-content-between mb-2">
-									<span>Envío:</span>
-									<span class="text-success">Gratis</span>
-								</div>
-								<div class="d-flex justify-content-between mb-2">
-									<span>Descuento:</span>
-									<span class="text-danger">$0</span>
-								</div>
-								<div class="d-flex justify-content-between mt-3 pt-2 border-top">
-									<h5>Total:</h5>
-									<h5 class="text-primary"
-										th:text="${#strings.concat('$', #numbers.formatDecimal(orden.total, 0, 'POINT',0, 'POINT'))}">
-									</h5>
-								</div>
-							</div>
+                                    <div class="form-group">
+                                        <label for="form-checkout__identificationNumber">Número de documento</label>
+                                        <input type="text" id="form-checkout__identificationNumber" class="form-control"
+                                               pattern="[0-9]*" inputmode="numeric"
+                                               placeholder="Número de identificación" required/>
+                                    </div>
 
-							<div class="form-check mt-3 mb-4">
-								<input class="form-check-input" type="checkbox" id="termsCheck">
-								<label class="form-check-label small" for="termsCheck">
-									Acepto los <a href="#">términos y condiciones</a> y la <a href="#">política de privacidad</a>
-								</label>
-							</div>
+                                    <div class="form-group">
+                                        <label for="form-checkout__installments">Cuotas</label>
+                                        <select id="form-checkout__installments" class="form-control">
+                                            <!-- El SDK de MercadoPago llenará automáticamente estas opciones -->
+                                        </select>
+                                    </div>
 
-							<div class="payment-buttons">
-								<!-- Botón de MercadoPago -->
-								<form id="mercadopago-form" th:action="@{/saveOrder}" method="get" style="display: none;">
-									<button type="submit" class="btn btn-danger w-100 py-3 mb-2">
-										<i class="bi bi-credit-card me-2"></i> Pagar con MercadoPago
-									</button>
-								</form>
+                                    <div class="form-group">
+                                        <label for="form-checkout__issuer">Emisor</label>
+                                        <select id="form-checkout__issuer" class="form-control">
+                                            <!-- El SDK de MercadoPago llenará automáticamente estas opciones -->
+                                        </select>
+                                    </div>
 
-								<!-- Botón para PayPal - formulario simple -->
-								<form id="paypal-form" th:action="@{/paypalOrder}" method="post" style="display: none;">
-									<button type="submit" class="btn btn-primary w-100 py-3 mb-2">
-										<i class="bi bi-paypal me-2"></i> Pagar con PayPal
-									</button>
-								</form>
-								<div class="alert alert-light border mt-3">
-									<div class="d-flex align-items-center">
-										<i class="bi bi-shield-lock fs-4 me-3 text-primary"></i>
-										<span class="small">Transacción segura protegida por encriptación SSL</span>
-									</div>
-								</div>
+                                    <button type="submit" id="form-checkout__submit"
+                                            class="btn btn-danger w-100 py-3 mb-2">
+                                        <i class="bi bi-credit-card me-2"></i> Pagar con MercadoPago
+                                    </button>
 
-							</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		</div>
-	</section><!-- End Order Confirmation Section -->
+                                    <progress value="0" class="progress-bar progress-bar-danger w-100 mp-hidden"
+                                              id="loading-progress">Procesando...
+                                    </progress>
+
+                                    <!-- Campos ocultos para datos de la orden -->
+                                    <input type="hidden" name="transactionAmount" id="transactionAmount"
+                                           th:value="${orden.total}"/>
+                                    <input type="hidden" name="description" id="description"
+                                           value="Productos de BarberMusicSpa"/>
+                                    <input type="hidden" name="orderId" id="orderId" th:value="${orden.id}"/>
+                                </form>
+                            </div>
+
+                            <div id="paypal-details" class="payment-details" style="display: none;">
+                                <div class="alert alert-info mt-4">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    Serás redirigido a PayPal para completar tu pago de forma segura.
+                                </div>
+
+                                <!-- Botón para PayPal -->
+                                <form id="paypal-form" th:action="@{/paypalOrder}" method="post">
+                                    <input type="hidden" name="orderId" th:value="${orden.id}"/>
+                                    <button type="submit" class="btn btn-primary w-100 py-3 mb-2">
+                                        <i class="bi bi-paypal me-2"></i> Pagar con PayPal
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title mb-4">Resumen de la Orden</h3>
+
+                            <h5 class="mb-3">Productos</h5>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th class="text-end">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="dtorden: ${cart}">
+                                        <td>
+                                            <span th:text="${dtorden.nombre}"></span>
+                                            <small class="d-block text-muted"
+                                                   th:text="'Cantidad: ' + ${dtorden.cantidad}"></small>
+                                        </td>
+                                        <td class="text-end"
+                                            th:text="${#strings.concat('$', #numbers.formatDecimal(dtorden.total, 0, 'POINT',0, 'POINT'))}">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="border-top pt-3 mt-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span
+                                            th:text="${#strings.concat('$', #numbers.formatDecimal(orden.total, 0, 'POINT',0, 'POINT'))}"></span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Envío:</span>
+                                    <span class="text-success">Gratis</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Descuento:</span>
+                                    <span class="text-danger">$0</span>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3 pt-2 border-top">
+                                    <h5>Total:</h5>
+                                    <h5 class="text-primary"
+                                        th:text="${#strings.concat('$', #numbers.formatDecimal(orden.total, 0, 'POINT',0, 'POINT'))}">
+                                    </h5>
+                                </div>
+                            </div>
+
+                            <div class="form-check mt-3 mb-4">
+                                <input class="form-check-input" type="checkbox" id="termsCheck">
+                                <label class="form-check-label small" for="termsCheck">
+                                    Acepto los <a href="#">términos y condiciones</a> y la <a href="#">política de
+                                    privacidad</a>
+                                </label>
+                            </div>
+
+                            <div class="alert alert-light border mt-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-shield-lock fs-4 me-3 text-primary"></i>
+                                    <span class="small">Transacción segura protegida por encriptación SSL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Order Confirmation Section -->
 </main>
 
 <div th:insert="~{usuario/template_user.html::footer}"></div>
 
 <!-- Scroll Top -->
 <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-	<i class="bi bi-arrow-up-short"></i>
+    <i class="bi bi-arrow-up-short"></i>
 </a>
 
 <!-- Preloader -->
@@ -290,74 +374,230 @@
 <div th:insert="~{usuario/template_user.html::jsFiles}"></div>
 
 <script th:inline="javascript">
-	/*<![CDATA[*/
-	const order_total = /*[[${orden.total}]]*/ 0;
-	const order_id = /*[[${orden.id}]]*/ 0;
-	/*]]>*/
+    /*<![CDATA[*/
+    const order_total = /*[[${orden.total}]]*/ 0;
+    const order_id = /*[[${orden.id}]]*/ 0;
+    /*]]>*/
 </script>
-
-<!-- Reemplaza el script de PayPal actual con este código simplificado -->
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 <script>
-	function selectPaymentMethod(method) {
-		// Remover la clase 'selected' de todas las opciones
-		document.querySelectorAll('.payment-option').forEach(option => {
-			option.classList.remove('selected');
-		});
+    function selectPaymentMethod(method) {
+        // Remover la clase 'selected' de todas las opciones
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.classList.remove('selected');
+        });
 
-		// Ocultar todos los detalles de pago
-		document.querySelectorAll('.payment-details').forEach(detail => {
-			detail.style.display = 'none';
-		});
+        // Ocultar todos los detalles de pago
+        document.querySelectorAll('.payment-details').forEach(detail => {
+            detail.style.display = 'none';
+        });
 
-		// Ocultar todos los formularios de pago
-		document.getElementById('mercadopago-form').style.display = 'none';
-		document.getElementById('paypal-form').style.display = 'none';
+        // Activar la opción seleccionada
+        document.getElementById(method + '-option').classList.add('selected');
 
-		// Activar la opción seleccionada
-		document.getElementById(method + '-option').classList.add('selected');
+        // Mostrar los detalles correspondientes
+        document.getElementById(method + '-details').style.display = 'block';
+    }
 
-		// Mostrar los detalles correspondientes
-		document.getElementById(method + '-details').style.display = 'block';
 
-		// Mostrar el formulario correspondiente
-		if (method === 'mercadopago') {
-			document.getElementById('mercadopago-form').style.display = 'block';
-		} else if (method === 'paypal') {
-			document.getElementById('paypal-form').style.display = 'block';
-		}
-	}
+    // Reemplaza tu actual script con esto:
+    document.addEventListener('DOMContentLoaded', function () {
+        // Primero verifica si MercadoPago está cargado
+        if (typeof MercadoPago === 'undefined') {
+            console.error('El SDK de MercadoPago no se cargó correctamente');
+            // Puedes intentar cargarlo nuevamente o mostrar un mensaje al usuario
+            return;
+        }
 
-	// Inicializar con MercadoPago seleccionado
-	document.addEventListener('DOMContentLoaded', function() {
-		selectPaymentMethod('mercadopago');
+        selectPaymentMethod('mercadopago');
 
-		// Validación para aceptación de términos
-		const termsCheck = document.getElementById('termsCheck');
-		const buttons = document.querySelectorAll('.payment-buttons form button');
+        // Validación para aceptación de términos
+        const termsCheck = document.getElementById('termsCheck');
+        const submitButtons = document.querySelectorAll('#form-checkout__submit, #paypal-form button');
 
-		termsCheck.addEventListener('change', function() {
-			buttons.forEach(button => {
-				button.disabled = !this.checked;
-			});
-		});
+        termsCheck.addEventListener('change', function () {
+            submitButtons.forEach(button => {
+                button.disabled = !this.checked;
+            });
+        });
 
-		// Inicialmente deshabilitar botones si no están marcados los términos
-		buttons.forEach(button => {
-			button.disabled = !termsCheck.checked;
-		});
-	});
+        // Inicialmente deshabilitar botones si no están marcados los términos
+        submitButtons.forEach(button => {
+            button.disabled = !termsCheck.checked;
+        });
+
+        // Inicializar MercadoPago
+        initMercadoPago();
+    });
+
+    function initMercadoPago() {
+        try {
+            console.log('Inicializando MercadoPago...');
+
+            if (typeof MercadoPago === 'undefined') {
+                throw new Error('MercadoPago no está disponible');
+            }
+
+            const mp = new MercadoPago('TEST-691b031d-dfc9-4995-8123-72fd7866d738', {
+                locale: 'es-CO',
+                advancedFraudPrevention: false
+            });
+
+            // Inicializar el formulario de tarjeta
+            const cardForm = mp.cardForm({
+                amount: document.getElementById('transactionAmount').value,
+                autoMount: true,
+                form: {
+                    id: 'form-checkout',
+                    cardholderName: {
+                        id: 'form-checkout__cardholderName',
+                        placeholder: 'Nombre como aparece en la tarjeta',
+                    },
+                    cardholderEmail: {
+                        id: 'form-checkout__cardholderEmail',
+                        placeholder: 'E-mail',
+                    },
+                    cardNumber: {
+                        id: 'form-checkout__cardNumber',
+                        placeholder: 'Número de tarjeta',
+                    },
+                    expirationDate: {
+                        id: 'form-checkout__expirationDate',
+                        placeholder: 'MM/YY',
+                    },
+                    securityCode: {
+                        id: 'form-checkout__securityCode',
+                        placeholder: 'CVV',
+                    },
+                    installments: {
+                        id: 'form-checkout__installments',
+                        placeholder: 'Cuotas',
+                    },
+                    identificationType: {
+                        id: 'form-checkout__identificationType',
+                        placeholder: 'Tipo de documento',
+                    },
+                    identificationNumber: {
+                        id: 'form-checkout__identificationNumber',
+                        placeholder: 'Número de documento',
+                    },
+                    issuer: {
+                        id: 'form-checkout__issuer',
+                        placeholder: 'Banco emisor',
+                    },
+                },
+                callbacks: {
+                    onFormMounted: error => {
+                        if (error) {
+                            console.warn('Form Mounted error: ', error);
+                            return;
+                        }
+                        console.log('Form mounted successfully');
+
+                        // Agregar event listener para prevenir el refresh
+                        const form = document.getElementById('form-checkout');
+                        form.addEventListener('submit', (e) => {
+                            e.preventDefault(); // Esto previene el refresh
+                            console.log('Form submission prevented');
+                        });
+                    },
+                    onSubmit: async (event) => {
+                        event.preventDefault(); // Prevenir el comportamiento por defecto
+
+                        console.log('Iniciando procesamiento de pago...');
+                        const loadingIndicator = document.getElementById('loading-progress');
+                        loadingIndicator.classList.remove('mp-hidden');
+
+                        try {
+                            const {
+                                paymentMethodId: payment_method_id,
+                                issuerId: issuer_id,
+                                cardholderEmail: email,
+                                amount,
+                                token,
+                                installments,
+                                identificationNumber,
+                                identificationType,
+                            } = cardForm.getCardFormData();
+
+                            const paymentData = {
+                                token,
+                                issuer_id,
+                                payment_method_id,
+                                transaction_amount: Number(amount),
+                                installments: Number(installments),
+                                description: document.getElementById('description').value,
+                                order_id: document.getElementById('orderId').value,
+                                payer: {
+                                    email,
+                                    identification: {
+                                        type: identificationType,
+                                        number: identificationNumber
+                                    }
+                                }
+                            };
+
+                            console.log('Enviando datos de pago...', paymentData);
+
+                            const response = await fetch('/mercadopago/process_payment', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(paymentData)
+                            });
+
+                            const result = await response.json();
+                            console.log('Respuesta del pago:', result);
+
+                            loadingIndicator.classList.add('mp-hidden');
+
+                            if (!response.ok) {
+                                throw new Error(result.message || 'Error en el pago');
+                            }
+
+                            if (result.status === 'approved') {
+                                window.location.href = "/success?payment_id=" + result.id;
+                            } else if (result.status === 'in_process') {
+                                window.location.href = "/pending?payment_id=" + result.id;
+                            } else {
+                                window.location.href = "/failure?payment_id=" + result.id + "&status=" + result.status + "&error=" + (result.status_detail || '');
+                            }
+                        } catch (error) {
+                            loadingIndicator.classList.add('mp-hidden');
+                            console.error('Error al procesar el pago:', error);
+                            alert('Hubo un problema al procesar el pago: ' + error.message);
+                        }
+                    },
+                    onFetching: (resource) => {
+                        console.log("Fetching resource: ", resource);
+                        const loadingIndicator = document.getElementById('loading-progress');
+                        loadingIndicator.classList.remove('mp-hidden');
+                        return () => {
+                            loadingIndicator.classList.add('mp-hidden');
+                        };
+                    }
+                },
+            });
+        } catch (error) {
+            console.error('Error en initMercadoPago:', error);
+            alert('Error al inicializar el sistema de pagos: ' + error.message);
+        }
+    }
+
+    // Añade un timeout para reintentar si los campos no se cargan
+    setTimeout(() => {
+        if (document.querySelector('#form-checkout__identificationType').options.length <= 1) {
+            console.log('Reintentando inicializar MercadoPago...');
+            initMercadoPago();
+        }
+    }, 3000);
+
+    document.getElementById('form-checkout')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('Form submission prevented by global listener');
+    });
 </script>
 
-<div th:insert="~{usuario/template_user.html::footer}"></div>
-
-<!-- Scroll Top -->
-<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-	<i class="bi bi-arrow-up-short"></i>
-</a>
-
-<!-- Preloader -->
-<div id="preloader"></div>
-
-<div th:insert="~{usuario/template_user.html::jsFiles}"></div>
 </body>
 </html>

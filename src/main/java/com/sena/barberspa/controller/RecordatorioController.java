@@ -4,6 +4,7 @@ import com.sena.barberspa.model.Agendamiento;
 import com.sena.barberspa.model.Recordatorio;
 import com.sena.barberspa.model.Usuario;
 import com.sena.barberspa.service.IAgendamientosService;
+import com.sena.barberspa.service.IOrdenService;
 import com.sena.barberspa.service.IRecordatorioService;
 import com.sena.barberspa.service.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class RecordatorioController {
 
     @Autowired
     private IAgendamientosService agendamientosService;
+
+    @Autowired
+    private IOrdenService ordenService;
 
     @ModelAttribute
     public void addUsuarioToModel(Model model, HttpSession session) {

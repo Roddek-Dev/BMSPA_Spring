@@ -2,112 +2,112 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{administrador/template_admins.html :: head}">
-  <title>Gestión de Usuarios | BarberMusic Admin</title>
+    <title>Gestión de Usuarios | BarberMusic Admin</title>
 </head>
 
 <body>
 <div class="container">
-  <!-- Sidebar -->
-  <div th:replace="~{administrador/template_admins.html :: aside}"></div>
+    <!-- Sidebar -->
+    <div th:replace="~{administrador/template_admins.html :: aside}"></div>
 
-  <!-- Main Content -->
-  <main class="dashboard-main">
-    <!-- Encabezado -->
-    <div class="page-header">
-      <h1>
-        <span class="material-icons-sharp">manage_accounts</span>
-        Gestión de Usuarios
-      </h1>
-      <nav class="breadcrumbs">
-        <a th:href="@{/administrador}">Inicio</a>
-        <span class="material-icons-sharp">chevron_right</span>
-        <span>Usuarios</span>
-      </nav>
-    </div>
-
-    <!-- Alertas -->
-    <div th:if="${success != null}" class="alert alert-success">
-      <span class="material-icons-sharp">check_circle</span>
-      <span th:text="${success}"></span>
-    </div>
-    <div th:if="${error != null}" class="alert alert-danger">
-      <span class="material-icons-sharp">error</span>
-      <span th:text="${error}"></span>
-    </div>
-
-    <!-- Contenido Principal -->
-    <section class="tabla-section">
-      <div class="card">
-        <div class="card-header">
-          <h2>Lista de Usuarios</h2>
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Encabezado -->
+        <div class="page-header">
+            <h1>
+                <span class="material-icons-sharp">manage_accounts</span>
+                Gestión de Usuarios
+            </h1>
+            <nav class="breadcrumbs">
+                <a th:href="@{/administrador}">Inicio</a>
+                <span class="material-icons-sharp">chevron_right</span>
+                <span>Usuarios</span>
+            </nav>
         </div>
 
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="agendamientos-table">
-              <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Rol Actual</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="user : ${usuarios}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.nombre}"></td>
-                <td th:text="${user.email}"></td>
-                <td>
-                                            <span class="status-badge"
-                                                  th:classappend="${user.tipo == 'ADMIN' ? 'confirmado' : 'pendiente'}"
-                                                  th:text="${user.tipo}">
-                                            </span>
-                </td>
-                <td>
-                                            <span class="status-badge"
-                                                  th:classappend="${user.estado == 'ACTIVO' ? 'confirmado' : 'cancelado'}"
-                                                  th:text="${user.estado ?: 'No definido'}">
-                                            </span>
-                </td>
-                <td class="actions">
-                  <form th:action="@{/admin/usuarios/cambiar-rol/{id}(id=${user.id})}" method="post" style="display:inline;">
-                    <button type="submit" class="btn-action" th:title="${user.tipo == 'ADMIN' ? 'Cambiar a Usuario' : 'Cambiar a Administrador'}">
-                      <span class="material-icons-sharp" th:text="${user.tipo == 'ADMIN' ? 'person' : 'admin_panel_settings'}"></span>
-                    </button>
-                  </form>
-                  <form th:action="@{/admin/usuarios/eliminar/{id}(id=${user.id})}" method="post" style="display:inline;"
-                        onsubmit="return confirm('¿Estás seguro de eliminar este usuario? Esta acción no se puede deshacer.')">
-                    <button type="submit" class="btn-action btn-delete" title="Eliminar Usuario">
-                      <span class="material-icons-sharp">delete</span>
-                    </button>
-                  </form>
-                </td>
-              </tr>
-              <tr th:if="${usuarios.empty}">
-                <td colspan="6" class="text-center text-muted py-3">
-                  No hay usuarios registrados
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+        <!-- Alertas -->
+        <div th:if="${success != null}" class="alert alert-success">
+            <span class="material-icons-sharp">check_circle</span>
+            <span th:text="${success}"></span>
         </div>
-      </div>
-    </section>
-  </main>
+        <div th:if="${error != null}" class="alert alert-danger">
+            <span class="material-icons-sharp">error</span>
+            <span th:text="${error}"></span>
+        </div>
 
-  <!-- Right Section -->
-  <div th:replace="~{administrador/template_admins.html :: right_section}"></div>
+        <!-- Contenido Principal -->
+        <section class="tabla-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Lista de Usuarios</h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="agendamientos-table">
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Direccion</th>
+                                <th>Telefono</th>
+                                <th>Rol Actual</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user : ${usuarios}">
+                                <td th:text="${user.nombre}"></td>
+                                <td th:text="${user.email}"></td>
+                                <td th:text="${user.direccion}"></td>
+                                <td th:text="${user.telefono}"></td>
+                                <td>
+                                    <span class="status-badge"
+                                          th:classappend="${user.tipo == 'ADMIN' ? 'confirmado' : 'pendiente'}"
+                                          th:text="${user.tipo}">
+                                    </span>
+                                </td>
+
+                                <td class="actions">
+                                    <form th:action="@{/admin/usuarios/cambiar-rol/{id}(id=${user.id})}" method="post"
+                                          style="display:inline;">
+                                        <button type="submit" class="btn-action"
+                                                th:title="${user.tipo == 'ADMIN' ? 'Cambiar a Usuario' : 'Cambiar a Administrador'}">
+                                            <span class="material-icons-sharp"
+                                                  th:text="${user.tipo == 'ADMIN' ? 'person' : 'admin_panel_settings'}"></span>
+                                        </button>
+                                    </form>
+                                    <form th:action="@{/admin/usuarios/eliminar/{id}(id=${user.id})}" method="post"
+                                          style="display:inline;"
+                                          onsubmit="return confirm('¿Estás seguro de eliminar este usuario? Esta acción no se puede deshacer.')">
+                                        <button type="submit" class="btn-action btn-delete" title="Eliminar Usuario">
+                                            <span class="material-icons-sharp">delete</span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${usuarios.empty}">
+                                <td colspan="6" class="text-center text-muted py-3">
+                                    No hay usuarios registrados
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Right Section -->
+    <div th:replace="~{administrador/template_admins.html :: right_section}"></div>
 </div>
 
 <div th:replace="~{administrador/template_admins.html :: jsFiles}"></div>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    setActiveLink("nuevo-admin-link");
-  });
+    document.addEventListener('DOMContentLoaded', function () {
+        setActiveLink("nuevo-admin-link");
+    });
 </script>
 </body>
 

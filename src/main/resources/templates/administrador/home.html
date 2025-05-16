@@ -2,122 +2,127 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{administrador/template_admins.html::head}">
-	<title>Dashboard | BarberMusic Admin</title>
+    <title>Dashboard | BarberMusic Admin</title>
 </head>
 
 <body>
 <div class="container">
-	<!-- Sidebar -->
-	<div th:replace="~{administrador/template_admins.html::aside}"></div>
+    <!-- Sidebar -->
+    <div th:replace="~{administrador/template_admins.html::aside}"></div>
 
-	<!-- Main Content -->
-	<main class="dashboard-main">
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div th:insert="~{administrador/template_admins.html::admin-search}"></div>
+        <!-- Sección de Productos -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h1>
+                    <span class="material-icons-sharp">inventory</span>
+                    Productos
+                </h1>
+                <div class="section-badge" th:text="${productos.size()}"></div>
+            </div>
 
-		<!-- Sección de Productos -->
-		<section class="dashboard-section">
-			<div class="section-header">
-				<h1>
-					<span class="material-icons-sharp">inventory</span>
-					Productos
-				</h1>
-				<div class="section-badge" th:text="${productos.size()}"></div>
-			</div>
-
-			<div class="cards-container">
-				<a th:href="@{/productos/edit/{id}(id=${producto.id})}" class="card-link"
-				   th:each="producto : ${productos}">
-					<div class="card">
-						<div class="card-image-container">
-							<img th:src="@{/images/{img} (img=${producto.imagen})}"
-								 th:alt="${producto.nombreproducto}" class="card-image"
-								 onerror="this.src='/images/default-product.png'">
-						</div>
-						<div class="card-info">
-							<h5 th:text="${producto.nombreproducto}"></h5>
-							<p class="card-description" th:text="${producto.descripcion}"></p>
-							<div class="card-price-main"
-								 th:text="'$' + ${#numbers.formatDecimal(producto.precio, 1, 2)}"></div>
-							<div class="card-footer">
+            <div class="cards-container">
+                <a th:href="@{/productos/edit/{id}(id=${producto.id})}" class="card-link"
+                   th:each="producto : ${productos}">
+                    <div class="card">
+                        <div class="card-image-container">
+                            <img th:src="@{/images/{img} (img=${producto.imagen})}"
+                                 th:alt="${producto.nombreproducto}" class="card-image"
+                                 onerror="this.src='/images/default-product.png'">
+                        </div>
+                        <div class="card-info">
+                            <h5 th:text="${producto.nombreproducto}"></h5>
+                            <p class="card-description" th:text="${producto.descripcion}"></p>
+                            <div class="card-price-main"
+                                 th:text="'$' + ${#numbers.formatDecimal(producto.precio, 1, 2)}"></div>
+                            <div class="card-footer">
 									<span class="card-badge card-stock"
-										  th:text="${producto.cantidad} + ' unidades'"></span>
-								<span class="card-badge card-price">En stock</span>
-							</div>
-						</div>
-					</div>
-				</a>
-			</div>
-		</section>
+                                          th:text="${producto.cantidad} + ' unidades'"></span>
+                                <span class="card-badge card-price">En stock</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
 
-		<!-- Sección de Servicios -->
-		<section class="dashboard-section">
-			<div class="section-header">
-				<h1>
-					<span class="material-icons-sharp">self_improvement</span>
-					Servicios
-				</h1>
-				<div class="section-badge" th:text="${servicios.size()}"></div>
-			</div>
+        <!-- Sección de Servicios -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h1>
+                    <span class="material-icons-sharp">self_improvement</span>
+                    Servicios
+                </h1>
+                <div class="section-badge" th:text="${servicios.size()}"></div>
+            </div>
 
-			<div class="cards-container">
-				<a th:href="@{/servicios/edit/{id}(id=${servicio.id})}" class="card-link"
-				   th:each="servicio : ${servicios}">
-					<div class="card">
-						<div class="card-image-container">
-							<img th:src="@{/images/{img} (img=${servicio.imagen})}" th:alt="${servicio.nombre}"
-								 class="card-image" onerror="this.src='/images/default-service.png'">
-						</div>
-						<div class="card-info">
-							<h5 th:text="${servicio.nombre}"></h5>
-							<p class="card-description" th:text="${servicio.descripcion}"></p>
-							<div class="card-price-main"
-								 th:text="'$' + ${#numbers.formatDecimal(servicio.precio, 1, 2)}"></div>
-							<div class="card-footer">
+            <div class="cards-container">
+                <a th:href="@{/servicios/edit/{id}(id=${servicio.id})}" class="card-link"
+                   th:each="servicio : ${servicios}">
+                    <div class="card">
+                        <div class="card-image-container">
+                            <img th:src="@{/images/{img} (img=${servicio.imagen})}" th:alt="${servicio.nombre}"
+                                 class="card-image" onerror="this.src='/images/default-service.png'">
+                        </div>
+                        <div class="card-info">
+                            <h5 th:text="${servicio.nombre}"></h5>
+                            <p class="card-description" th:text="${servicio.descripcion}"></p>
+                            <div class="card-price-main"
+                                 th:text="'$' + ${#numbers.formatDecimal(servicio.precio, 1, 2)}"></div>
+                            <div class="card-footer">
 									<span class="card-badge card-duration"
-										  th:text="${servicio.duracion} + ' min'"></span>
-								<span class="card-badge card-schedule">Disponible</span>
-							</div>
-						</div>
-					</div>
-				</a>
-			</div>
-		</section>
+                                          th:text="${servicio.duracion} + ' min'"></span>
+                                <span class="card-badge card-schedule">Disponible</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
 
-		<!-- Sección de Sucursales -->
-		<section class="dashboard-section">
-			<div class="section-header">
-				<h1>
-					<span class="material-icons-sharp">store</span>
-					Sucursales
-				</h1>
-				<div class="section-badge" th:text="${sucursales.size()}"></div>
-			</div>
+        <!-- Sección de Sucursales -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h1>
+                    <span class="material-icons-sharp">store</span>
+                    Sucursales
+                </h1>
+                <div class="section-badge" th:text="${sucursales.size()}"></div>
+            </div>
 
-			<div class="cards-container">
-				<a th:href="@{/sucursales/edit/{id}(id=${sucursal.id})}" class="card-link"
-				   th:each="sucursal : ${sucursales}">
-					<div class="card">
-						<div class="card-image-container">
-							<img th:src="@{/images/{img} (img=${sucursal.imagen})}" th:alt="${sucursal.nombre}"
-								 class="card-image" onerror="this.src='/images/default-branch.png'">
-						</div>
-						<div class="card-info">
-							<h5 th:text="${sucursal.nombre}"></h5>
-							<p class="card-description" th:text="${sucursal.direccion} + ', ' + ${sucursal.ciudad}">
-							</p>
-							<div class="card-footer">
-								<span class="card-map" th:text="${sucursal.horarios}"></span>
-								<span class="material-icons-sharp">map</span>
-								Ver mapa
-							</div>
-						</div>
-					</div>
-				</a>
-			</div>
-		</section>
-	</main>
+            <div class="cards-container">
+                <div class="card" th:each="sucursal : ${sucursales}">
+                    <a th:href="@{/sucursales/edit/{id}(id=${sucursal.id})}"
+                    >
+                        <div class="card-image-container">
+                            <img th:src="@{/images/{img} (img=${sucursal.imagen})}" th:alt="${sucursal.nombre}"
+                                 class="card-image" onerror="this.src='/images/default-branch.png'">
+                        </div>
+                    </a>
+                    <div class="card-info">
+                        <h5 th:text="${sucursal.nombre}"></h5>
+                        <p class="card-description" th:text="${sucursal.direccion} + ', ' + ${sucursal.ciudad}">
+                        </p>
+                        <div class="card-footer">
+								<span class="card-badge card-schedule">
+									<span class="material-icons-sharp">schedule</span>
+									<span th:text="${sucursal.horarios}"></span>
+								</span>
+                            <a th:href="${sucursal.link_maps}" target="_blank" class="card-badge card-map">
+                                <span class="material-icons-sharp">map</span>
+                                Ver mapa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-	<!-- Right Section -->
-	<div th:replace="~{administrador/template_admins.html::right_section}"></div>
+    <!-- Right Section -->
+    <div th:replace="~{administrador/template_admins.html::right_section}"></div>
 </div>
 
 <div th:replace="~{administrador/template_admins.html::jsFiles}"></div>

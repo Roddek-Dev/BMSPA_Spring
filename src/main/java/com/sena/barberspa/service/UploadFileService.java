@@ -11,28 +11,42 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UploadFileService {
-	
-	// usa la misma ruta que en ResourceWebConfiguration
-	private final String storagePath = "C:/images/";
+    private final String storagePath = "C:/images/";
 
-	// metodo para subir la imagen del producto
-	public String saveImages(MultipartFile file, String nombre) throws IOException {
-		// validacion de imagenes
-		if (!file.isEmpty()) {
-			byte[] bytes = file.getBytes();
-			// variable de tipo path que redirige al directo
-			// se importa el path de .nio.file
-			Path path = Paths.get(storagePath + nombre + "_" + file.getOriginalFilename());
-			Files.write(path, bytes);
-			return nombre + "_" + file.getOriginalFilename();
-		}
-		return "default.jpg";
-	}
-	
-	//metodo para la eliminacion de la imagen del producto
-	public void deleteImage(Object object) {
-		String ruta = "C//images";
-		File file = new File(ruta + object);
-		file.delete();
-	}
+    public String saveImages(MultipartFile file, String nombre) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return "default.jpg";
+        }
+
+        // Validar tipo de archivo
+        if (!file.getContentType().startsWith("image/")) {
+            throw new IllegalArgumentException("Solo se permiten archivos de imagen");
+        }
+
+        // Crear directorio si no existe
+        File directory = new File(storagePath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        // Generar nombre único para el archivo
+        String originalFilename = file.getOriginalFilename();
+        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String newFilename = "profile_" + nombre + "_" + System.currentTimeMillis() + extension;
+
+        // Guardar el archivo
+        Path path = Paths.get(storagePath + newFilename);
+        Files.write(path, file.getBytes());
+
+        return newFilename;
+    }
+
+    public void deleteImage(String filename) throws IOException {
+        if (filename != null && !filename.isEmpty() && !"default.jpg".equals(filename)) {
+            Path path = Paths.get(storagePath + filename);
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+        }
+    }
 }

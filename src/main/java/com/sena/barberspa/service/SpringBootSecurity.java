@@ -33,10 +33,16 @@ public class SpringBootSecurity {
 				.authorizeRequests(authorize -> authorize
 						.requestMatchers("/administrador/**").hasRole("ADMIN")
 						.requestMatchers("/productos/**").hasRole("ADMIN")
-						.requestMatchers("/recordatorios/**").hasRole("ADMIN") // Añadir esta línea
+						.requestMatchers("/recordatorios/**").hasRole("ADMIN")
+						// Permitir acceso público a la ruta de agendamientos
+						.requestMatchers("/agendamientos/save", "/agendamientos/**").permitAll()
+						// Permitir acceso a API de servicios para modal de citas
+						.requestMatchers("/servicios/sucursales/json").permitAll()
+						.requestMatchers("/usuario/resetPassword", "/usuario/cambiarPassword",
+								"/usuario/saveNewPassword", "/usuario/token-invalido").permitAll()
 						.requestMatchers("/assets/**", "/assetsADMINS/**", "/css/**", "/js/**", "/images/**",
-								"/", "/serviciosVista", "/productosVista", "/usuario/registro",
-								"/usuario/login", "/usuario/save", "/error/**").permitAll()
+								"/", "/serviciosVista", "/servicioHome/**", "/productosVista", "/productoHome/**",
+								"/usuario/registro", "/usuario/login", "/usuario/save", "/error/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.formLogin(formLogin -> formLogin

@@ -9,8 +9,8 @@ import com.sena.barberspa.model.Usuario;
 public interface IOrdenService {
 
 	public Orden save(Orden orden);
-	
-    public Orden update(Orden orden);  // New update method
+
+	public Orden update(Orden orden);  // New update method
 
 	public List<Orden> findAll();
 
@@ -20,4 +20,6 @@ public interface IOrdenService {
 
 	public Optional<Orden> findById(Integer id);
 
+	// Nuevo método para contar todas las órdenes
+	public long countAll();
 }

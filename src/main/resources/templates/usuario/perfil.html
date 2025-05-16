@@ -2,32 +2,98 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head th:insert="~{usuario/template_user.html::head}">
-    <title>Mi Perfil | BarberMusic&Spa</title>
-
-    <!-- Favicons -->
-    <link th:href="@{/assets/img/LogoMusic.png}" rel="icon">
-    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap"
-            rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Vendor CSS Files -->
-    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/aos/aos.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
-
-    <!-- Main CSS File -->
-    <link th:href="@{/assets/css/main.css}" rel="stylesheet">
 </head>
+
+<style>
+    /* Estilos para la imagen de perfil */
+    .profile-avatar-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-avatar {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .change-image-btn {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        text-align: center;
+        padding: 8px 0;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        opacity: 0;
+    }
+
+    .profile-avatar-container:hover .change-image-btn {
+        opacity: 1;
+    }
+
+    .change-image-btn i {
+        margin-right: 5px;
+    }
+
+    /* Estilos para las pestañas */
+    .tab-pane {
+        display: none;
+    }
+
+    .tab-pane.active {
+        display: block;
+    }
+
+    .profile-section {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .appointment-card, .order-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .status-badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-confirmed {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-canceled {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    #main {
+        padding-top: 5em;
+    }
+</style>
 
 <body class="index-page">
 
@@ -35,13 +101,20 @@
 <div th:insert="~{usuario/template_user.html::usuarioCabecera}" th:unless="${sesion == null}"></div>
 
 <main id="main">
-    <div class="container">
+    <div class="container my-5">
         <div class="row">
             <div class="col-lg-4">
                 <!-- Sección de Perfil -->
                 <div class="profile-section">
-                    <div class="profile-header">
-                        <img th:src="${usuario.imagen != null} ? @{'/uploads/' + ${usuario.imagen}} : @{/assets/img/avatar-placeholder.jpg}" alt="Foto de perfil" class="profile-avatar">
+                    <div class="profile-header text-center">
+                        <div class="profile-avatar-container">
+                            <img th:src="${usuario.imagen != null} ? @{'/uploads/' + ${usuario.imagen}} : @{/assets/img/avatar-placeholder.png}"
+                                 alt="Foto de perfil" class="profile-avatar" id="profile-avatar-preview">
+                            <label for="img" class="change-image-btn">
+                                <i class="bi bi-camera"></i>
+                                Cambiar imagen
+                            </label>
+                        </div>
                         <div class="profile-info">
                             <h2 th:text="${usuario.nombre}">Nombre Usuario</h2>
                             <p class="text-muted" th:text="${usuario.email}">usuario@example.com</p>
@@ -50,7 +123,7 @@
                     </div>
 
                     <!-- Estadísticas del perfil -->
-                    <div class="profile-stats">
+                    <div class="profile-stats d-flex justify-content-around text-center mt-4">
                         <div class="stat-card">
                             <h3 th:text="${ordenesCount ?: '0'}">0</h3>
                             <p>Compras</p>
@@ -62,11 +135,13 @@
                     </div>
 
                     <!-- Información de contacto -->
-                    <div class="contact-info">
+                    <div class="contact-info mt-4">
                         <h5>Información de contacto</h5>
                         <ul class="list-unstyled">
-                            <li class="mb-2"><i class="bi bi-telephone me-2"></i> <span th:text="${usuario.telefono ?: 'No especificado'}">Teléfono</span></li>
-                            <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> <span th:text="${usuario.direccion ?: 'No especificada'}">Dirección</span></li>
+                            <li class="mb-2"><i class="bi bi-telephone me-2"></i> <span
+                                    th:text="${usuario.telefono ?: 'No especificado'}">Teléfono</span></li>
+                            <li class="mb-2"><i class="bi bi-geo-alt me-2"></i> <span
+                                    th:text="${usuario.direccion ?: 'No especificada'}">Dirección</span></li>
                         </ul>
                     </div>
                 </div>
@@ -75,102 +150,125 @@
             <div class="col-lg-8">
                 <!-- Pestañas del perfil -->
                 <div class="profile-section profile-tabs">
-                    <div class="tab-header">
-                        <button class="tab-btn active" data-tab="editProfile">Editar Perfil</button>
-                        <button class="tab-btn" data-tab="appointments">Mis Citas</button>
-                        <button class="tab-btn" data-tab="orders">Mis Compras</button>
+                    <div class="tab-header d-flex mb-4 border-bottom">
+                        <button class="tab-btn btn btn-outline-secondary me-2 active" data-tab="editProfile">Editar
+                            Perfil
+                        </button>
+                        <button class="tab-btn btn btn-outline-secondary me-2" data-tab="appointments">Mis Citas
+                        </button>
+                        <button class="tab-btn btn btn-outline-secondary" data-tab="orders">Mis Compras</button>
                     </div>
 
                     <!-- Tab Editar Perfil -->
                     <div class="tab-pane active" id="editProfile">
                         <form th:action="@{/usuario/actualizar}" method="post" enctype="multipart/form-data">
+                            <!-- Campo oculto para la imagen -->
+                            <input type="file" id="img" name="img" class="d-none">
+
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group mb-3">
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" class="form-control" id="nombre" name="nombre" th:value="${usuario.nombre}">
+                                        <input type="text" class="form-control" id="nombre" name="nombre"
+                                               th:value="${usuario.nombre}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group mb-3">
                                         <label for="email">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" th:value="${usuario.email}">
+                                        <input type="email" class="form-control" id="email" name="email"
+                                               th:value="${usuario.email}">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group mb-3">
                                         <label for="telefono">Teléfono</label>
-                                        <input type="text" class="form-control" id="telefono" name="telefono" th:value="${usuario.telefono}">
+                                        <input type="text" class="form-control" id="telefono" name="telefono"
+                                               th:value="${usuario.telefono}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group mb-3">
                                         <label for="direccion">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" name="direccion" th:value="${usuario.direccion}">
+                                        <input type="text" class="form-control" id="direccion" name="direccion"
+                                               th:value="${usuario.direccion}">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="password">Nueva Contraseña (dejar en blanco para mantener)</label>
                                 <input type="password" class="form-control" id="password" name="password">
                             </div>
 
-                            <div class="form-group">
-                                <label for="img">Imagen de Perfil</label>
-                                <input type="file" class="form-control" id="img" name="img">
-                                <small class="text-muted">Formatos aceptados: JPG, PNG</small>
-                            </div>
-
-                            <button type="submit" class="btn-action mt-3">Guardar Cambios</button>
+                            <button type="submit" class="btn btn-danger mt-3">
+                                <i class="bi bi-save me-2"></i>Guardar Cambios
+                            </button>
                         </form>
                     </div>
 
                     <!-- Tab Mis Citas -->
                     <div class="tab-pane" id="appointments">
-                        <h5>Mis Citas Agendadas</h5>
+                        <h5 class="mb-4">Mis Citas Agendadas</h5>
 
                         <div class="appointments-list">
                             <div th:if="${#lists.isEmpty(agendamientos)}">
-                                <p class="text-muted">No tienes citas programadas.</p>
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    No tienes citas programadas.
+                                </div>
                             </div>
 
                             <div th:each="agendamiento : ${agendamientos}" class="appointment-card">
-                                <div class="appointment-header">
-                                    <h6 th:text="${agendamiento.servicio.nombre}">Nombre del servicio</h6>
+                                <div class="appointment-header d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0" th:text="${agendamiento.servicio.nombre}">Nombre del servicio</h6>
                                     <span class="status-badge"
                                           th:classappend="${agendamiento.estado == 'PENDIENTE'} ? 'status-pending' : (${agendamiento.estado == 'CONFIRMADO'} ? 'status-confirmed' : 'status-canceled')"
                                           th:text="${agendamiento.estado}">Estado</span>
                                 </div>
-                                <p><strong>Fecha:</strong> <span th:text="${#temporals.format(agendamiento.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha y hora</span></p>
-                                <p><strong>Sucursal:</strong> <span th:text="${agendamiento.sucursal.nombre}">Nombre de la sucursal</span></p>
-                                <p th:if="${agendamiento.mensaje}"><strong>Notas:</strong> <span th:text="${agendamiento.mensaje}">Mensaje</span></p>
+                                <p class="mb-2"><strong>Fecha:</strong> <span
+                                        th:text="${#temporals.format(agendamiento.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha y hora</span>
+                                </p>
+                                <p class="mb-2"><strong>Sucursal:</strong> <span
+                                        th:text="${agendamiento.sucursal.nombre}">Nombre de la sucursal</span></p>
+                                <p th:if="${agendamiento.mensaje}" class="mb-0"><strong>Notas:</strong> <span
+                                        th:text="${agendamiento.mensaje}">Mensaje</span></p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tab Mis Compras -->
                     <div class="tab-pane" id="orders">
-                        <h5>Historial de Compras</h5>
+                        <h5 class="mb-4">Historial de Compras</h5>
 
                         <div class="orders-list">
                             <div th:if="${#lists.isEmpty(ordenes)}">
-                                <p class="text-muted">No tienes compras realizadas.</p>
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    No tienes compras realizadas.
+                                </div>
                             </div>
 
                             <div th:each="orden : ${ordenes}" class="order-card">
-                                <div class="order-header">
-                                    <h6 th:text="${'Orden #' + orden.numero}">Número de orden</h6>
+                                <div class="order-header d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0" th:text="${'Orden #' + orden.numero}">Número de orden</h6>
                                     <span class="status-badge"
                                           th:classappend="${orden.estado == 'PENDIENTE'} ? 'status-pending' : (${orden.estado == 'PAGADO'} ? 'status-confirmed' : 'status-canceled')"
                                           th:text="${orden.estado}">Estado</span>
                                 </div>
-                                <p><strong>Fecha:</strong> <span th:text="${#dates.format(orden.fechacreacion, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
-                                <p><strong>Total:</strong> <span th:text="${'$' + #numbers.formatDecimal(orden.total, 0, 'POINT', 0, 'POINT')}">Total</span></p>
-                                <a th:href="@{/usuario/compras/{id}(id=${orden.id})}" class="btn btn-sm btn-outline-dark mt-2">Ver Detalles</a>
+                                <p class="mb-2"><strong>Fecha:</strong> <span
+                                        th:text="${#dates.format(orden.fechacreacion, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                                </p>
+                                <p class="mb-3"><strong>Total:</strong> <span
+                                        th:text="${'$' + #numbers.formatDecimal(orden.total, 0, 'POINT', 0, 'POINT')}">Total</span>
+                                </p>
+                                <a th:href="@{/usuario/compras/{id}(id=${orden.id})}"
+                                   class="btn btn-sm btn-outline-dark">
+                                    <i class="bi bi-eye me-1"></i>Ver Detalles
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -193,12 +291,12 @@
 <div th:insert="~{usuario/template_user.html::jsFiles}"></div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Manejo de pestañas
         const tabButtons = document.querySelectorAll('.tab-btn');
 
         tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 // Eliminar clase active de todos los botones y paneles
                 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                 document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
@@ -212,18 +310,28 @@
             });
         });
 
-        // Vista previa de la imagen de perfil
-        const fileInput = document.getElementById('img');
+        // Manejo de cambio de imagen de perfil
+        const imgInput = document.getElementById('img');
+        const profileImg = document.getElementById('profile-avatar-preview');
 
-        if (fileInput) {
-            fileInput.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
+        if (imgInput && profileImg) {
+            imgInput.addEventListener('change', function (e) {
+                if (e.target.files && e.target.files[0]) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
-                        document.querySelector('.profile-avatar').src = e.target.result;
+                    reader.onload = function (event) {
+                        profileImg.src = event.target.result;
                     };
-                    reader.readAsDataURL(this.files[0]);
+                    reader.readAsDataURL(e.target.files[0]);
                 }
+            });
+        }
+
+        // Habilitar la selección de imagen al hacer clic en el contenedor
+        const changeImageBtn = document.querySelector('.change-image-btn');
+        if (changeImageBtn) {
+            changeImageBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                imgInput.click();
             });
         }
     });
