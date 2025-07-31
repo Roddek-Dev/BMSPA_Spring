@@ -276,17 +276,40 @@
 			const message = chatInput.value.trim();
 			if (!message) return;
 
+			// Añade el mensaje del usuario a la interfaz
 			addMessage('user', message);
 			chatInput.value = '';
 
+			// Muestra un indicador de que el bot está "escribiendo"
 			const typingIndicator = addMessage('assistant', '...');
 			typingIndicator.classList.add('typing');
 
-			// Simular respuesta o conectar con backend
-			setTimeout(() => {
-				chatMessages.removeChild(typingIndicator);
-				addMessage('assistant', 'Gracias por tu mensaje. ¿En qué puedo ayudarte?');
-			}, 1000);
+			// --- INICIO DE LA LÓGICA MODIFICADA ---
+
+			// Llama al backend de Spring (que a su vez llamará a Python)
+			fetch('/api/chatbot/ask', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ question: message }) // Envía la pregunta en el formato correcto
+			})
+				.then(response => response.json())
+				.then(data => {
+					// Elimina el indicador de "escribiendo"
+					chatMessages.removeChild(typingIndicator);
+					// Añade la respuesta real del chatbot
+					addMessage('assistant', data.answer || 'No se recibió una respuesta.');
+				})
+				.catch(error => {
+					console.error('Error al contactar al chatbot:', error);
+					// Elimina el indicador de "escribiendo"
+					chatMessages.removeChild(typingIndicator);
+					// Muestra un mensaje de error en el chat
+					addMessage('assistant', 'Hubo un problema al conectar con el asistente. Intenta de nuevo.');
+				});
+
+			// --- FIN DE LA LÓGICA MODIFICADA ---
 		}
 
 		function addMessage(sender, text) {
