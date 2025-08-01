@@ -125,7 +125,6 @@
 		<footer id="footer" class="footer">
 			<div class="container footer-top">
 				<div class="row gy-3">
-					<!-- Información de Integrantes -->
 					<div class="col-lg-3 col-md-6 d-flex">
 						<i class="bi bi-geo-alt icon"></i>
 						<div class="address">
@@ -137,7 +136,6 @@
 						</div>
 					</div>
 
-					<!-- Información del Tecnólogo -->
 					<div class="col-lg-3 col-md-6 d-flex">
 						<i class="bi bi-telephone icon"></i>
 						<div>
@@ -147,25 +145,30 @@
 						</div>
 					</div>
 
-					<!-- Detalles del Prototipo -->
 					<div class="col-lg-3 col-md-6 d-flex">
 						<i class="bi bi-clock icon"></i>
 						<div>
-							<h4>Detalles Prototipo</h4>
+							<h4>Detalles Proyecto Final</h4>
 							<p><strong>Elaborado en: </strong> <span>Java Spring</span><br>
-								<strong>Version: </strong> <span>1.0</span>
+								<strong>Version: </strong> <span>3.0</span>
 							</p>
 						</div>
 					</div>
 
-					<!-- Logo -->
 					<div class="col-lg-3 col-md-6">
 						<img th:src="@{/assets/img/LogoBarberMusicSpa.png}" style="width: 150px;">
 					</div>
 				</div>
 			</div>
 
-			<!-- Sección de redes sociales y copyright -->
+			<div class="container mt-4">
+				<div class="row">
+					<div class="col-12 text-center">
+						<h4>¡Siente el ritmo de BarberMusic&Spa!</h4>
+						<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DWZJmo7mlltU6?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+					</div>
+				</div>
+			</div>
 			<div class="container mt-4">
 				<div class="row">
 					<div class="col-12 text-center mb-3">
@@ -183,8 +186,7 @@
 				<p>© <span>Copyright</span> <strong class="px-1 sitename">BarberMusic&Spa</strong> <span>All Rights Reserved</span>
 				</p>
 			</div>
-		</footer>
-</div>
+		</footer></div>
 
 <div th:fragment="jsFiles">
 	<!-- Vendor JS Files -->

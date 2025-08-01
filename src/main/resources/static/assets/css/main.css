@@ -3149,14 +3149,14 @@ section,
 }
 
 .services-list-enhanced .list-group-item i {
-    color: var(--bs-primary); /* Usar color primario de Bootstrap */
+    color: var(--accent-color); /* Usar color primario de Bootstrap */
     opacity: 0.6;
     transition: all 0.3s ease;
 }
 
 .services-list-enhanced .list-group-item:hover,
 .services-list-enhanced .list-group-item.active {
-    background-color: var(--bs-primary); /* Fondo primario al pasar el ratón o activo */
+    background-color: var(--accent-color); /* Fondo primario al pasar el ratón o activo */
     color: #fff; /* Texto blanco */
     transform: translateX(5px); /* Ligero desplazamiento */
 }
